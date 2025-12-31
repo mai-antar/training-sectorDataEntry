@@ -2,164 +2,202 @@
 <html lang="ar">
 <head>
     <meta charset="utf-8" />
+    <link href="~/css/vendor.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - TrainigSectorDataEntry</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TrainigSectorDataEntry.styles.css" asp-append-version="true" />
+    <link href="~/fontawesome/css/all.css" rel="stylesheet" />
+    <link href="~/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
         body {
             direction: rtl;
         }
 
-        .sidebar {
-            min-height: 100vh;
-            border-left: 1px solid #dee2e6;
-            padding-top: 20px;
-            background-color: #f8f9fa;
-        }
-
-        .sidebar .nav-link.active {
-            font-weight: bold;
-            background-color: #e9ecef;
-        }
-
-        .my-textarea {
-            height: 150px;
-        }
     </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">قطاع التدريب</a>
-            </div>
-        </nav>
-    </header>
+
 
     <div class="container-fluid">
+
+        <div class="row ">
+            <div class="contt">
+
+                <div class="row ">
+                    <div class="col-lg-6">
+                        <img src="~/images/log1-T.png" width="125" height="120" />
+
+
+                        <h5 class="headTit">وزاة الإنتاج الحربي </h5>
+
+                        <h5 class="headTit">قطاع التدريب </h5>
+                    </div>
+
+                    <div class="col-lg-4">
+                    </div>
+
+                    <div class="col-lg-2">
+                        <a href="#" class="exit">تسجيل خروج</a> <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar">
-                <ul class="nav flex-column nav-pills">
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Home") ? "active" : "")"
-                           asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a>
-                    </li>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Slider") ? "active" : "")"
-                           asp-area="" asp-controller="Slider" asp-action="Index">الصور المتحركة</a>
-                    </li>
+            <div class="col-lg-3 bk-blk">
+                <!-- Sidebar -->
+                <div>
 
-                       <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "EducationalLevel") ? "active" : "")"
-                           asp-area="" asp-controller="EducationalLevel" asp-action="Index">المستوى التعليمي</a>
-                    </li>
+                    <div class="dropdown">
+                        <p>
+                            <i class="fas fa-home-alt"></i>
+                            <a class="nav-link display-inline display-inline @((ViewContext.RouteData.Values["controller"] as string == "Home") ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-image"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "Slider") ? "active" : "")"
+                               asp-area="" asp-controller="Slider" asp-action="Index">الصور المتحركة</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-book-open-reader"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "EducationalLevel") ? "active" : "")"
+                               asp-area="" asp-controller="EducationalLevel" asp-action="Index">المستوى التعليمي</a>
+                        </p>
 
-               
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "News") ? "active" : "")"
-                           asp-area="" asp-controller="News" asp-action="Index">الأخبار</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "HistoryBreif") ? "active" : "")"
-                           asp-area="" asp-controller="HistoryBreif" asp-action="Index">النبذة التاريخية</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Projects") ? "active" : "")"
-                           asp-area="" asp-controller="Projects" asp-action="Index">المشاريع</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "QualityCertificate") ? "active" : "")"
-                           asp-area="" asp-controller="QualityCertificate" asp-action="Index">شهادات الجودة</a>
-                    </li>
-                     <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Service") ? "active" : "")"
-                           asp-area="" asp-controller="Service" asp-action="Index">الخدمات</a>
-                    </li>
-              
-                
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "StagesAndHall") ? "active" : "")"
+
+
+
+                        <p>
+                            <i class="fa-solid fa-newspaper"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "News") ? "active" : "")"
+                               asp-area="" asp-controller="News" asp-action="Index">الأخبار</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-timeline"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "HistoryBreif") ? "active" : "")"
+                               asp-area="" asp-controller="HistoryBreif" asp-action="Index">نبذة تاريخية</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-diagram-project"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "Projects") ? "active" : "")"
+                               asp-area="" asp-controller="Projects" asp-action="Index">المشاريع</a>
+                        </p>
+
+
+
+
+                        <p>
+                            <i class="fa-solid fa-certificate"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "QualityCertificate") ? "active" : "")"
+                               asp-area="" asp-controller="QualityCertificate" asp-action="Index">شهادات الجودة</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-wrench"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "Service") ? "active" : "")"
+                               asp-area="" asp-controller="Service" asp-action="Index">الخدمات</a>
+                        </p>
+                        <p>
+                            <i<i class="fa-solid fa-masks-theater"></i>
+                        <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "StagesAndHall") ? "active" : "")"
                            asp-area="" asp-controller="StagesAndHall" asp-action="Index">قاعات ومسارح</a>
-                    </li>
-                    
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-chess"></i>                        <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "StudentActivite") ? "active" : "")"
+                                                                                        asp-area="" asp-controller="StudentActivite" asp-action="Index">الانشطة الطلابية</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-table-columns"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "StudentsTimeTable") ? "active" : "")"
+                               asp-area="" asp-controller="StudentsTimeTable" asp-action="Index">الجداول الدراسية</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "StudentActivite") ? "active" : "")"
-                           asp-area="" asp-controller="StudentActivite" asp-action="Index">الانشطة الطلابية</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "StudentsTimeTable") ? "active" : "")"
-                           asp-area="" asp-controller="StudentsTimeTable" asp-action="Index">الجداول الدراسية</a>
-                    </li>
+                        <p>
+                            <i class="fa-regular fa-face-smile"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "SucessStory") ? "active" : "")"
+                               asp-area="" asp-controller="SucessStory" asp-action="Index">قصة نجاح</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "SucessStory") ? "active" : "")"
-                           asp-area="" asp-controller="SucessStory" asp-action="Index">قصة نجاح</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-chalkboard-user"></i>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "TrainingCoursesType") ? "active" : "")"
-                           asp-area="" asp-controller="TrainingCoursesType" asp-action="Index">نوع الدورات التدريبية</a>
-                    </li>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "TrainingCoursesType") ? "active" : "")"
+                               asp-area="" asp-controller="TrainingCoursesType" asp-action="Index">نوع الدورات التدريبية</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "TrainingCourse") ? "active" : "")"
-                           asp-area="" asp-controller="TrainingCourse" asp-action="Index">الدورات التدريبية</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "TrainingCourse") ? "active" : "")"
+                               asp-area="" asp-controller="TrainingCourse" asp-action="Index">الدورات التدريبية</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "DepartmentType") ? "active" : "")"
-                           asp-area="" asp-controller="DepartmentType" asp-action="Index">انواع الاقسام</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-timeline inverse90"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "DepartmentType") ? "active" : "")"
+                               asp-area="" asp-controller="DepartmentType" asp-action="Index">انواع الاقسام</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Departmentsandbranches") ? "active" : "")"
-                           asp-area="" asp-controller="Departmentsandbranches" asp-action="Index">الاقسام</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "Specialization") ? "active" : "")"
-                           asp-area="" asp-controller="Specialization" asp-action="Index">التخصصات</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-timeline inverse"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "Departmentsandbranches") ? "active" : "")"
+                               asp-area="" asp-controller="Departmentsandbranches" asp-action="Index">الاقسام</a>
+                        </p>
+                        <p>
+                            <i class="fa-solid fa-users-rays"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "Specialization") ? "active" : "")"
+                               asp-area="" asp-controller="Specialization" asp-action="Index">التخصصات</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "ContactUs") ? "active" : "")"
-                           asp-area="" asp-controller="ContactUs" asp-action="Index">تواصل معنا</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-handshake"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "ContactUs") ? "active" : "")"
+                               asp-area="" asp-controller="ContactUs" asp-action="Index">تواصل معنا</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "ComplaintsAndSuggestions") ? "active" : "")"
-                           asp-area="" asp-controller="ComplaintsAndSuggestions" asp-action="Index">الشكاوي والمقترحات</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-envelope-open"></i>                        <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "ComplaintsAndSuggestions") ? "active" : "")"
+                                                                                                asp-area="" asp-controller="ComplaintsAndSuggestions" asp-action="Index">الشكاوي والمقترحات</a>
+                        </p>
 
-                    <li class="nav-item mb-2">
-                        <a class="nav-link @((ViewContext.RouteData.Values["controller"] as string == "AlertsAndAdvertisment") ? "active" : "")"
-                           asp-area="" asp-controller="AlertsAndAdvertisment" asp-action="Index">اعلانات وتنبيهات</a>
-                    </li>
+                        <p>
+                            <i class="fa-solid fa-bell"></i>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "AlertsAndAdvertisment") ? "active" : "")"
+                               asp-area="" asp-controller="AlertsAndAdvertisment" asp-action="Index">اعلانات وتنبيهات</a>
+                        </p>
 
-                
-                 
-                </ul>
+
+                    </div>
+                </div>
             </div>
 
             <!-- Main Content -->
-            <main class="col-md-9 col-lg-10">
+            <main class="col-md-9 col-lg-9">
                 @RenderBody()
             </main>
         </div>
+        <div class="row">
+            <div class="border-top footer colory ">
+                <center>
+
+                    <div class="container ">
+                        <a class="colorOrg" asp-area="" asp-controller="Home" asp-action="Privacy">سياسة الخصوصية</a>     &copy; 2025 - TrainigSectorDataEntry -
+                    </div>
+                </center>
+
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted mt-5">
-        <div class="container">
-            &copy; 2025 - TrainigSectorDataEntry - <a asp-area="" asp-controller="Home" asp-action="Privacy">سياسة الخصوصية</a>
-        </div>
-    </footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
