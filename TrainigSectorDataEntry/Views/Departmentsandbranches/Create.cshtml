@@ -1,0 +1,105 @@
+﻿
+@model TrainigSectorDataEntry.ViewModel.DepartmentsandbranchVM
+
+
+<h2>إضافة الاقسام</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+  
+    <br />
+    <div class="form-group">
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilityList" class="form-control">
+            <option value="">-- اختر منشأة تعليمية --</option>
+        </select>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label asp-for="DepatmentTypeID" class="control-label">اسم نوع القسم</label>
+        <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" class="form-control">
+            <option value="">-- اختر نوع القسم --</option>
+        </select>
+        <span asp-validation-for="DepatmentTypeID" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+    <br />
+
+    <br />
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<br />
+
+ <div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">انواع الاقسام</strong>
+    </div>
+    <div class="card-body">
+        <h3>انواع الاقسام</h3>
+
+        <table class="table table-bordered table-striped" id="departmentTable">
+            <thead>
+                <tr>
+                    <th>الاسم باللغة العربية</th>
+                    <th>الاسم باللغة الانجليزية</th>
+                    <th>اسم المنشأة التعليمية</th>
+                    <th>نوع القسم</th>
+                    <th>التفعيل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.existingDepartmentsandbranch != null)
+                {
+                    @Html.Partial("_DepartmentsandbranchesPartial", (List<TrainigSectorDataEntry.ViewModel.DepartmentsandbranchVM>)ViewBag.existingDepartmentsandbranch)
+               
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div> 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            $('#EducationalFacilitiesId').change(function() {
+                var facilityId = $(this).val();
+                if (facilityId) {
+                    $.ajax({
+                        url: '@Url.Action("GetDepartmentByFacility", "Departmentsandbranches")',
+                        type: 'GET',
+                        data: { facilityId: facilityId },
+                        success: function(data) {
+                            $('#departmentTable tbody').html(data);
+                        }
+                    });
+                } else {
+                    $('#departmentTable tbody').html('');
+                }
+            });
+        });
+    </script>
+}
+
+
+

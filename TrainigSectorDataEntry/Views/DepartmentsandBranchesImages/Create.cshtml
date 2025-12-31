@@ -1,0 +1,64 @@
+﻿@model TrainigSectorDataEntry.ViewModel.DepartmentsandBranchesImageVM
+
+
+<h2>اضافة تفاصيل للقسم </h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+    <br />
+    <div class="form-group">
+        <label  class="control-label"> المنشأة التعليمية:</label>
+        <span>@ViewBag.educationalFacilitiesName</span>
+     
+    
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label  class="control-label"> نوع القسم:</label>
+        <span>@ViewBag.depatmentTypeName</span>
+        <input asp-for="DepartmentsandbranchesId" value="@ViewBag.DepartmentId" hidden />
+        <input asp-for="educationalFacilitiesName" value="@ViewBag.educationalFacilitiesName" hidden />
+        <input asp-for="depatmentTypeName" value="@ViewBag.depatmentTypeName" hidden />
+   
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleAr" class="control-label">العنوان باللغة العربية</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزي</label>
+        <input asp-for="TitleEn" class="form-control" />
+        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
+        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزي</label>
+        <textarea asp-for="TitleEn" class="form-control my-textarea" ></textarea>
+        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="UploadedImage">تحميل الصورة</label>
+        <input asp-for="UploadedImage" type="file" class="form-control" />
+        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<br />

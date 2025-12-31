@@ -1,0 +1,141 @@
+﻿@model TrainigSectorDataEntry.ViewModel.SucessStoryVM
+
+@{
+    ViewData["Title"] = "تعديل قصة نجاح";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل قصة نجاح</h2>
+<br />
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+            <option value="">-- اختر الجهة --</option>
+        </select>
+        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleAr" class="control-label">عنوان قصة النجاح باللغة العربية</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleEn" class="control-label">عنوان قصة النجاح باللغة الانجليزية</label>
+        <input asp-for="TitleEn" class="form-control" />
+        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    </div>
+    <br />
+    <!-- Existing Images -->
+    <div class="form-group">
+        <label>الصورة الحالية</label>
+
+        <div>
+            @if (Model.ImagePath != null)
+            {
+
+                <div class="image-container" data-id="@Model.Id" style="display: inline-block; position: relative; margin: 5px;">
+                    <img src="@("/Storage/" + Model.ImagePath)" alt="Project Image"
+                         style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
+
+                </div>
+
+            }
+            else
+            {
+                <p>لا توجد صور.</p>
+            }
+        </div>
+    </div>
+    <br />
+    <!-- Upload New Images -->
+    <div class="form-group">
+        <label for="UploadedImages">تحديث الصورة</label>
+        <input asp-for="UploadedImage" type="file" class="form-control" />
+        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    </div>
+ @*    <!-- Existing Video Display -->
+    <div class="form-group">
+        <label>الفيديو الحالي</label>
+        <div>
+            @if (!string.IsNullOrEmpty(Model.VedioPath))
+            {
+                if (Model.IsExternalLink)
+                {
+                    <a href="@Model.VedioPath" target="_blank">رابط الفيديو الخارجي</a>
+                }
+                else
+                {
+                    <video width="300" height="200" controls>
+                        <source src="@Model.VedioPath" type="video/mp4" />
+                        لا يدعم متصفحك علامة الفيديو.
+                    </video>
+                }
+            }
+            else
+            {
+                <p>لا يوجد فيديو حالياً.</p>
+            }
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="IsExternalLink" class="control-label">لينك خارجي؟</label>
+        <input asp-for="IsExternalLink" class="form-check-input" id="isExternalLinkCheckbox" />
+        <span asp-validation-for="IsExternalLink" class="text-danger"></span>
+    </div>
+    <br />
+    <!-- External link input -->
+    <div class="form-group" id="externalLinkDiv" style="display:none;">
+        <label asp-for="VedioPath">رابط الفيديو</label>
+        <input asp-for="VedioPath" class="form-control" />
+        <span asp-validation-for="VedioPath" class="text-danger"></span>
+    </div>
+    <br />
+    <!-- File upload input -->
+    <div class="form-group" id="uploadDiv">
+        <label for="VedioFile">تحديث الفيديو</label>
+        <input asp-for="VedioFile" type="file" class="form-control" />
+        <span asp-validation-for="VedioFile" class="text-danger"></span>
+    </div> *@
+    <br />
+
+
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function toggleInputFields() {
+            const isExternal = document.getElementById('isExternalLinkCheckbox').checked;
+            document.getElementById('externalLinkDiv').style.display = isExternal ? 'block' : 'none';
+            document.getElementById('uploadDiv').style.display = isExternal ? 'none' : 'block';
+        }
+
+        // Listen to checkbox changes
+        document.getElementById('isExternalLinkCheckbox').addEventListener('change', toggleInputFields);
+
+        // Trigger on page load to show correct field
+        window.addEventListener('DOMContentLoaded', function () {
+            toggleInputFields();
+        });
+    </script>
+
+
+}
+

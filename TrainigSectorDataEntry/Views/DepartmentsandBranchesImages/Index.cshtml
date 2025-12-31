@@ -1,0 +1,59 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.DepartmentsandBranchesImageVM>
+
+<h2>صور وتفاصيل قسم: @ViewBag.DepartmentName</h2>
+
+<a asp-action="Create"
+   asp-route-departmentId="@ViewBag.DepartmentId"
+   asp-route-educationalFacilitiesName="@ViewBag.educationalFacilitiesName"
+   asp-route-depatmentTypeName="@ViewBag.depatmentTypeName"
+   class="btn btn-primary mb-3">
+    إضافة 
+</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>المنشأه التعليمية</th>
+            <th>نوع القسم</th>
+            <th>العنوان</th>
+            <th>الوصف</th>
+            <th>الصورة</th>
+            <th>الحالة</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@ViewBag.educationalFacilitiesName</td>
+                <td>@ViewBag.depatmentTypeName</td>
+                <td>@item.TitleAr</td>
+                <td>@item.DescriptionAr</td>
+                <td>
+                    <img src="/Files/@item.ImagePath"
+                         style="width:60px;height:60px;object-fit:cover" />
+                   @*  <img src="@item.ImagePath" width="100" /> *@
+                </td>
+                <td>
+                    @(item.IsActive ? "مفعل" : "غير مفعل")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-departmentId="@ViewBag.DepartmentId"
+                       class="btn btn-sm btn-warning">تعديل</a>
+
+
+                    <a asp-action="Delete" asp-route-id="@item.Id"asp-route-departmentId="@ViewBag.DepartmentId"
+                   
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('هل أنت متأكد من الحذف؟');">
+                        حذف
+                    </a>
+
+                    @* <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">حذف</a> *@
+                </td>
+               
+            </tr>
+        }
+    </tbody>
+</table>

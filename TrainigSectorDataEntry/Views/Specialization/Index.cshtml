@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.SpecializationVM>
+
+@{
+    ViewData["Title"] = "التخصصات";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">التخصصات</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة تخصص</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>الاسم باللغة العربية</th>
+            <th>الاسم باللغة الانجليزية</th>
+            <th>المنشأت التعليمية</th>
+            <th>التاريخ</th>
+            <th>التفعيل</th>
+     
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var specialization in Model)
+        {
+            <tr>
+                <td>@specialization.NameAr</td>
+                <td>@specialization.NameEn</td>
+                <td>@specialization.EducationalFacilityName</td>
+                <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (specialization.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+       
+                <td>
+                    <a asp-controller="SpecializationImage" asp-action="Index" asp-route-specializationId="@specialization.Id"
+                       asp-route-departmentName="@specialization.DepartmentName"
+                       asp-route-educationalFacilitiesName="@specialization.EducationalFacilityName"
+                      class="btn btn-sm btn-info">التفاصيل / الصور</a>
+
+                    <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                    <a asp-action="Delete" asp-route-id="@specialization.Id" class="btn btn-sm btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

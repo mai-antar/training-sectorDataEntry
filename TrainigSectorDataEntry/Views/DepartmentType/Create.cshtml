@@ -1,0 +1,90 @@
+﻿@model TrainigSectorDataEntry.ViewModel.DepartmentTypeVM
+
+@{
+    ViewData["Title"] = "انواع الاقسام";
+}
+
+<h2>إضافة انواع الاقسام</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+ @*    <div class="form-group">
+        <label asp-for="SpecializationId" class="control-label">اسم التخصص</label>
+        <select asp-for="SpecializationId" asp-items="ViewBag.educationalFacilityList" class="form-control">
+            <option value="">-- اختر التخصص --</option>
+        </select>
+        <span asp-validation-for="SpecializationId" class="text-danger"></span>
+    </div> *@
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+    <br />
+
+
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">انواع الاقسام</strong>
+    </div>
+    <div class="card-body">
+        <h3>انواع الاقسام</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>الاسم باللغة العربية</th>
+                    <th>الاسم باللغة الانجليزية</th>
+                    @* <th>التخصص</th> *@
+                    <th>التفعيل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var departmentType in (List<TrainigSectorDataEntry.ViewModel.DepartmentTypeVM>)ViewBag.existingDepartmentType)
+                {
+                    <tr>
+                        <td>@departmentType.NameAr</td>
+                        <td>@departmentType.NameEn</td>
+                   @*      <td>@departmentType.Specialization?.NameAr</td> *@
+                        <td>
+                            @if (departmentType.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@departmentType.ID" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@departmentType.ID" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

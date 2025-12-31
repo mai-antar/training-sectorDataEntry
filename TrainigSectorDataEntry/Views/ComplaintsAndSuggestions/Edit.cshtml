@@ -1,0 +1,77 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM
+
+@{
+    ViewData["Title"] = "تعديل الشكاوى والمقترحات";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل الشكاوى والمقترحات</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">الاسم</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Telephone" class="control-label">التليفون</label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="ComplaintText" class="control-label">محتوى الشكوى</label>
+        <textarea asp-for="ComplaintText" class="form-control my-textarea" ></textarea>
+        <span asp-validation-for="ComplaintText" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">البريد الالكتروني</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <br />
+    <!-- File Upload -->
+    <div class="form-group">
+        <label for="UploadedFile">تحديث الملف (اختياري)</label>
+        <input asp-for="UploadedFile" type="file" class="form-control" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+    <br />
+
+    <!-- Existing File Preview -->
+    @if (!string.IsNullOrEmpty(Model.FilePath))
+    {
+        <div class="form-group">
+            <label>الملف الحالي:</label><br />
+            @* <a href="@Model.FilePath" target="_blank">تحميل الملف الحالي</a> *@
+            <a asp-controller="Files" asp-action="Download" asp-route-filePath="@Model.FilePath">
+                تحميل
+            </a>
+        </div>
+    }
+
+
+    <br />
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}
+

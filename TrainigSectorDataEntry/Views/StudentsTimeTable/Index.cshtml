@@ -1,0 +1,61 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.StudentsTimeTableVM>
+
+@{
+    ViewData["Title"] = "جداول الطلاب";
+}
+
+<h2>جداول الطلاب</h2>
+<br />
+<a asp-action="Create" class="btn btn-primary mb-3">إضافة جدول جديد</a>
+<br />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>المرحلة التعليمية</th>
+            <th>المنشأة التعليمية</th>
+            <th>حالي؟</th>
+            <th>مفعل؟</th>
+            <th>الملف</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EducationalLevel?.NameAr</td>
+                <td>@item.EducationalFacilities?.NameAr</td>
+                <td>
+                    @if (item.IsCurrent == true)
+                    {
+                        <span class="badge bg-success">نعم</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">لا</span>
+                    }
+                </td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.FilePath))
+                    {
+                        <a href="@item.FilePath" target="_blank">تحميل</a>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">تعديل</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

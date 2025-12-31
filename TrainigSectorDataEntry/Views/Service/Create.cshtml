@@ -1,0 +1,121 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ServiceVM
+
+@{
+    ViewData["Title"] = "الخدمات";
+}
+
+<h2>إضافة خدمات</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
+            <option value="">-- اختر منشأة تعليمية --</option>
+        </select>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleAr" class="control-label">العنوان باللغة العربية</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزية</label>
+        <input asp-for="TitleEn" class="form-control " />
+        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
+        <textarea asp-for="DescriptionAr" class="form-control my-textarea" ></textarea>
+        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
+        <textarea asp-for="DescriptionEn" class="form-control my-textarea" ></textarea>
+        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label for="UploadedImage">تحميل الصورة</label>
+        <input asp-for="UploadedImage" type="file" e class="form-control" />
+        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">الخدمات</strong>
+    </div>
+    <div class="card-body">
+        <h3>الخدمات</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>العنوان باللغة العربية</th>
+                    <th>العنوان باللغة الانجليزية</th>
+                    <th>التفاصيل باللغة العربية</th>
+                    <th>التفاصيل باللغة الانجليزية</th>
+                    <th>المنشأت التعليمية</th>
+                    <th>التفعيل</th>
+                    <th>الصورة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var service in (List<TrainigSectorDataEntry.ViewModel.ServiceVM>)ViewBag.existingService)
+                {
+                    <tr>
+                        <td>@service.TitleAr</td>
+                        <td>@service.TitleEn</td>
+                        <td>@service.DescriptionAr</td>
+                        <td>@service.DescriptionEn</td>
+                        <td>@service.EducationalFacilities?.NameAr</td>
+                        <td>@service.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (service.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+                        <td>
+
+                            <img src="@("/Storage/" + service.ImagePath)" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+
+
+
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@service.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@service.Id" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

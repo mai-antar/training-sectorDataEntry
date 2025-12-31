@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.AlertsAndAdvertismentVM>
+
+@{
+    ViewData["Title"] = "اعلانات وتنبيهات";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">اعلانات وتنبيهات</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة اعلانات وتنبيهات</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            
+            <th>التفاصيل باللغة العربية</th>
+            <th>التفاصيل باللغة الانجليزية</th>
+            <th>المنشأت التعليمية</th>
+            <th>التفعيل</th>
+            <th>الصورة</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alertsAndAdvertisment in Model)
+        {
+            <tr>
+
+                <td>@alertsAndAdvertisment.DescriptionAr</td>
+                <td>@alertsAndAdvertisment.DescriptionEn</td>
+                <td>@alertsAndAdvertisment.EducationalFacilities?.NameAr</td>
+                <td>
+                    @if (alertsAndAdvertisment.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+                <td>
+                    <img src="/Files/@alertsAndAdvertisment.ImagePath"
+                         style="width:60px;height:60px;object-fit:cover" />
+                   
+                   @*  <img src="@("/Storage/" + alertsAndAdvertisment.ImagePath)" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" /> *@
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@alertsAndAdvertisment.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                    <a asp-action="Delete" asp-route-id="@alertsAndAdvertisment.Id" class="btn btn-sm btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

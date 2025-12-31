@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM>
+
+@{
+    ViewData["Title"] = "الشكاوى والمقترحات";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">الشكاوى والمقترحات</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة شكاوى والمقترحات</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>اسم الجهة</th>
+            <th>الاسم</th>
+            <th>التليفون</th>
+            <th>محتوى الشكوى</th>
+            <th>البريد الالكتروني</th>
+            <th>التفعيل</th>
+            <th>الملف</th>
+
+
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var complaintsAndSuggestion in Model)
+        {
+            <tr>
+                <td>@complaintsAndSuggestion.TrainigSector?.NameAr</td>
+                <td>@complaintsAndSuggestion.Name</td>
+                <td>@complaintsAndSuggestion.Telephone</td>
+                <td>@complaintsAndSuggestion.ComplaintText</td>
+                <td>@complaintsAndSuggestion.Email</td>
+                <td>
+                    @if (complaintsAndSuggestion.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(complaintsAndSuggestion.FilePath))
+                    {
+                        
+                        <a asp-controller="Files" asp-action="Download" asp-route-filePath="@complaintsAndSuggestion.FilePath">
+                            تحميل
+                        </a>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                    <a asp-action="Delete" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@model List<TrainigSectorDataEntry.ViewModel.EducationalLevelVM>
+
+
+@foreach (var educationalLevel in Model)
+{
+    <tr>
+        <td>@educationalLevel.NameAr</td>
+        <td>@educationalLevel.NameEn</td>
+        <td>@educationalLevel.EducationalFacilities?.NameAr</td>
+        <td>
+            @if (educationalLevel.IsActive)
+            {
+                <span class="badge bg-success">مفعل</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">غير مفعل</span>
+            }
+        </td>
+
+        <td>
+            <a asp-action="Edit" asp-route-id="@educationalLevel.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+            <a asp-action="Delete" asp-route-id="@educationalLevel.Id" class="btn btn-sm btn-danger">حذف</a>
+        </td>
+    </tr>
+}

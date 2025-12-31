@@ -1,0 +1,105 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ContactUVM
+
+@{
+    ViewData["Title"] = "تواصل معنا";
+}
+
+<h2>إضافة لتواصل معنا</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+            <option value="">-- اختر الجهة --</option>
+        </select>
+        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Address" class="control-label">العنوان</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Telephone" class="control-label">التليفون</label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div>
+    <br/>
+    <div class="form-group">
+        <label asp-for="Fax" class="control-label">الفاكس</label>
+        <input asp-for="Fax" class="form-control" />
+        <span asp-validation-for="Fax" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">البريد الالكتروني</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">تواصل معنا</strong>
+    </div>
+    <div class="card-body">
+        <h3>تواصل معنا</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>اسم الجهة</th>
+                    <th>العنوان</th>
+                    <th>التليفون</th>
+                    <th>الفاكس</th>
+                    <th>البريد الالكتروني</th>
+                    <th>التفعيل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in (List<TrainigSectorDataEntry.ViewModel.ContactUVM>)ViewBag.existingContactU)
+                {
+                    <tr>
+                        <td>@contact.TrainigSector?.NameAr</td>
+                        <td>@contact.Address</td>
+                        <td>@contact.Telephone</td>
+                        <td>@contact.Fax</td>
+                        <td>@contact.Email</td>
+                        <td>
+                            @if (contact.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@contact.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@contact.Id" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

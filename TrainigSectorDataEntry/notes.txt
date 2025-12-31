@@ -1,0 +1,19 @@
+﻿Scaffold-DbContext "Server=MAI;Database=TrainingSectorDB;TrustServerCertificate=True;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context TrainingSectorDbContext -ContextDir DataContext -UseDatabaseNames -Force
+
+
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+      try
+      {
+          string c = Directory.GetCurrentDirectory();
+          IConfigurationRoot configuration =
+              new ConfigurationBuilder().SetBasePath(c).AddJsonFile("appsettings.json").Build();
+
+          optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+      }
+      catch
+      {
+          //ignore
+      }
+  }

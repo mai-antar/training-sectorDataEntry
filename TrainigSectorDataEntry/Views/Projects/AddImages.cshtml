@@ -1,0 +1,32 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ProjectImageVM
+
+@{
+    ViewData["Title"] = "إضافة صور للمشروع";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">إضافة صور للمشروع</h2>
+
+<form asp-action="AddImages" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProjectsId" />
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label>اختار صور</label>
+        <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+        <span asp-validation-for="UploadedImages" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">تحميل</button>
+    <a asp-action="Index" class="btn btn-secondary">الرجوع للقائمة</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

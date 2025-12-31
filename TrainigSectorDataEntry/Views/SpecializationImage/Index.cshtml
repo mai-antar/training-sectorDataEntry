@@ -1,0 +1,60 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.SpecializationImageVM>
+
+<h2>صور وتفاصيل تخصص: @ViewBag.specializationName</h2>
+
+<a asp-action="Create"
+   asp-route-specializationId="@ViewBag.SpecializationId"
+   asp-route-educationalFacilitiesName="@ViewBag.educationalFacilitiesName"
+   asp-route-specializationName="@ViewBag.specializationName"
+   asp-route-departmentName="@ViewBag.departmentName"
+  
+   class="btn btn-primary mb-3">
+    إضافة
+</a>
+
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>المنشأه التعليمية</th>
+            <th>نوع القسم</th>
+            <th>العنوان</th>
+            <th>الوصف</th>
+            <th>الصورة</th>
+            <th>الحالة</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@ViewBag.educationalFacilitiesName</td>
+                <td>@ViewBag.departmentName</td>
+                <td>@item.TitleAr</td>
+                <td>@item.DescriptionAr</td>
+                <td>
+                    <img src="/Files/@item.ImagePath"
+                         style="width:60px;height:60px;object-fit:cover" />
+                @*     <img src="@item.ImagePath" width="100" /> *@
+                </td>
+                <td>
+                    @(item.IsActive ? "مفعل" : "غير مفعل")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+
+
+                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-specializationId="@ViewBag.SpecializationId"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('هل أنت متأكد من الحذف؟');">
+                        حذف
+                    </a>
+                  
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>

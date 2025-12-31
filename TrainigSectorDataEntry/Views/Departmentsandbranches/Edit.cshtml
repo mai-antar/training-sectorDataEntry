@@ -1,0 +1,100 @@
+﻿@model TrainigSectorDataEntry.ViewModel.DepartmentsandbranchVM
+
+@{
+    ViewData["Title"] = "تعديل الاقسام";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل الاقسام</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <br />
+    <div class="form-group">
+        <input type="hidden" id="CurrentFacilityId" value="@Model.EducationalFacilitiesId" />
+
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمي</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilityList" class="form-control">
+            <option value="">-- اختر المنشأة التعليمية --</option>
+        </select>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+    </div>
+@* 
+    <div class="form-group">
+        <input type="hidden" id="CurrentspecializationsId" value="@Model.SpecializationId" />
+
+        <label asp-for="SpecializationId" class="control-label">اسم التخصص</label>
+        <select asp-for="SpecializationId" asp-items="ViewBag.specializationList" class="form-control">
+            <option value="">-- اختر التخصص --</option>
+        </select>
+        <span asp-validation-for="SpecializationId" class="text-danger"></span>
+    </div> *@
+    <br />
+    <div class="form-group">
+        <label asp-for="DepatmentTypeID" class="control-label">اسم نوع القسم</label>
+        <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" class="form-control">
+            <option value="">-- اختر نوع القسم --</option>
+        </select>
+        <span asp-validation-for="DepatmentTypeID" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+
+
+    <br />
+
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+@* 
+    <script>
+        $(document).ready(function () {
+            $('#EducationalFacilitiesId').change(function () {
+                var facilityId = $(this).val();
+
+                if (facilityId) {
+                    $.ajax({
+                        url: '/Departmentsandbranches/GetspecializationByFacilityId',
+                        type: 'GET',
+                        data: { facilityId: facilityId },
+                        success: function (data) {
+                            var $specializations = $('#SpecializationId');
+                            var selectedspecializationsId = $('#CurrentspecializationsId').val();
+
+                            $specializations.empty();
+                            $specializations.append('<option value="">-- اختر التخصص --</option>');
+                            $.each(data, function (i, specialization) {
+                                $specializations.append('<option value="' + specialization.value + '">' + specialization.text + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+
+    </script> *@
+}
+

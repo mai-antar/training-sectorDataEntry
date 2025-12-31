@@ -1,0 +1,92 @@
+﻿@model TrainigSectorDataEntry.ViewModel.TrainingCoursesTypeVM
+
+@{
+    ViewData["Title"] = "انواع الدورات التدريبية";
+}
+
+<h2>إضافة انواع الدورات التدريبية</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainingSectorId" class="control-label">اسم الجهة</label>
+        <select asp-for="TrainingSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+            <option value="">-- اختر الجهة --</option>
+        </select>
+        <span asp-validation-for="TrainingSectorId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">انواع الدورات التدريبية</strong>
+    </div>
+    <div class="card-body">
+        <h3>انواع الدورات التدريبية</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>الاسم باللغة العربية</th>
+                    <th>الاسم باللغة الانجليزية</th>
+                    <th>الجهة</th>
+                    <th>التاريخ</th>
+                    <th>التفعيل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var trainingCoursesType in (List<TrainigSectorDataEntry.ViewModel.TrainingCoursesTypeVM>)ViewBag.existingTrainingCoursesType)
+                {
+                    <tr>
+                        <td>@trainingCoursesType.NameAr</td>
+                        <td>@trainingCoursesType.NameEn</td>
+                        <td>@trainingCoursesType.TrainingSector?.NameAr</td>
+                        <td>@trainingCoursesType.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (trainingCoursesType.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@trainingCoursesType.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@trainingCoursesType.Id" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

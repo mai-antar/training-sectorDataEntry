@@ -1,0 +1,65 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ContactUVM
+
+@{
+    ViewData["Title"] = "تعديل تواصل معنا";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل تواصل معنا</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+            <option value="">-- اختر منشأة تعليمية --</option>
+        </select>
+        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Address" class="control-label">العنوان</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Telephone" class="control-label">التليفون</label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Fax" class="control-label">الفاكس</label>
+        <input asp-for="Fax" class="form-control" />
+        <span asp-validation-for="Fax" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">البريد الالكتروني</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+
+    <br />
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}
+

@@ -1,0 +1,107 @@
+﻿@model TrainigSectorDataEntry.ViewModel.TrainingCourseVM
+
+@{
+    ViewData["Title"] = " الدورات التدريبية";
+}
+
+<h2> انواع الدورات التدريبية</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainigCoursesTypesId" class="control-label">نوع الدورات التدريبية</label>
+        <select asp-for="TrainigCoursesTypesId" asp-items="ViewBag.TrainingCoursesTypeList" class="form-control">
+            <option value="">-- اختر نوع الدورات التدريبية --</option>
+        </select>
+        <span asp-validation-for="TrainigCoursesTypesId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="UploadedFile">تحميل الملف</label>
+        <input asp-for="UploadedFile" type="file" class="form-control" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;"> الدورات التدريبية</strong>
+    </div>
+    <div class="card-body">
+        <h3>الدورات التدريبية</h3>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>الاسم باللغة العربية</th>
+                    <th>الاسم باللغة الانجليزية</th>
+                    <th>نوع الدورات التدريبية</th>
+                    <th>الملف</th>
+                    <th>التفعيل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var trainingCourse in (List<TrainigSectorDataEntry.ViewModel.TrainingCourseVM>)ViewBag.existingTrainingCourse)
+                {
+                    <tr>
+                        <td>@trainingCourse.NameAr</td>
+                        <td>@trainingCourse.NameEn</td>
+                        <td>@trainingCourse.TrainigCoursesTypes?.NameAr</td>
+                        <td>
+
+                            @if (!string.IsNullOrEmpty(trainingCourse.FilePath))
+                            {
+                                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@trainingCourse.FilePath">
+                                    تحميل
+                                </a>
+
+                                @* <a href="@("/Storage/" + trainingCourse.FilePath)" target="_blank">تحميل</a> *@
+                            }
+                        </td>
+                        <td>
+                            @if (trainingCourse.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@trainingCourse.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@trainingCourse.Id" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

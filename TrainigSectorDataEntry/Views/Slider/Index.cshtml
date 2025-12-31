@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.SliderVM>
+
+@{
+    ViewData["Title"] = "Slider";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">slider</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">اضافة silder</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>العنوان باللغة العربية</th>
+            <th>العنوان باللغة الانجليزية</th>
+            <th>التفاصيل باللغة العربية</th>
+            <th>التفاصيل باللغة الانجليزية</th>
+            <th>اسم الجهة</th>
+            <th>التفعيل</th>
+            <th>الصورة</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var slider in Model)
+        {
+            <tr>
+                <td>@slider.TitleAr</td>
+                <td>@slider.TitleEn</td>
+                <td>@slider.DescriptionAr</td>
+                <td>@slider.DescriptionEn</td>
+                <td>@slider.TrainigSector?.NameAr</td>
+                <td>
+                    @if (slider.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+                <td>
+
+                    <img src="@slider.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@slider.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                    <a asp-action="Delete" asp-route-id="@slider.Id" class="btn btn-sm btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

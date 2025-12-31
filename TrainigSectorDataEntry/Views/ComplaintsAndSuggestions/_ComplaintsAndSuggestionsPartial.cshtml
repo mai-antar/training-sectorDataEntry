@@ -1,0 +1,38 @@
+﻿@model List<TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM>
+
+
+@foreach (var complaintsAndSuggestion in Model)
+{
+    <tr>
+        <td>@complaintsAndSuggestion.TrainigSector?.NameAr</td>
+        <td>@complaintsAndSuggestion.Name</td>
+        <td>@complaintsAndSuggestion.Telephone</td>
+        <td>@complaintsAndSuggestion.ComplaintText</td>
+        <td>@complaintsAndSuggestion.Email</td>
+        <td>
+            @if (complaintsAndSuggestion.IsActive)
+            {
+                <span class="badge bg-success">مفعل</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">غير مفعل</span>
+            }
+        </td>
+        <td>
+            @if (!string.IsNullOrEmpty(complaintsAndSuggestion.FilePath))
+            {
+                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@complaintsAndSuggestion.FilePath">
+                    تحميل
+                </a>
+
+            }
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+            <a asp-action="Delete" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-danger">حذف</a>
+        </td>
+    </tr>
+}
+

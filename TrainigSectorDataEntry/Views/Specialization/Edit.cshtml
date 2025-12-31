@@ -1,0 +1,55 @@
+﻿@model TrainigSectorDataEntry.ViewModel.SpecializationVM
+
+@{
+    ViewData["Title"] = "تعديل التخصصات";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل التخصصات</h2>
+
+<form asp-action="Edit" method="post" >
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
+            <option value="">-- اختر منشأة تعليمية --</option>
+        </select>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+
+   
+
+    <br />
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}
+

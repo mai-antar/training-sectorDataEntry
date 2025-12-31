@@ -1,0 +1,163 @@
+﻿@model TrainigSectorDataEntry.ViewModel.HistoryBreifVM
+
+@{
+    ViewData["Title"] = "تعديل النبذة تاريخية";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">تعديل النبذة تاريخية</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
+            <option value="">-- اختر منشأة تعليمية --</option>
+        </select>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
+        <input asp-for="NameAr" class="form-control" />
+        <span asp-validation-for="NameAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
+        <input asp-for="NameEn" class="form-control" />
+        <span asp-validation-for="NameEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleAr" class="control-label">عنوان النبذة التاريخية باللغة العربية</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TitleEn" class="control-label">عنوان النبذة التاريخية باللغة العربية</label>
+        <input asp-for="TitleEn" class="form-control" />
+        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionAr" class="control-label">تفاصيل النبذة التاريخية باللغة العربية</label>
+        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="DescriptionEn" class="control-label">تفاصيل النبذة التاريخية باللغة الانجليزية</label>
+        <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+    </div>
+    <br />
+
+    <!-- Existing Images -->
+    <div class="form-group">
+        <label>الصور الحالية</label>
+@*         <input type="hidden" name="DeletedImageIds" id="DeletedImageIds" /> *@
+
+        <div>
+            @if (Model.HistoryBerifImages != null && Model.HistoryBerifImages.Any())
+            {
+                foreach (var image in Model.HistoryBerifImages.Where(a => a.IsDeleted == false))
+                {
+                    <div class="image-container" data-image-id="@image.Id" style="display: inline-block; position: relative; margin: 5px;">
+                   @*      <img src="@("/Storage/" + image.ImagePath)" alt="News Image"
+                             style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" /> *@
+                        <img src="/Files/@image.ImagePath" alt="News Image"
+                             style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
+                        <button type="button" class="btn btn-sm btn-danger delete-image-btn"
+                                style="position: absolute; top: -10px; right: -10px;">
+                            X
+                        </button>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>لا توجد صور.</p>
+            }
+        </div>
+    </div>
+    <br />
+    <!-- Upload New Images -->
+    <div class="form-group">
+        <label for="UploadedImages">إضافة صور جديدة</label>
+        <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+        <span asp-validation-for="UploadedImages" class="text-danger"></span>
+    </div>
+    <br />
+
+
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll(".delete-image-btn").forEach(button => {
+                button.addEventListener("click", function () {
+
+                    const container = this.closest(".image-container");
+                    const imageId = container.dataset.imageId;
+
+                    // hide image
+                    container.style.display = "none";
+
+                    // prevent duplicates
+                    if (document.querySelector(`input[name="DeletedImageIds"][value="${imageId}"]`))
+                        return;
+
+                    // create hidden input
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "DeletedImageIds";
+                    input.value = imageId;
+
+                    // append to form
+                    container.closest("form").appendChild(input);
+                });
+            });
+
+        });
+    </script>
+
+
+@*     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deletedImageIds = new Set();
+            const hiddenField = document.getElementById("DeletedImageIds");
+
+            document.querySelectorAll(".delete-image-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    const container = this.closest(".image-container");
+                    const imageId = container.getAttribute("data-image-id");
+
+                    // Hide the image preview
+                    container.style.display = "none";
+
+                    // Track the ID in the hidden input
+                    deletedImageIds.add(imageId);
+                    hiddenField.value = Array.from(deletedImageIds).join(',');
+                });
+            });
+        });
+    </script> *@
+}

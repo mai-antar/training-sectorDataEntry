@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.StagesAndHallVM>
+
+@{
+    ViewData["Title"] = "القاعات والمسارح";
+}
+
+<h2 class="text-center" style="margin-bottom: 80px;">القاعات والمسارح</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة قاعة او مسرح</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>الوصف باللغة العربية</th>
+            <th>الوصف باللغة الانجليزية</th>
+            <th>الجهة</th>
+            <th>قاعة أم مسرح</th>
+            <th>التفعيل</th>
+            <th>الصورة</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stagesAndHall in Model)
+        {
+            <tr>
+                <td>@stagesAndHall.DescriptionAr</td>
+                <td>@stagesAndHall.DescriptionAr</td>
+                <td>@stagesAndHall.TrainigSector?.NameAr</td>
+                <td>
+                    @if (stagesAndHall.ISStage == true)
+                    {
+                        <span class="badge bg-success">مسرح</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">قاعة</span>
+                    }
+                </td>
+                <td>
+                    @if (stagesAndHall.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+                <td>
+
+                    <img src="@stagesAndHall.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@stagesAndHall.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                    <a asp-action="Delete" asp-route-id="@stagesAndHall.Id" class="btn btn-sm btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

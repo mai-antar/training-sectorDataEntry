@@ -1,0 +1,55 @@
+﻿@model TrainigSectorDataEntry.ViewModel.DepartmentsandBranchesImageVM
+
+
+
+<h2>تعديل صورة القسم: @ViewBag.DepartmentName</h2>
+<br />
+<span>المنشأة التعليمية: @ViewBag.educationalFacilitiesName</span>
+
+<br />
+<span>نوع القسم: @ViewBag.depatmentTypeName</span>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="DepartmentsandbranchesId" />
+    <input type="hidden" asp-for="educationalFacilitiesName" value="@ViewBag.educationalFacilitiesName" />
+    <input type="hidden" asp-for="depatmentTypeName" value="@ViewBag.depatmentTypeName" />
+    <br />
+    <div class="mb-3">
+        <label>العنوان العربي</label>
+        <input asp-for="TitleAr" class="form-control" />
+        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="mb-3">
+        <label>الوصف العربي</label>
+        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="mb-3">
+        <label>الوصف الانجليزي</label>
+        <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="mb-3">
+        <label>الصورة الحالية</label><br />
+        <img src="/Files/@Model.ImagePath"
+             style="width:120px;height:120px;object-fit:cover" />
+    </div>
+    <br />
+    <div class="mb-3">
+        <label>تغيير الصورة (اختياري)</label>
+        <input asp-for="UploadedImage" type="file" class="form-control" />
+        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-success">حفظ التعديل</button>
+    <a asp-action="Index"
+       asp-route-departmentId="@Model.DepartmentsandbranchesId"
+    
+       class="btn btn-secondary">
+        رجوع
+    </a>
+</form>

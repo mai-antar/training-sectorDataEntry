@@ -1,0 +1,139 @@
+﻿@model TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM
+
+@{
+    ViewData["Title"] = "الشكاوى والمقترحات";
+}
+
+<h2>إضافة شكاوى والمقترحات</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="form-group">
+        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+            <option value="">-- اختر الجهة --</option>
+        </select>
+        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">الاسم</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Telephone" class="control-label">التليفون</label>
+        <input asp-for="Telephone" class="form-control" />
+        <span asp-validation-for="Telephone" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="ComplaintText" class="control-label">محتوى الشكوى</label>
+        <textarea asp-for="ComplaintText" class="form-control my-textarea" ></textarea>
+        <span asp-validation-for="ComplaintText" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">البريد الالكتروني</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="UploadedFile">تحميل الملف</label>
+        <input asp-for="UploadedFile" type="file" class="form-control" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">إضافة</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+<div class="card mt-5">
+    <div class="card-header">
+        <strong class="text-center" style="margin-bottom: 80px;">الشكاوى والمقترحات</strong>
+    </div>
+    <div class="card-body">
+        <h3>الشكاوى والمقترحات</h3>
+
+        <table class="table table-bordered table-striped" id="complaintsTable">
+            <thead>
+                <tr>
+                    <th>اسم الجهة</th>
+                    <th>الاسم</th>
+                    <th>التليفون</th>
+                    <th>محتوى الشكوى</th>
+                    <th>البريد الالكتروني</th>
+                    <th>التفعيل</th>
+                    <th>الملف</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @Html.Partial("_ComplaintsAndSuggestionsPartial", (List<TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM>)ViewBag.existingComplaintsAndSuggestion)
+             @*    @foreach (var complaintsAndSuggestion in (List<TrainigSectorDataEntry.ViewModel.ComplaintsAndSuggestionVM>)ViewBag.existingComplaintsAndSuggestion)
+                {
+                    <tr>
+                        <td>@complaintsAndSuggestion.TrainigSector?.NameAr</td>
+                        <td>@complaintsAndSuggestion.Name</td>
+                        <td>@complaintsAndSuggestion.Telephone</td>
+                        <td>@complaintsAndSuggestion.ComplaintText</td>
+                        <td>@complaintsAndSuggestion.Email</td>
+                        <td>
+                            @if (complaintsAndSuggestion.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">غير مفعل</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(complaintsAndSuggestion.FilePath))
+                            {
+                                <a href="@complaintsAndSuggestion.FilePath" target="_blank">تحميل</a>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+                            <a asp-action="Delete" asp-route-id="@complaintsAndSuggestion.Id" class="btn btn-sm btn-danger">حذف</a>
+                        </td>
+                    </tr>
+                }
+  *@           </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+       
+    }
+    <script>
+        $(document).ready(function() {
+            $('#TrainigSectorId').change(function() {
+                var trainigSectorId = $(this).val();
+
+               
+                if (trainigSectorId) {
+                    $.ajax({
+                        url: '@Url.Action("GetComplaintsByTrainingSector", "ComplaintsAndSuggestions")',
+                        type: 'GET',
+                        data: { trainigSectorId: trainigSectorId },
+                        success: function(data) {
+                            $('#complaintsTable tbody').html(data);
+                        }
+                    });
+                } else {
+                    $('#complaintsTable tbody').html('');
+                }
+            });
+        });
+    </script>
+}
