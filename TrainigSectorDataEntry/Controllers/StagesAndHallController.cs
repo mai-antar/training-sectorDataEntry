@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using TrainigSectorDataEntry.Interface;
 using TrainigSectorDataEntry.Logging;
 using TrainigSectorDataEntry.Models;
+using TrainigSectorDataEntry.Services;
 using TrainigSectorDataEntry.ViewModel;
 
 namespace TrainigSectorDataEntry.Controllers
@@ -15,13 +16,16 @@ namespace TrainigSectorDataEntry.Controllers
         private readonly IGenericService<TrainingSector> _TrainingSectorService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
+        private readonly IFileStorageService _fileStorageService;
+
         public StagesAndHallController(IGenericService<StagesAndHall> StagesAndHallService,
-            IGenericService<TrainingSector> TrainingSectorService, IMapper mapper, ILoggerRepository logger)
+            IGenericService<TrainingSector> TrainingSectorService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
         {
             _StagesAndHallService = StagesAndHallService;
             _TrainingSectorService = TrainingSectorService;
             _mapper = mapper;
             _logger = logger;
+            _fileStorageService = fileStorageService;
         }
         public async Task<IActionResult> Index()
         {
@@ -74,31 +78,30 @@ namespace TrainigSectorDataEntry.Controllers
                 return View(model);
             }
             // Save the image
-            string? fileName = null;
+
             if (model.UploadedImage != null)
             {
-                string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/StagesAndHallImage");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
 
-                if (model.UploadedImage.Length > 0 && model.UploadedImage.ContentType.StartsWith("image/"))
+
+                var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "StagesAndHallImage");
+
+                if (relativePath != null)
                 {
-                    fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedImage.FileName);
-                    var filePath = Path.Combine(uploadDir, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    await _StagesAndHallService.AddAsync(new StagesAndHall
                     {
-                        await model.UploadedImage.CopyToAsync(stream);
-                    }
+                        TrainigSectorId = model.TrainigSectorId,
+                        DescriptionAr = model.DescriptionAr,
+                        DescriptionEn = model.DescriptionEn,
+                        IsDeleted = false,
+                        IsActive = true,
+                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
+                        ImagePath = relativePath
+                    });
+
                 }
+
             }
 
-            var entity = _mapper.Map<StagesAndHall>(model);
-            entity.IsDeleted = false;
-            entity.IsActive = true;
-            entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
-            entity.ImagePath = "/uploads/StagesAndHallImage/" + fileName;
-            await _StagesAndHallService.AddAsync(entity);
 
             return RedirectToAction(nameof(Index));
         }
@@ -146,34 +149,34 @@ namespace TrainigSectorDataEntry.Controllers
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
 
+
             if (model.UploadedImage != null && model.UploadedImage.Length > 0)
             {
-                // Delete old image if exists
+
                 if (!string.IsNullOrEmpty(entity.ImagePath))
                 {
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", entity.ImagePath.TrimStart('/'));
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
+                    await _fileStorageService.DeleteFileAsync(entity.ImagePath);
                 }
 
-                // Save new image
-                var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/StagesAndHallImage");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
+                var relativePath = await _fileStorageService
+                    .UploadImageAsync(model.UploadedImage, "StagesAndHallImage");
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedImage.FileName);
-                var filePath = Path.Combine(uploadDir, fileName);
+                entity.ImagePath = relativePath;
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (string.IsNullOrEmpty(relativePath))
                 {
-                    await model.UploadedImage.CopyToAsync(stream);
+                    ModelState.AddModelError("UploadedImage", "حدث خطأ أثناء رفع الصورة.");
+                    var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
+
+                    ViewBag.TrainingSectorList =
+                        new SelectList(TrainingSector, "Id", "NameAr");
+                    return View(model);
                 }
 
-                // Update entity path
-                entity.ImagePath = "/uploads/StagesAndHallImage/" + fileName;
+                entity.ImagePath = relativePath;
             }
+
+      
 
             // Ensure image path is still set
             if (string.IsNullOrEmpty(entity.ImagePath))

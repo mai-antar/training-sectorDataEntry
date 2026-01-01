@@ -44,18 +44,7 @@ namespace TrainigSectorDataEntry.Controllers
 
 
 
-            //var SpecializationList = await _specializationService.GetAllAsync();
-            //var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-
-            //ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
-
-            //var departmentsandbranch = await _departmentsandbranch.GetDropdownListAsync();
-
-            //ViewBag.departmentsandbranchList = new SelectList(departmentsandbranch, "Id", "NameAr");
-
-            //var viewModelList = _mapper.Map<List<SpecializationVM>>(SpecializationList);
-
-            //return View(viewModelList);
+      
         }
 
         public async Task<IActionResult> Create()

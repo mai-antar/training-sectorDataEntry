@@ -80,13 +80,13 @@ namespace TrainigSectorDataEntry.Controllers
             {
 
                
-                    var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "historyBreifImage");
+                    var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "AlertsAndAdvertismentImage");
 
                     if (relativePath != null)
                     {
                         await _AlertsAndAdvertismentServices.AddAsync(new AlertsAndAdvertisment
                         {
-                               EducationalFacilitiesId=model.EducationalFacilitiesId,
+                           EducationalFacilitiesId=model.EducationalFacilitiesId,
                            IsDeleted = false,
                            IsActive = true,
                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today),

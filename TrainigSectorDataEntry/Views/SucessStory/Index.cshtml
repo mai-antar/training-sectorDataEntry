@@ -27,7 +27,7 @@
                 <td>@item.TrainigSector?.NameAr</td>
                 <td>
 
-                    <img src="@("/Storage/" + item.ImagePath)" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                    <img src="/Files/@item.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
                 </td>
             @*     <td>
                     @if (item.IsExternalLink == true && !string.IsNullOrEmpty(item.VedioPath))
