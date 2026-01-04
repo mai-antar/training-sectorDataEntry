@@ -46,7 +46,7 @@
     <div class="card-body">
         <h3>الدورات التدريبية</h3>
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="trainingCourseTable">
             <thead>
                 <tr>
                     <th>الاسم باللغة العربية</th>
@@ -58,42 +58,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var trainingCourse in (List<TrainigSectorDataEntry.ViewModel.TrainingCourseVM>)ViewBag.existingTrainingCourse)
-                {
-                    <tr>
-                        <td>@trainingCourse.NameAr</td>
-                        <td>@trainingCourse.NameEn</td>
-                        <td>@trainingCourse.TrainigCoursesTypes?.NameAr</td>
-                        <td>
-
-                            @if (!string.IsNullOrEmpty(trainingCourse.FilePath))
-                            {
-                                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@trainingCourse.FilePath">
-                                    تحميل
-                                </a>
-
-                                @* <a href="@("/Storage/" + trainingCourse.FilePath)" target="_blank">تحميل</a> *@
-                            }
-                        </td>
-                        <td>
-                            @if (trainingCourse.IsActive)
-                            {
-                                <span class="badge bg-success">مفعل</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">غير مفعل</span>
-                            }
-                        </td>
-
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@trainingCourse.Id" class="btn btn-sm btn-warning">تعديل</a>
-
-                            <a asp-action="Delete" asp-route-id="@trainingCourse.Id" class="btn btn-sm btn-danger">حذف</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                @Html.Partial("_TrainingCoursePartial", (List<TrainigSectorDataEntry.ViewModel.TrainingCourseVM>)ViewBag.existingTrainingCourse)
+                            </tbody>
         </table>
 
     </div>
@@ -104,4 +70,23 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function() {
+            $('#TrainigCoursesTypesId').change(function() {
+                var trainigCoursesTypesId = $(this).val();
+                if (trainigCoursesTypesId) {
+                    $.ajax({
+                        url: '@Url.Action("GetTrainingCourseByTrainingCourseType", "TrainingCourse")',
+                        type: 'GET',
+                        data: { trainigCoursesTypesId: trainigCoursesTypesId },
+                        success: function(data) {
+                            $('#trainingCourseTable tbody').html(data);
+                        }
+                    });
+                } else {
+                    $('#trainingCourseTable tbody').html('');
+                }
+            });
+        });
+    </script>
 }

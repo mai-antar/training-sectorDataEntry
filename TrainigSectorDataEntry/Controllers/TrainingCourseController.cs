@@ -192,5 +192,18 @@ namespace TrainigSectorDataEntry.Controllers
             await _TrainingCourseService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTrainingCourseByTrainingCourseType(int trainigCoursesTypesId)
+        {
+            var trainingCoursesType = await _TrainingCoursesTypeService.GetDropdownListAsync();
+            var trainingCourses = await _TrainingCourseService.GetAllAsync();
+            trainingCourses = trainingCourses.Where(a => a.TrainigCoursesTypesId== trainigCoursesTypesId).ToList();
+
+            var vmList = _mapper.Map<List<TrainingCourseVM>>(trainingCourses);
+
+
+            return PartialView("_TrainingCoursePartial", vmList);
+        }
     }
 }
