@@ -17,15 +17,17 @@ namespace TrainigSectorDataEntry.Controllers
         private readonly IGenericService<EducationalFacility> _educationalFacilityService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
+        private readonly IFileStorageService _fileStorageService;
         public StudentsTimeTableController(IGenericService<StudentsTimeTable> StudentsTimeTableService,
             IGenericService<EducationalLevel> EducationalLevelService, IGenericService<EducationalFacility> educationalFacilityService,
-            IMapper mapper, ILoggerRepository logger)
+            IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
         {
             _StudentsTimeTableService = StudentsTimeTableService;
             _EducationalLevelService = EducationalLevelService;
             _educationalFacilityService = educationalFacilityService;
             _mapper = mapper;
             _logger = logger;
+            _fileStorageService = fileStorageService;
         }
         public async Task<IActionResult> Index()
         {
@@ -237,6 +239,19 @@ namespace TrainigSectorDataEntry.Controllers
                 .ToList();
 
             return Json(filteredLevels);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStudentsTimeTableByFacility(int facilityId)
+        {
+            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+            var studentsTimeTable = await _StudentsTimeTableService.GetAllAsync();
+            studentsTimeTable = studentsTimeTable.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
+
+            var vmList = _mapper.Map<List<StudentsTimeTableVM>>(studentsTimeTable);
+
+
+            return PartialView("_AlertsAndAdvertismentPartial", vmList);
         }
 
 
