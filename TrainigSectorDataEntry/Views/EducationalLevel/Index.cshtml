@@ -3,10 +3,21 @@
 @{
     ViewData["Title"] = "المستوى التعليمي";
 }
+<div class="container-fluid">
+    <div class="contPage">
 
-<h2 class="text-center" style="margin-bottom: 80px;">المستوى التعليمي</h2>
 
-<a asp-action="Create" class="btn btn-success mb-3">إضافة مستوى تعليمي</a>
+        <div class="orang">
+            <h3>المستوى التعليمي </h3>
+            <div></div>
+        </div>
+
+
+    </div>
+    <button type="button" asp-action="Create" class="button right-4tens ">
+        <span class="button__text"> إضافة مستوى تعليمي</span>
+        <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+    </button>
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -30,20 +41,29 @@
                 <td>
                     @if (educationalLevel.IsActive)
                     {
-                        <span class="badge bg-success">مفعل</span>
+
+                            <i class="fa-solid fa-toggle-on"> </i>
                     }
                     else
                     {
                         <span class="badge bg-danger">غير مفعل</span>
                     }
-                </td>
+                    </td>
 
-                <td>
-                    <a asp-action="Edit" asp-route-id="@educationalLevel.Id" class="btn btn-sm btn-warning">تعديل</a>
+                    <td>
+                        <button type="button" asp-action="Edit" asp-route-id="@educationalLevel.Id" class="buttonedit right-4tens ">
+                            <span class="buttonedit__text">تعديل</span>
+                            <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                        </button>
 
-                    <a asp-action="Delete" asp-route-id="@educationalLevel.Id" class="btn btn-sm btn-danger">حذف</a>
-                </td>
+                        <button type="button" asp-action="Delete" asp-route-id="@educationalLevel.Id" class="buttonremove right-4tens ">
+                            <span class="buttonremove__text"> حذف</span>
+                            <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                        </button>
+
+                    </td>
             </tr>
         }
     </tbody>
 </table>
+</div>

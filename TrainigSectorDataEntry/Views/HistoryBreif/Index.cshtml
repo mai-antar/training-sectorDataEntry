@@ -3,10 +3,22 @@
 @{
     ViewData["Title"] = "النبذة التاريخية";
 }
+<div class="container-fluid">
+    <div class="contPage">
 
-<h2 class="text-center" style="margin-bottom: 80px;">النبذة التاريخية</h2>
 
-<a asp-action="Create" class="btn btn-success mb-3">إضافة نبذة تاريخية</a>
+        <div class="orang">
+            <h3>النبذة التاريخية </h3>
+            <div></div>
+        </div>
+
+
+    </div>
+    <button type="button" asp-action="Create" class="button right-4tens ">
+        <span class="button__text"> إضافة نبذة تاريخية</span>
+        <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+    </button>
+
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -60,3 +72,4 @@
         }
     </tbody>
 </table>
+</div>
