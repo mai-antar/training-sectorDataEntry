@@ -14,13 +14,16 @@ namespace TrainigSectorDataEntry.Controllers
         private readonly IGenericService<TrainingSector> _trainingSectorService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
+        private readonly IFileStorageService _fileStorageService;
+
         public SliderController(IGenericService<Slider> sliderService,
-            IGenericService<TrainingSector> trainingSectorService, IMapper mapper, ILoggerRepository logger)
+            IGenericService<TrainingSector> trainingSectorService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
         {
             _sliderService = sliderService;
             _trainingSectorService = trainingSectorService;
             _mapper = mapper;
             _logger = logger;
+            _fileStorageService = fileStorageService;
         }
         public async Task<IActionResult> Index()
         {
@@ -69,35 +72,36 @@ namespace TrainigSectorDataEntry.Controllers
 
                 return View(model);
             }
+            
 
             // Save the image
-            string? fileName = null;
+
             if (model.UploadedImage != null)
             {
-                string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/SliderImage");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
 
-                if (model.UploadedImage.Length > 0 && model.UploadedImage.ContentType.StartsWith("image/"))
+
+                var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "SliderImage");
+
+                if (relativePath != null)
                 {
-                    fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedImage.FileName);
-                    var filePath = Path.Combine(uploadDir, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    await _sliderService.AddAsync(new Slider
                     {
-                        await model.UploadedImage.CopyToAsync(stream);
-                    }
+
+                        TrainigSectorId = model.TrainigSectorId,
+                        TitleAr = model.TitleAr,
+                        TitleEn = model.TitleEn,
+                        DescriptionAr = model.DescriptionAr,
+                        DescriptionEn = model.DescriptionEn,
+                        IsDeleted = false,
+                        IsActive = true,
+                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
+                        ImagePath = relativePath
+                    });
+
                 }
+
             }
 
-            // Map and save the entity
-            var entity = _mapper.Map<Slider>(model);
-            entity.IsDeleted = false;
-            entity.IsActive = true;
-            entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
-            entity.ImagePath = "/uploads/SliderImage/" + fileName;
-
-            await _sliderService.AddAsync(entity);
 
             return RedirectToAction(nameof(Index));
         }
@@ -145,35 +149,31 @@ namespace TrainigSectorDataEntry.Controllers
             entity.IsActive = model.IsActive;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
-
             if (model.UploadedImage != null && model.UploadedImage.Length > 0)
             {
-                // Delete old image if exists
+
                 if (!string.IsNullOrEmpty(entity.ImagePath))
                 {
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", entity.ImagePath.TrimStart('/'));
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
+                    await _fileStorageService.DeleteFileAsync(entity.ImagePath);
                 }
 
-                // Save new image
-                var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/SliderImage");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
+                var relativePath = await _fileStorageService
+                    .UploadImageAsync(model.UploadedImage, "AlertsAndAdvertismentImage");
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedImage.FileName);
-                var filePath = Path.Combine(uploadDir, fileName);
+                entity.ImagePath = relativePath;
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (string.IsNullOrEmpty(relativePath))
                 {
-                    await model.UploadedImage.CopyToAsync(stream);
+                    ModelState.AddModelError("UploadedImage", "حدث خطأ أثناء رفع الصورة.");
+                    var educationalFacility = await _sliderService.GetDropdownListAsync();
+                    ViewBag.educationalFacilityList =
+                        new SelectList(educationalFacility, "Id", "NameAr");
+                    return View(model);
                 }
 
-                // Update entity path
-                entity.ImagePath = "/uploads/SliderImage/" + fileName;
+                entity.ImagePath = relativePath;
             }
+         
 
             // Ensure image path is still set
             if (string.IsNullOrEmpty(entity.ImagePath))

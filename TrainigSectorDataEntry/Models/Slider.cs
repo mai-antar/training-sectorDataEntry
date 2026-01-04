@@ -35,5 +35,7 @@ public partial class Slider
 
     public DateOnly? UserDeletionDate { get; set; }
 
+    public string? VedioPath { get; set; }
+
     public virtual TrainingSector TrainigSector { get; set; } = null!;
 }

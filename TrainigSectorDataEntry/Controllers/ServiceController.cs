@@ -133,6 +133,8 @@ namespace TrainigSectorDataEntry.Controllers
 
             entity.TitleAr = model.TitleAr;
             entity.TitleEn = model.TitleEn;
+            entity.DescriptionAr = model.DescriptionAr;
+            entity.DescriptionEn = model.DescriptionEn;
             entity.EducationalFacilitiesId = model.EducationalFacilitiesId;
             entity.IsActive = model.IsActive;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
@@ -184,6 +186,18 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _Services.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetServicesByFacility(int facilityId)
+        {
+            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+            var services = await _Services.GetAllAsync();
+            services = services.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
+
+            var vmList = _mapper.Map<List<ServiceVM>>(services);
+
+
+            return PartialView("_ServicePartial", vmList);
         }
     }
 }
