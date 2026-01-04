@@ -91,32 +91,26 @@ namespace TrainigSectorDataEntry.Controllers
 
                 return View(model);
             }
+
             // Save the file
-            string? fileName = null;
+
             if (model.UploadedFile != null)
             {
-                string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/StudentsTimeTableFile");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
+                string[] allowedDocs = { ".pdf", ".docx", ".xlsx" };
+                var relativePath = await _fileStorageService.UploadFileAsync(model.UploadedFile, "StudentsTimeTableFile", allowedDocs);
 
-                if (model.UploadedFile != null && model.UploadedFile.Length > 0)
-                {
-                    fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedFile.FileName);
-                    var filePath = Path.Combine(uploadDir, fileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.UploadedFile.CopyToAsync(stream);
-                    }
-                }
+                // Map and save the entity
+                 var entity = _mapper.Map<StudentsTimeTable>(model);
+                entity.IsDeleted = false;
+                entity.IsActive = true;
+                entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
+                entity.FilePath = relativePath;
+
+                await _StudentsTimeTableService.AddAsync(entity);
             }
 
-            var entity = _mapper.Map<StudentsTimeTable>(model);
-            entity.IsDeleted = false;
-            entity.IsActive = true;
-            entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
-            entity.FilePath = "/uploads/StudentsTimeTableFile/" + fileName;
-            await _StudentsTimeTableService.AddAsync(entity);
+    
 
             return RedirectToAction(nameof(Index));
         }
@@ -178,29 +172,18 @@ namespace TrainigSectorDataEntry.Controllers
                 // Delete old file if exists
                 if (!string.IsNullOrEmpty(entity.FilePath))
                 {
-                    var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", entity.FilePath.TrimStart('/'));
-                    if (System.IO.File.Exists(oldFilePath))
-                    {
-                        System.IO.File.Delete(oldFilePath);
-                    }
+                    await _fileStorageService.DeleteFileAsync(entity.FilePath);
+
+
                 }
-
-                // Save new file
-                var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/StudentsTimeTableFile");
-                if (!Directory.Exists(uploadDir))
-                    Directory.CreateDirectory(uploadDir);
-
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.UploadedFile.FileName);
-                var filePath = Path.Combine(uploadDir, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.UploadedFile.CopyToAsync(stream);
-                }
+                string[] allowedDocs = { ".pdf", ".docx", ".xlsx" };
+                var relativePath = await _fileStorageService.UploadFileAsync(model.UploadedFile, "StudentsTimeTableFile", allowedDocs);
 
                 // Update entity path
-                entity.FilePath = "/uploads/StudentsTimeTableFile/" + fileName;
+                entity.FilePath = relativePath;
             }
+
+           
 
             // Ensure file path is still set
             if (string.IsNullOrEmpty(entity.FilePath))
