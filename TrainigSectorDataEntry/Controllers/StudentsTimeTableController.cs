@@ -241,18 +241,7 @@ namespace TrainigSectorDataEntry.Controllers
             return Json(filteredLevels);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetStudentsTimeTableByFacility(int facilityId)
-        {
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-            var studentsTimeTable = await _StudentsTimeTableService.GetAllAsync();
-            studentsTimeTable = studentsTimeTable.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
-
-            var vmList = _mapper.Map<List<StudentsTimeTableVM>>(studentsTimeTable);
-
-
-            return PartialView("_AlertsAndAdvertismentPartial", vmList);
-        }
+ 
 
 
     }
