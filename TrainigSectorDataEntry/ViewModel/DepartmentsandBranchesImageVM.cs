@@ -7,6 +7,9 @@ namespace TrainigSectorDataEntry.ViewModel
     public class DepartmentsandBranchesImageVM
     {
         public int Id { get; set; }
+
+
+        [Required(ErrorMessage = ".برجاء اختيار القسم ")]
         public int DepartmentsandbranchesId { get; set; }
 
         [ValidateNever]

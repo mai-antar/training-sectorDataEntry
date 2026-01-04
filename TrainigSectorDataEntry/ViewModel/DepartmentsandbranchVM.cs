@@ -9,8 +9,11 @@ namespace TrainigSectorDataEntry.ViewModel
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = ".برجاء اختيار اسم المنشأة")]
         public int EducationalFacilitiesId { get; set; }
 
+
+        [Required(ErrorMessage = ".برجاء اختيار نوع القسم")]
         public int? DepatmentTypeID { get; set; }
 
 

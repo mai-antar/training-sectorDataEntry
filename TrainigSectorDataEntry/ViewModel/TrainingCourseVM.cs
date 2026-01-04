@@ -8,6 +8,7 @@ namespace TrainigSectorDataEntry.ViewModel
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = ".برجاء اختيار نوع الدورة التدريبية")]
         public int TrainigCoursesTypesId { get; set; }
 
         [Required(ErrorMessage = ".برجاء ادخال الاسم باللغة العربية")]
