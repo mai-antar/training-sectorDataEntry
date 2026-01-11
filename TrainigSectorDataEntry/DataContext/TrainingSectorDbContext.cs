@@ -62,9 +62,15 @@ public partial class TrainingSectorDbContext : DbContext
 
     public virtual DbSet<StudentActivite> StudentActivites { get; set; }
 
+    public virtual DbSet<StudentTablesAttachment> StudentTablesAttachments { get; set; }
+
     public virtual DbSet<StudentsTimeTable> StudentsTimeTables { get; set; }
 
     public virtual DbSet<SucessStory> SucessStories { get; set; }
+
+    public virtual DbSet<TableType> TableTypes { get; set; }
+
+    public virtual DbSet<Term> Terms { get; set; }
 
     public virtual DbSet<TrainingCourse> TrainingCourses { get; set; }
 
@@ -375,6 +381,36 @@ public partial class TrainingSectorDbContext : DbContext
                 .HasConstraintName("FK_StudentActivites_EducationalFacilities");
         });
 
+        modelBuilder.Entity<StudentTablesAttachment>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_TablesPDF");
+
+            entity.ToTable("StudentTablesAttachment");
+
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Departmentsandbranches).WithMany(p => p.StudentTablesAttachments)
+                .HasForeignKey(d => d.DepartmentsandbranchesId)
+                .HasConstraintName("FK_StudentTablesAttachment_Departmentsandbranches");
+
+            entity.HasOne(d => d.EducationalLevel).WithMany(p => p.StudentTablesAttachments)
+                .HasForeignKey(d => d.EducationalLevelId)
+                .HasConstraintName("FK_StudentTablesAttachment_EducationalLevel");
+
+            entity.HasOne(d => d.Specialization).WithMany(p => p.StudentTablesAttachments)
+                .HasForeignKey(d => d.SpecializationId)
+                .HasConstraintName("FK_StudentTablesAttachment_Specialization");
+
+            entity.HasOne(d => d.TableType).WithMany(p => p.StudentTablesAttachments)
+                .HasForeignKey(d => d.TableTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentTablesAttachment_TableType");
+
+            entity.HasOne(d => d.Terms).WithMany(p => p.StudentTablesAttachments)
+                .HasForeignKey(d => d.TermsId)
+                .HasConstraintName("FK_StudentTablesAttachment_Terms");
+        });
+
         modelBuilder.Entity<StudentsTimeTable>(entity =>
         {
             entity.ToTable("StudentsTimeTable");
@@ -402,6 +438,26 @@ public partial class TrainingSectorDbContext : DbContext
                 .HasForeignKey(d => d.TrainigSectorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_SucessStory_TrainingSector");
+        });
+
+        modelBuilder.Entity<TableType>(entity =>
+        {
+            entity.ToTable("TableType");
+
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.NameAr).HasMaxLength(250);
+            entity.Property(e => e.NameEn).HasMaxLength(250);
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
+        });
+
+        modelBuilder.Entity<Term>(entity =>
+        {
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.NameAr).HasMaxLength(250);
+            entity.Property(e => e.NameEn).HasMaxLength(250);
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<TrainingCourse>(entity =>

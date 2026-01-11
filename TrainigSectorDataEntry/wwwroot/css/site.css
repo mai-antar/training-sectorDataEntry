@@ -483,3 +483,37 @@ i {
 .mar-t-35{
     margin-top:35px;
 }
+
+/* Make toasts more visible and match page style */
+.toast {
+    opacity: 1 !important;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Success toast */
+.toast-success {
+    background-color: #198754 !important; /* green */
+    color: white !important;
+}
+
+/* Error toast */
+.toast-error {
+    background-color: #dc3545 !important; /* red */
+    color: white !important;
+}
+
+/* Info toast */
+.toast-info {
+    background-color: #17a2b8 !important; /* blue */
+    color: white !important;
+}
+
+/* Warning toast */
+.toast-warning {
+    background-color: #ffc107 !important; /* yellow */
+    color: black !important;
+}

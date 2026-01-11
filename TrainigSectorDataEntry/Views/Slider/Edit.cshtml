@@ -43,34 +43,43 @@
         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
     </div>
     <br />
-    <!-- Existing Images -->
-    <div class="form-group">
-        <label>الصورة الحالية</label>
 
-        <div>
-            @if (Model.ImagePath != null)
-            {
-
-                <div class="image-container" data-id="@Model.Id" style="display: inline-block; position: relative; margin: 5px;">
-                    <img src="/Files/@Model.ImagePath" alt="Project Image"
-                         style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
-
-                </div>
-
-            }
-            else
-            {
-                <p>لا توجد صور.</p>
-            }
-        </div>
+    <div class="form-group form-check mb-3">
+        <input asp-for="IsVideo" class="form-check-input" id="isVideoCheckbox" />
+        <label class="form-check-label">هذا Slider فيديو</label>
     </div>
     <br />
-    <!-- Upload New Images -->
+
+    <!-- Existing Images -->
     <div class="form-group">
-        <label for="UploadedImages">تحديث الصورة</label>
-        <input asp-for="UploadedImage" type="file" class="form-control" />
-        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+        <label>المحتوى الحالي</label>
+        <br />
+        @if (Model.IsVideo==true)
+        {
+            <a href="@Model.FilePath" target="_blank" class="btn btn-info">
+                مشاهدة الفيديو الحالي
+            </a>
+        }
+        else
+        {
+            <img src="/Files/@Model.FilePath"
+                 style="width:80px;height:80px;object-fit:cover;border:1px solid #ccc" />
+        }
     </div>
+
+    <br />
+    <!-- Upload New Images -->
+    <div class="form-group" id="imageSection">
+        <label>تحديث الصورة</label>
+        <input asp-for="UploadedFile" type="file" class="form-control" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+    <div class="form-group d-none" id="videoSection">
+        <label>رابط الفيديو</label>
+        <input asp-for="FilePath" class="form-control" />
+        <span asp-validation-for="FilePath" class="text-danger"></span>
+    </div>
+
 
     <br />
     <div class="form-group">
@@ -88,6 +97,22 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script>
+        function toggleSliderType() {
+            if ($("#isVideoCheckbox").is(":checked")) {
+                $("#imageSection").addClass("d-none");
+                $("#videoSection").removeClass("d-none");
+            } else {
+                $("#imageSection").removeClass("d-none");
+                $("#videoSection").addClass("d-none");
+            }
+        }
 
+        $(document).ready(function () {
+            toggleSliderType();
+            $("#isVideoCheckbox").change(toggleSliderType);
+        });
+    </script>
 }
+
 

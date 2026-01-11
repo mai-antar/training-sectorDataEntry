@@ -50,9 +50,23 @@
                     }
                 </td>
                 <td>
-
-                    <img src="/Files/@slider.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                    @if (slider.IsVideo == true)
+                    {
+                        <a href="@slider.FilePath" target="_blank" class="btn btn-sm btn-info">
+                            مشاهدة الفيديو
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="/Files/@slider.FilePath"
+                             style="width:60px;height:60px;object-fit:cover" />
+                    }
                 </td>
+
+            @*     <td>
+
+                    <img src="/Files/@slider.FilePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                </td> *@
                 <td>
                     <a asp-action="Edit" asp-route-id="@slider.Id" class="btn btn-sm btn-warning">تعديل</a>
 

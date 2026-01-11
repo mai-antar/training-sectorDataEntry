@@ -26,7 +26,8 @@ namespace TrainigSectorDataEntry.ViewModel
         [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string DescriptionEn { get; set; } = null!;
         [ValidateNever]
-        public string ImagePath { get; set; } = null!;
+        public string FilePath { get; set; } = null!;
+        public bool? IsVideo { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -45,6 +46,6 @@ namespace TrainigSectorDataEntry.ViewModel
         public DateOnly? UserDeletionDate { get; set; }
         [ValidateNever]
         public virtual TrainingSector TrainigSector { get; set; } = null!;
-        public IFormFile? UploadedImage { get; set; }
+        public IFormFile? UploadedFile { get; set; }
     }
 }

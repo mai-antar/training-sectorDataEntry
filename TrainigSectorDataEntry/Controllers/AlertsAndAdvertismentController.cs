@@ -84,9 +84,12 @@ namespace TrainigSectorDataEntry.Controllers
 
                     if (relativePath != null)
                     {
-                        await _AlertsAndAdvertismentServices.AddAsync(new AlertsAndAdvertisment
+                    //var entity = _mapper.Map<AlertsAndAdvertisment>(model);
+                    await _AlertsAndAdvertismentServices.AddAsync(new AlertsAndAdvertisment
                         {
                            EducationalFacilitiesId=model.EducationalFacilitiesId,
+                        DescriptionAr = model.DescriptionAr,
+                        DescriptionEn = model.DescriptionEn,
                            IsDeleted = false,
                            IsActive = true,
                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
@@ -96,14 +99,20 @@ namespace TrainigSectorDataEntry.Controllers
                     }
                 
             }
-          
 
-            return View(new AlertsAndAdvertismentVM
+            return Json(new
             {
-                EducationalFacilitiesId = model.EducationalFacilitiesId
+                success = true,
+                message = "تم الحفظ",
+                facilityId = model.EducationalFacilitiesId
             });
 
-         
+            //return View(new AlertsAndAdvertismentVM
+            //{
+            //    EducationalFacilitiesId = model.EducationalFacilitiesId
+            //});
+
+
         }
 
 
@@ -179,19 +188,29 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             await _AlertsAndAdvertismentServices.UpdateAsync(entity);
+       
+            
 
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "تم تعديل الإعلان بنجاح", redirectUrl = Url.Action("Index") });
+            
         }
 
 
         public async Task<IActionResult> Delete(int id)
         {
-            var AlertsAndAdvertisment = await _AlertsAndAdvertismentServices.GetByIdAsync(id);
-            if (AlertsAndAdvertisment == null) return NotFound();
+            var entity = await _AlertsAndAdvertismentServices.GetByIdAsync(id);
+            if (entity == null)
+            {
+                TempData["Error"] = "الإعلان غير موجود";
+                return RedirectToAction(nameof(Index));
+            }
 
             await _AlertsAndAdvertismentServices.DeleteAsync(id);
+
+            TempData["Success"] = "تم حذف الإعلان بنجاح";
             return RedirectToAction(nameof(Index));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAlertsByFacility(int facilityId)
