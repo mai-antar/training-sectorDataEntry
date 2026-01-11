@@ -27,9 +27,15 @@
                asp-route-depatmentTypeName="@departmentType.DepatmentType?.NameAr"
                class="btn btn-sm btn-info">التفاصيل / الصور</a>
 
-            <a asp-action="Edit" asp-route-id="@departmentType.Id" class="btn btn-sm btn-warning">تعديل</a>
+            <a asp-action="Edit" asp-route-id="@departmentType.Id" class="buttonedit right-4tens " >
+                <span class="buttonedit__text">تعديل</span>
+                <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+            </a>
 
-            <a asp-action="Delete" asp-route-id="@departmentType.Id" class="btn btn-sm btn-danger">حذف</a>
+            <a asp-action="Delete" asp-route-id="@departmentType.Id" class="buttonremove right-4tens ">
+                <span class="buttonremove__text"> حذف</span>
+                <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+            </a>  
         </td>
     </tr>
 }

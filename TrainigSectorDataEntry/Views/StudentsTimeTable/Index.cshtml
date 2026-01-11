@@ -4,12 +4,30 @@
     ViewData["Title"] = "جداول الطلاب";
 }
 
-<h2>جداول الطلاب</h2>
+
+
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>جداول الطلاب </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <br />
-<a asp-action="Create" class="btn btn-primary mb-3">إضافة جدول جديد</a>
+
+    <a asp-action="Create" class="button right-4tens ">
+
+        <span class="button__text"> إضافة جدول جديد</span>
+        <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+
+    </a>
 <br />
 <table class="table table-bordered">
-    <thead>
+        <thead class="thead-dark">
         <tr>
             <th>المرحلة التعليمية</th>
             <th>المنشأة التعليمية</th>
@@ -52,10 +70,22 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">تعديل</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">حذف</a>
+                  
+
+
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="buttonedit right-4tens ">
+                            <span class="buttonedit__text">تعديل</span>
+                            <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                        </a>
+
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="buttonremove right-4tens ">
+                            <span class="buttonremove__text"> حذف</span>
+                            <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                        </a>
+                
                 </td>
             </tr>
         }
     </tbody>
 </table>
+</div>

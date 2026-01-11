@@ -9,54 +9,100 @@
     }
 
 </style>
-<h2>إضافة slider</h2>
 
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة slider </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <div class="form-group">
-        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
-        <select asp-for="TrainigSectorId" asp-items="ViewBag.trainingSectorList" class="form-control">
-            <option value="">-- اختر الجهة --</option>
-        </select>
-        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+                <select asp-for="TrainigSectorId" asp-items="ViewBag.trainingSectorList" class="form-control">
+                    <option value="">-- اختر الجهة --</option>
+                </select>
+                <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleAr" class="control-label">العنوان باللغة العربية</label>
+                <input asp-for="TitleAr" class="form-control" />
+                <span asp-validation-for="TitleAr" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleAr" class="control-label">العنوان باللغة العربية</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزية</label>
+                <input asp-for="TitleEn" class="form-control" />
+                <span asp-validation-for="TitleEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="UploadedImage">تحميل الصورة</label>
+                <input asp-for="UploadedImage" type="file" multiple class="form-control" />
+                <span asp-validation-for="UploadedImage" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزية</label>
-        <input asp-for="TitleEn" class="form-control" />
-        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
+                <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
+                <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
-        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
-        <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-    </div>
+    
+    
+   
+
 
     <br />
-    <div class="form-group">
-        <label for="UploadedImage">تحميل الصورة</label>
-        <input asp-for="UploadedImage" type="file" multiple class="form-control" />
-        <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    <div class="row">
+        
+            <div class="col-md-6">
+             
+                <button type="submit" class="button right-4tens float-left">
+                    <span class="button__text"> إضافة </span>
+                    <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                </button>
+                
+               
+            </div>
+            <div class="col-md-6">
+                
+                    <a asp-action="Index" class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;">
+
+                    <span class="buttonremove__text"> إلغاء</span>
+                        <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+                </a>
+               
+            </div>
+          
     </div>
-
-
-    <br />
-    <button type="submit" class="btn btn-primary">إضافة</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+       
 </form>
 <div class="card mt-5">
     <div class="card-header">
@@ -66,7 +112,7 @@
         <h3>slider</h3>
 
         <table class="table table-bordered table-striped">
-            <thead>
+                <thead class="thead-dark">
                 <tr>
                     <th>العنوان باللغة العربية</th>
                     <th>العنوان باللغة الانجليزية</th>
@@ -103,9 +149,15 @@
 
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@slider.Id" class="btn btn-sm btn-warning">تعديل</a>
+                                <a asp-action="Edit" asp-route-id="@slider.Id" class="buttonedit right-4tens ">
+                                    <span class="buttonedit__text">تعديل</span>
+                                    <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                                </a>
 
-                            <a asp-action="Delete" asp-route-id="@slider.Id" class="btn btn-sm btn-danger">حذف</a>
+                                <a asp-action="Delete" asp-route-id="@slider.Id" class="buttonremove right-4tens ">
+                                    <span class="buttonremove__text"> حذف</span>
+                                    <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                                </a>
                         </td>
                     </tr>
                 }
@@ -115,7 +167,7 @@
     </div>
 </div>
 
-
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -4,9 +4,28 @@
     ViewData["Title"] = "التخصصات";
 }
 
-<h2 class="text-center" style="margin-bottom: 80px;">التخصصات</h2>
+<div class="container-fluid">
+    <div class="contPage">
 
-<a asp-action="Create" class="btn btn-success mb-3">إضافة تخصص</a>
+
+        <div class="orang2">
+            <h3>التخصصات  </h3>
+            <div></div>
+        </div>
+
+
+    </div>
+
+    
+    <a asp-action="Create" class="button right-4tens " >
+        <span class="button__text">  إضافة تخصص</span>
+        <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+
+    </a>
+
+
+
+
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -16,7 +35,7 @@
             <th>المنشأت التعليمية</th>
             <th>التاريخ</th>
             <th>التفعيل</th>
-     
+            <th>التفاصيل</th>
 
             <th></th>
         </tr>
@@ -39,18 +58,29 @@
                         <span class="badge bg-danger">غير مفعل</span>
                     }
                 </td>
-       
                 <td>
                     <a asp-controller="SpecializationImage" asp-action="Index" asp-route-specializationId="@specialization.Id"
                        asp-route-departmentName="@specialization.DepartmentName"
                        asp-route-educationalFacilitiesName="@specialization.EducationalFacilityName"
-                      class="btn btn-sm btn-info">التفاصيل / الصور</a>
+                           class="btn btn-sm btn-info"><i class="fas fa-link"></i> التفاصيل / الصور</a>
+                </td>
+                <td>
 
-                    <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
 
-                    <a asp-action="Delete" asp-route-id="@specialization.Id" class="btn btn-sm btn-danger">حذف</a>
+                        <a asp-action="Edit" asp-route-id="@specialization.Id" class="buttonedit right-4tens ">
+                            <span class="buttonedit__text">تعديل</span>
+                            <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                        </a>
+
+                        <a asp-action="Delete" asp-route-id="@specialization.Id" class="buttonremove right-4tens ">
+                            <span class="buttonremove__text"> حذف</span>
+                            <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                        </a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+</div>
+
+

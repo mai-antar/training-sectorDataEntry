@@ -14,10 +14,10 @@
 
 
     </div>
-    <button type="button" asp-action="Create" class="button right-4tens ">
+    <a  asp-action="Create" class="button right-4tens ">
         <span class="button__text"> إضافة مستوى تعليمي</span>
         <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
-    </button>
+    </a>
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -51,15 +51,15 @@
                     </td>
 
                     <td>
-                        <button type="button" asp-action="Edit" asp-route-id="@educationalLevel.Id" class="buttonedit right-4tens ">
+                        <a  asp-action="Edit" asp-route-id="@educationalLevel.Id" class="buttonedit right-4tens ">
                             <span class="buttonedit__text">تعديل</span>
                             <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
-                        </button>
+                        </a>
 
-                        <button type="button" asp-action="Delete" asp-route-id="@educationalLevel.Id" class="buttonremove right-4tens ">
+                        <a asp-action="Delete" asp-route-id="@educationalLevel.Id" class="buttonremove right-4tens ">
                             <span class="buttonremove__text"> حذف</span>
                             <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
-                        </button>
+                        </a>
 
                     </td>
             </tr>

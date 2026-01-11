@@ -4,8 +4,18 @@
     ViewData["Title"] = "انواع الاقسام";
 }
 
-<h2>إضافة انواع الاقسام</h2>
 
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة انواع الاقسام </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <form asp-action="Create" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -30,9 +40,24 @@
     </div>
     <br />
 
+    <div class="row">
+        <div class="col-md-6">
+            <button type="submit" class="button right-4tens float-left">
+                <span class="button__text"> إضافة</span>
+                <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 
-    <button type="submit" class="btn btn-primary">إضافة</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+            </button>
+        </div>
+
+        <div class="col-md-6">
+            <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" href="/TrainingCourse">
+                <span class="buttonremove__text"> إلغاء</span>
+                <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+            </a>
+        </div>
+
+        </div>
+
 </form>
 <div class="card mt-5">
     <div class="card-header">
@@ -42,7 +67,7 @@
         <h3>انواع الاقسام</h3>
 
         <table class="table table-bordered table-striped">
-            <thead>
+                <thead class="thead-dark">
                 <tr>
                     <th>الاسم باللغة العربية</th>
                     <th>الاسم باللغة الانجليزية</th>
@@ -70,9 +95,23 @@
                         </td>
 
                         <td>
-                            <a asp-action="Edit" asp-route-id="@departmentType.ID" class="btn btn-sm btn-warning">تعديل</a>
 
-                            <a asp-action="Delete" asp-route-id="@departmentType.ID" class="btn btn-sm btn-danger">حذف</a>
+                                <a class="buttonedit right-4tens " href="/TrainingCourse/Edit/13">
+                                    <span asp-route-id="@departmentType.ID" class="buttonedit__text">تعديل</span>
+                                    <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                                </a>
+
+
+
+                                <a class="buttonremove right-4tens " href="/TrainingCourse/Delete/13">
+                                    <span asp-route-id="@departmentType.ID" class="buttonremove__text"> حذف</span>
+                                    <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                                </a>
+
+
+
+
+
                         </td>
                     </tr>
                 }
@@ -88,3 +127,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+</div>

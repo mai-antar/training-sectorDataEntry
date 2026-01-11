@@ -26,9 +26,17 @@
 
         </td>
         <td>
-            <a asp-action="Edit" asp-route-id="@studentActivite.Id" class="btn btn-sm btn-warning">تعديل</a>
-
-            <a asp-action="Delete" asp-route-id="@studentActivite.Id" class="btn btn-sm btn-danger">حذف</a>
+           
+            <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@studentActivite.Id">
+                <span class="buttonedit__text">تعديل</span>
+                <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+            </a>
+            <a class="buttonremove right-4tens " asp-action="Delete" asp-route-id="@studentActivite.Id">
+                <span class="buttonremove__text"> حذف</span>
+                <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+            </a>
+        
+        
         </td>
     </tr>
 }

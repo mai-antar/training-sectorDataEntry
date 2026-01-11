@@ -4,35 +4,45 @@
     ViewData["Title"] = "تعديل الانشطة الطلابية";
 }
 
-<h2 class="text-center" style="margin-bottom: 80px;">تعديل الانشطة الطلابية</h2>
 
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>تعديل الانشطة الطلابية </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <div class="form-group">
+    <div class="row">
+        <div class="col-md-6"> <div class="form-group">
         <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
         <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
             <option value="">-- اختر منشأة تعليمية --</option>
         </select>
         <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
-    </div>
-    <br />
-
-    <div class="form-group">
+    </div></div>
+        <div class="col-md-6">    <div class="form-group">
         <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
         <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
         <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+    </div></div>
+
     </div>
-    <br />
-    <div class="form-group">
+    <div class="row">
+        <div class="col-md-6"><div class="form-group">
         <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
         <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-    </div>
-    <br />
-    <!-- Existing Images -->
+    </div></div>
+        <div class="col-md-6">    <!-- Existing Images -->
     <div class="form-group">
         <label>الصورة الحالية</label>
 
@@ -52,24 +62,57 @@
                 <p>لا توجد صور.</p>
             }
         </div>
-    </div>
-    <br />
-    <!-- Upload New Images -->
+    </div></div>
+
+        <div class="row">
+        <div class="col-md-6"> <!-- Upload New Images -->
     <div class="form-group">
         <label for="UploadedImages">تحديث الصورة</label>
         <input asp-for="UploadedImage" type="file" class="form-control" />
         <span asp-validation-for="UploadedImage" class="text-danger"></span>
-    </div>
-
-    <br />
-    <div class="form-group">
+    </div></div>
+        <div class="col-md-6"><div class="form-group">
         <label asp-for="IsActive" class="control-label">التفعيل</label>
         <input asp-for="IsActive" class="form-check-input" />
         <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div></div>
+
     </div>
+    </div>
+   
+  
+    
     <br />
-    <button type="submit" class="btn btn-primary">حفظ</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+    <div class="row">
+
+            <div class="col-md-6">
+
+                <button type="submit" class="button right-4tens float-left">
+                    <span class="button__text"> حفظ </span>
+                    <span class="button__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg save-icon">
+
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+
+                        </svg>
+                    </span>
+                </button>
+
+
+            </div>
+            <div class="col-md-6">
+
+                <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" asp-action="Index">
+
+                    <span class="buttonremove__text"> إلغاء</span>
+                    <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+                </a>
+
+            </div>
+
+        </div>
 </form>
 
 @section Scripts {
@@ -80,3 +123,4 @@
 
 }
 
+</div>

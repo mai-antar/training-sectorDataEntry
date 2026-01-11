@@ -4,39 +4,61 @@
     ViewData["Title"] = "إضافة قصة نجاح";
 }
 
-<h2>إضافة قصة نجاح</h2>
 
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة قصة نجاح </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <br />
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
   
     <br />
-    <div class="form-group">
-        <label asp-for="TitleAr">عنوان قصة النجاح باللغة العربية</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleAr">عنوان قصة النجاح باللغة العربية</label>
+                    <input asp-for="TitleAr" class="form-control" />
+                    <span asp-validation-for="TitleAr" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleEn">عنوان قصة النجاح باللغة الانجليزية</label>
+                    <input asp-for="TitleEn" class="form-control" />
+                    <span asp-validation-for="TitleEn" class="text-danger"></span>
+                </div>
+            </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleEn">عنوان قصة النجاح باللغة الانجليزية</label>
-        <input asp-for="TitleEn" class="form-control" />
-        <span asp-validation-for="TitleEn" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TrainigSectorId">الجهة</label>
-        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
-            <option value="">-- اختر الجهة --</option>
-        </select>
-  
-        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label for="UploadedImage">تحميل الصورة</label>
-        <input asp-for="UploadedImage" type="file" multiple class="form-control" />
-        <span asp-validation-for="UploadedImage" class="text-danger"></span>
-    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TrainigSectorId">الجهة</label>
+                    <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+                        <option value="">-- اختر الجهة --</option>
+                    </select>
+
+                    <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="UploadedImage">تحميل الصورة</label>
+                    <input asp-for="UploadedImage" type="file" multiple class="form-control" />
+                    <span asp-validation-for="UploadedImage" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+   
+   
+    
 @*     <div class="form-group">
         <label asp-for="IsExternalLink">هل هو رابط خارجي؟</label>
         <input asp-for="IsExternalLink" type="checkbox" class="form-check-input" id="isExternalLinkCheckbox" />
@@ -55,7 +77,26 @@
     </div>
  *@
     <br />
-    <input type="submit" value="حفظ" class="btn btn-primary" />
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <button type="submit" class="button right-4tens float-left">
+                    <span class="button__text"> حفظ </span>
+                    <span class="button__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg save-icon">
+
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+
+                        </svg>
+                    </span>
+                </button>
+
+
+            </div>
+            </div>
 </form>
 <br />
 <div class="card mt-5">
@@ -63,10 +104,10 @@
         <strong class="text-center" style="margin-bottom: 80px;">قصة نجاح</strong>
     </div>
     <div class="card-body">
-        <h3>قصة نجاح</h3>
+       
 
         <table class="table table-bordered table-striped">
-            <thead>
+                <thead class="thead-dark">
                 <tr>
                     <th>عنوان قصة النجاح باللغة العربية</th>
                     <th>عنوان قصة النجاح باللغة الانجليزية</th>
@@ -118,6 +159,7 @@
         </table>
 
     </div>
+</div>
 </div>
 @section Scripts {
     @{

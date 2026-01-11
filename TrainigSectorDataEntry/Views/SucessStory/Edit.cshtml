@@ -4,34 +4,45 @@
     ViewData["Title"] = "تعديل قصة نجاح";
 }
 
-<h2 class="text-center" style="margin-bottom: 80px;">تعديل قصة نجاح</h2>
+
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>تعديل قصة نجاح </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <br />
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <div class="form-group">
+    <div class="row">
+        <div class="col-md-6">  <div class="form-group">
         <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
         <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
             <option value="">-- اختر الجهة --</option>
         </select>
         <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
+    </div></div>
+        <div class="col-md-6">  <div class="form-group">
         <label asp-for="TitleAr" class="control-label">عنوان قصة النجاح باللغة العربية</label>
         <input asp-for="TitleAr" class="form-control" />
         <span asp-validation-for="TitleAr" class="text-danger"></span>
+    </div></div>
     </div>
-    <br />
-    <div class="form-group">
+     <div class="row">
+        <div class="col-md-6"> <div class="form-group">
         <label asp-for="TitleEn" class="control-label">عنوان قصة النجاح باللغة الانجليزية</label>
         <input asp-for="TitleEn" class="form-control" />
         <span asp-validation-for="TitleEn" class="text-danger"></span>
-    </div>
-    <br />
-    <!-- Existing Images -->
+    </div></div>
+        <div class="col-md-6">  <!-- Existing Images -->
     <div class="form-group">
         <label>الصورة الحالية</label>
 
@@ -51,14 +62,24 @@
                 <p>لا توجد صور.</p>
             }
         </div>
+    </div></div>
     </div>
-    <br />
-    <!-- Upload New Images -->
+     <div class="row">
+        <div class="col-md-6">  <!-- Upload New Images -->
     <div class="form-group">
         <label for="UploadedImages">تحديث الصورة</label>
         <input asp-for="UploadedImage" type="file" class="form-control" />
         <span asp-validation-for="UploadedImage" class="text-danger"></span>
+    </div></div>
+        <div class="col-md-6"><div class="form-group">
+        <label asp-for="IsActive" class="control-label">التفعيل</label>
+        <input asp-for="IsActive" class="form-check-input" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div></div>
     </div>
+  
+   
+  
  @*    <!-- Existing Video Display -->
     <div class="form-group">
         <label>الفيديو الحالي</label>
@@ -103,17 +124,41 @@
         <input asp-for="VedioFile" type="file" class="form-control" />
         <span asp-validation-for="VedioFile" class="text-danger"></span>
     </div> *@
-    <br />
+   
 
 
-    <div class="form-group">
-        <label asp-for="IsActive" class="control-label">التفعيل</label>
-        <input asp-for="IsActive" class="form-check-input" />
-        <span asp-validation-for="IsActive" class="text-danger"></span>
-    </div>
+    
     <br />
-    <button type="submit" class="btn btn-primary">حفظ</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+       <div class="row">
+
+            <div class="col-md-6">
+
+                <button type="submit" class="button right-4tens float-left">
+                    <span class="button__text"> حفظ </span>
+                    <span class="button__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg save-icon">
+
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+
+                        </svg>
+                    </span>
+                </button>
+
+
+            </div>
+            <div class="col-md-6">
+
+                <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" asp-action="Index">
+
+                    <span class="buttonremove__text"> إلغاء</span>
+                    <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+                </a>
+
+            </div>
+
+        </div>
 </form>
 
 @section Scripts {
@@ -139,3 +184,4 @@
 
 }
 
+</div>

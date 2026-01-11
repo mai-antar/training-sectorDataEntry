@@ -19,19 +19,28 @@
             }
         </td>
         <td>
-            @foreach (var item in historyBreif.HistoryBerifImages)
+          @*   @foreach (var item in historyBreif.HistoryBerifImages)
             {
              
                 <img src=" /Files/@item.ImagePath" alt="History Berif Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
 
-            }
-
-            <a asp-action="AddImages" asp-route-id="@historyBreif.Id" class="btn btn-sm btn-primary mt-1">إضافة صورة</a>
+            } *@
+            <a class="buttoneimg right-4tens " asp-route-id="@historyBreif.Id"  asp-action="AddImages">
+                <span class="buttoneimg__text">إضافة صورة</span>
+                <span class="buttoneimg__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg>
+                </span>
+            </a>
         </td>
         <td>
-            <a asp-action="Edit" asp-route-id="@historyBreif.Id" class="btn btn-sm btn-warning">تعديل</a>
-
-            <a asp-action="Delete" asp-route-id="@historyBreif.Id" class="btn btn-sm btn-danger">حذف</a>
-        </td>
+            <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@historyBreif.Id">
+                <span class="buttonedit__text">تعديل</span>
+                <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+            </a>
+            <a class="buttonremove right-4tens " asp-action="Delete" asp-route-id="@historyBreif.Id">
+                <span class="buttonremove__text"> حذف</span>
+                <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+            </a>
+           </td>
     </tr>
 }

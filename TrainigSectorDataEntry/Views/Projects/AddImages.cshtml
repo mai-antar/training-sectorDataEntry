@@ -4,27 +4,87 @@
     ViewData["Title"] = "إضافة صور للمشروع";
 }
 
-<h2 class="text-center" style="margin-bottom: 80px;">إضافة صور للمشروع</h2>
+<style>
+    .buttonremove, .button {
+        height: 46px;
+    }
 
+    .contPage {
+        margin-right: 25%;
+    }
+</style>
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة صور للمشروع</h3>
+            <div></div>
+        </div>
+
+
+    </div>
 <form asp-action="AddImages" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="ProjectsId" />
     <br />
-    <div class="form-group">
-        <label asp-for="TitleAr" class="control-label">الاسم باللغة العربية</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleAr" class="control-label">الاسم باللغة العربية</label>
+                    <input asp-for="TitleAr" class="form-control" />
+                    <span asp-validation-for="TitleAr" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>اختار صور</label>
+                    <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+                    <span asp-validation-for="UploadedImages" class="text-danger"></span>
+                </div>
+            </div>
     </div>
+   
+  
+   
     <br />
-    <div class="form-group">
-        <label>اختار صور</label>
-        <input asp-for="UploadedImages" type="file" multiple class="form-control" />
-        <span asp-validation-for="UploadedImages" class="text-danger"></span>
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary">تحميل</button>
-    <a asp-action="Index" class="btn btn-secondary">الرجوع للقائمة</a>
-</form>
+        <div class="row">
 
+            <div class="col-md-6">
+
+                <button type="submit" class="button right-4tens float-left">
+                    <span class="button__text"> تحميل </span>
+                    <span class="button__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="24"
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                    </span>
+                </button>
+
+
+            </div>
+            <div class="col-md-6">
+
+                <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" asp-action="Index">
+
+                    <span class="buttonremove__text"> الرجوع للقائمة</span>
+                    <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+                </a>
+
+            </div>
+
+        </div>
+</form>
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

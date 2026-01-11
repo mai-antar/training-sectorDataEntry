@@ -4,64 +4,114 @@
     ViewData["Title"] = "إضافة خبر";
 }
 
-<h2>إضافة خبر</h2>
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة خبر </h3>
+            <div></div>
+        </div>
+
+
+    </div>
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <div class="form-group">
-        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
-        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
-            <option value="">-- اختر الجهة --</option>
-        </select>
-        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+                <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+                    <option value="">-- اختر الجهة --</option>
+                </select>
+                <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
+                <input asp-for="TitleAr" class="form-control" />
+                <span asp-validation-for="TitleAr" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleEn" class="control-label">عنوان الخبر بالانجليزي</label>
+                <input asp-for="TitleEn" class="form-control" />
+                <span asp-validation-for="TitleEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="ShortDescriptionAr" class="control-label">الخبر بالعربي</label>
+                <input asp-for="ShortDescriptionAr" class="form-control" />
+                <span asp-validation-for="ShortDescriptionAr" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleEn" class="control-label">عنوان الخبر بالانجليزي</label>
-        <input asp-for="TitleEn" class="form-control" />
-        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="ShortDescriptionEn" class="control-label">الخبر بالانجليزي</label>
+                <input asp-for="ShortDescriptionEn" class="form-control" />
+                <span asp-validation-for="ShortDescriptionEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
+                <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="ShortDescriptionAr" class="control-label">الخبر بالعربي</label>
-        <input asp-for="ShortDescriptionAr" class="form-control" />
-        <span asp-validation-for="ShortDescriptionAr" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionEn" class="control-label">تفاصيل الخبر بالانجليزي</label>
+                <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="UploadedImages">تحميل الصور</label>
+                <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+                <span asp-validation-for="UploadedImages" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="ShortDescriptionEn" class="control-label">الخبر بالانجليزي</label>
-        <input asp-for="ShortDescriptionEn" class="form-control" />
-        <span asp-validation-for="ShortDescriptionEn" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
-        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="DescriptionEn" class="control-label">تفاصيل الخبر بالانجليزي</label>
-        <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-    </div>
-    <br />
-    <div class="form-group">
-        <label for="UploadedImages">تحميل الصور</label>
-        <input asp-for="UploadedImages" type="file" multiple class="form-control" />
-        <span asp-validation-for="UploadedImages" class="text-danger"></span>
-    </div>
+    
     <br />
 
-    <button type="submit" class="btn btn-primary">إضافة</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <button type="submit" class="button right-4tens float-left">
+                <span class="button__text"> إضافة </span>
+                <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+            </button>
+
+
+        </div>
+        <div class="col-md-6">
+
+            <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" asp-action="Index">
+
+                <span class="buttonremove__text"> إلغاء</span>
+                <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+            </a>
+
+        </div>
+
+    </div>
+
+    
 </form>
 <div class="card mt-5">
     <div class="card-header">
@@ -71,7 +121,7 @@
         <h3>الأخبار</h3>
 
         <table class="table table-bordered table-striped">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th>عنوان الخبر بالعربي</th>
                     <th>عنوان الخبر بالانجليزي</th>
@@ -100,14 +150,20 @@
                             }
                         </td>
                         <td>
-                            @foreach (var item in news.NewsImages)
+                           @*  @foreach (var item in news.NewsImages)
                             {
                                 <img src="@("/Storage/" + item.ImagePath)" alt="News Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
                                 
 
-                            }
+                            } *@
 
-                            <a asp-action="AddImages" asp-route-id="@news.Id" class="btn btn-sm btn-primary mt-1">إضافة صورة</a>
+                            
+                            <a class="buttoneimg right-4tens " asp-action="AddImages" asp-route-id="@news.Id">
+                                <span class="buttoneimg__text">إضافة صورة</span>
+                                <span class="buttoneimg__icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg>
+                                </span>
+                            </a>
                         </td>
                     </tr>
                 }
@@ -117,7 +173,7 @@
     </div>
 </div>
 
-
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -4,7 +4,22 @@
     ViewData["Title"] = "تعديل انواع الاقسام";
 }
 
-<h2 class="text-center" style="margin-bottom: 80px;">تعديل انواع الاقسام</h2>
+
+
+<div class="container-fluid">
+    <div class="contPage">
+        <div class="orang2">
+            <h3>تعديل انواع الاقسام </h3>
+            <div></div>
+        </div>
+        </div>
+       
+
+
+
+
+
+
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="ID" />
@@ -41,8 +56,33 @@
         <span asp-validation-for="IsActive" class="text-danger"></span>
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">حفظ</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <button type="submit" class="button right-4tens float-left">
+
+
+                <span class="button__text"> إضافة</span>
+                <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+
+            </button>
+        </div>
+        <div class="col-md-6">
+            <a asp-action="Index" class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" href="/TrainingCourse">
+                <span  class="buttonremove__text"> إلغاء</span>
+                <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+            </a>
+        </div>
+    </div>
+
+
+
+
+
 </form>
 
 @section Scripts {
@@ -53,3 +93,4 @@
 
 }
 
+</div>

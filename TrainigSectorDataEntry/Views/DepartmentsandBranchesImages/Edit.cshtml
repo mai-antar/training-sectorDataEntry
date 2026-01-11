@@ -2,12 +2,26 @@
 
 
 
-<h2>تعديل صورة القسم: @ViewBag.DepartmentName</h2>
-<br />
-<span>المنشأة التعليمية: @ViewBag.educationalFacilitiesName</span>
+
+
+    <div class="container-fluid">
+
+<div class="contPage">
+
+
+    <div class="orang2">
+        <h3>تعديل صورة القسم: @ViewBag.DepartmentName</h3>
+
+        <div></div>
+    </div>
+
+
+</div>
+
+<h4>المنشأة التعليمية: @ViewBag.educationalFacilitiesName</h4>
 
 <br />
-<span>نوع القسم: @ViewBag.depatmentTypeName</span>
+<h4>نوع القسم: @ViewBag.depatmentTypeName</h4>
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
@@ -45,11 +59,44 @@
         <span asp-validation-for="UploadedImage" class="text-danger"></span>
     </div>
     <br />
-    <button type="submit" class="btn btn-success">حفظ التعديل</button>
-    <a asp-action="Index"
-       asp-route-departmentId="@Model.DepartmentsandbranchesId"
-    
-       class="btn btn-secondary">
-        رجوع
-    </a>
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <button type="submit" class="button right-4tens float-left">
+                <span class="button__text"> حفظ </span>
+                <span class="button__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg save-icon">
+
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+
+                    </svg>
+                </span>
+            </button>
+
+
+        </div>
+        <div class="col-md-6">
+
+            <a asp-action="Index"
+               asp-route-departmentId="@Model.DepartmentsandbranchesId"
+               class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" >
+
+                <span class="buttonremove__text"> رجوع</span>
+                <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+            </a>
+
+        </div>
+
+    </div>
+
 </form>
+
+</div>
+
