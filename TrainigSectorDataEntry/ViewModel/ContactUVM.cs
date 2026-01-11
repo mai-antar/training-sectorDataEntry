@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using TrainigSectorDataEntry.Models;
 
 namespace TrainigSectorDataEntry.ViewModel
@@ -7,14 +8,22 @@ namespace TrainigSectorDataEntry.ViewModel
     {
         public int Id { get; set; }
 
+
+        [Required(ErrorMessage = ".برجاء اختيار اسم الجهة")]
+
         public int TrainigSectorId { get; set; }
 
+
+        [Required(ErrorMessage = ".برجاء اختيار  العنوان")]
         public string Address { get; set; } = null!;
 
+        [Required(ErrorMessage = ".برجاء ادخال رقم الهاتف ")]
         public int Telephone { get; set; }
 
+        [Required(ErrorMessage = ".برجاء ادخال الفاكس ")]
         public int Fax { get; set; }
 
+        [Required(ErrorMessage = ".برجاء ادخال البريد الالكتروني ")]
         public string Email { get; set; } = null!;
 
         public bool IsActive { get; set; }

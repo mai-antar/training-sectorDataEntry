@@ -8,6 +8,8 @@ namespace TrainigSectorDataEntry.ViewModel
     {
         public int Id { get; set; }
 
+
+        [Required(ErrorMessage = ".برجاء اختيار التخصص")]
         public int SpecializationId { get; set; }
         public string? educationalFacilitiesName { get; set; }
         public string? departmentName { get; set; }

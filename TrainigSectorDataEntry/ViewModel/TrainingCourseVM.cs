@@ -1,5 +1,6 @@
 ﻿using TrainigSectorDataEntry.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace TrainigSectorDataEntry.ViewModel
 {
@@ -7,10 +8,15 @@ namespace TrainigSectorDataEntry.ViewModel
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = ".برجاء اختيار نوع الدورة التدريبية")]
         public int TrainigCoursesTypesId { get; set; }
 
+        [Required(ErrorMessage = ".برجاء ادخال الاسم باللغة العربية")]
+        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string? NameAr { get; set; }
 
+        [Required(ErrorMessage = ".برجاء ادخال الاسم باللغة الانجليزي")]
+        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string? NameEn { get; set; }
         [ValidateNever]
         public string FilePath { get; set; } = null!;
