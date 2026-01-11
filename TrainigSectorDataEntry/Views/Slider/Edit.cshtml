@@ -63,13 +63,16 @@
         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
     </div></div>
     </div>
-   <div class="form-group form-check mb-3">
-     <input asp-for="IsVideo" class="form-check-input" id="isVideoCheckbox" />
-     <label class="form-check-label">هذا Slider فيديو</label>
- </div>
+
+        <div class="form-group">
+            <label asp-for="IsVideo" class="control-label">فيديو</label>
+            <input asp-for="IsVideo" class="form-check-input" id="isVideoCheckbox" />
+            <span asp-validation-for="IsVideo" class="text-danger"></span>
+        </div>
+
  <br />
 
- <!-- Existing Images -->
+ <!-- Existing Image or Video -->
  <div class="form-group">
      <label>المحتوى الحالي</label>
      <br />
@@ -93,18 +96,12 @@
      <input asp-for="UploadedFile" type="file" class="form-control" />
      <span asp-validation-for="UploadedFile" class="text-danger"></span>
  </div>
+
+  <!-- Upload New Video -->
  <div class="form-group d-none" id="videoSection">
      <label>رابط الفيديو</label>
      <input asp-for="FilePath" class="form-control" />
      <span asp-validation-for="FilePath" class="text-danger"></span>
- </div>
-
-
- <br />
-     <div class="form-group">
-     <label asp-for="IsActive" class="control-label">التفعيل</label>
-     <input asp-for="IsActive" class="form-check-input" />
-     <span asp-validation-for="IsActive" class="text-danger"></span>
  </div>
  <br />
   
@@ -159,6 +156,53 @@
     }
 
     <script>
+         $(document).ready(function() {
+            $("#editForm").submit(function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "Slider")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                           success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '',
+                    text: response.message,
+                    toast: true,
+                    position: 'bottom-left',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    background: '#198754',
+                    color: '#fff'
+                }).then(() => {
+                    // Redirect after toast
+                    window.location.href = response.redirectUrl;
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: response.message
+                });
+            }
+        },
+
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'خطأ',
+                            text: 'حدث خطأ أثناء الحفظ'
+                        });
+                    }
+                });
+            });
+        });
         function toggleSliderType() {
             if ($("#isVideoCheckbox").is(":checked")) {
                 $("#imageSection").addClass("d-none");
@@ -174,6 +218,7 @@
             $("#isVideoCheckbox").change(toggleSliderType);
         });
     </script>
+ 
 }
 
 

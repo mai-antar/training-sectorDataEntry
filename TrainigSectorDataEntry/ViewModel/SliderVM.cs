@@ -27,7 +27,7 @@ namespace TrainigSectorDataEntry.ViewModel
         public string DescriptionEn { get; set; } = null!;
         [ValidateNever]
         public string FilePath { get; set; } = null!;
-        public bool? IsVideo { get; set; }
+        public bool IsVideo { get; set; }
 
         public bool IsActive { get; set; }
 

@@ -47,6 +47,12 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             ViewBag.trainingSectorList = new SelectList(trainingSector, "Id", "NameAr");
+
+            if (TempData["SelectedSectorId"] != null)
+            {
+                ViewBag.trainingSectorList = new SelectList(trainingSector, "Id", "NameAr", TempData["SelectedSectorId"]);
+
+            }
             ViewBag.existingSlider = existingSliderVM;
             return View();
         }
@@ -108,7 +114,10 @@ namespace TrainigSectorDataEntry.Controllers
                 FilePath = filePath
             });
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تم إضافة السلايدر بنجاح";
+            TempData["SelectedSectorId"] = model.TrainigSectorId;
+
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -187,7 +196,7 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             await _sliderService.UpdateAsync(entity);
-
+            TempData["Success"] = "تم تعديل السلايدر بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -198,6 +207,8 @@ namespace TrainigSectorDataEntry.Controllers
             if (Slider == null) return NotFound();
 
             await _sliderService.DeleteAsync(id);
+
+            TempData["Success"] = "تم حذف السليدر بنجاح";
             return RedirectToAction(nameof(Index));
         }
     }
