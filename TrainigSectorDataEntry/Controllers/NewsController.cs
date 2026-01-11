@@ -128,8 +128,16 @@ namespace TrainigSectorDataEntry.Controllers
             if (news == null) return NotFound();
 
             var model = _mapper.Map<NewsVM>(news);
-         
-            ViewBag.TrainingSectorList = news.TrainigSector.NameAr;
+            var sectors = await _trainingSectorService.GetAllAsync();
+
+            ViewBag.TrainingSectorList = new SelectList(
+                sectors,
+                "Id",
+                "NameAr",
+                news.TrainigSectorId
+            );
+
+            //ViewBag.TrainingSectorList = news.TrainigSector.NameAr;
             return View(model);
         }
 
