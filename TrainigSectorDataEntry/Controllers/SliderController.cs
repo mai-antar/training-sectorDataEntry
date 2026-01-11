@@ -114,7 +114,7 @@ namespace TrainigSectorDataEntry.Controllers
                 FilePath = filePath
             });
 
-            TempData["Success"] = "تم إضافة السلايدر بنجاح";
+            TempData["Success"] = "تمت الاضافة بنجاح";
             TempData["SelectedSectorId"] = model.TrainigSectorId;
 
             return RedirectToAction(nameof(Create));
@@ -196,7 +196,7 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             await _sliderService.UpdateAsync(entity);
-            TempData["Success"] = "تم تعديل السلايدر بنجاح";
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -208,7 +208,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _sliderService.DeleteAsync(id);
 
-            TempData["Success"] = "تم حذف السليدر بنجاح";
+            TempData["Success"] = "تم الحذف بنجاح";
             return RedirectToAction(nameof(Index));
         }
     }

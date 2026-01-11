@@ -44,6 +44,12 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+
+            if (TempData["SelectedSectorId"] != null)
+            {
+                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["SelectedSectorId"]);
+
+            }
             ViewBag.existingContactU = existingContactUVM;
             return View();
         }
@@ -74,7 +80,10 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _ContactUService.AddAsync(entity);
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["SelectedSectorId"] = model.TrainigSectorId;
+
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -116,6 +125,7 @@ namespace TrainigSectorDataEntry.Controllers
             await _ContactUService.UpdateAsync(entity);
 
 
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -125,6 +135,7 @@ namespace TrainigSectorDataEntry.Controllers
             if (ContactU == null) return NotFound();
 
             await _ContactUService.DeleteAsync(id);
+            TempData["Success"] = "تم الحذف بنجاح";
             return RedirectToAction(nameof(Index));
         }
     }

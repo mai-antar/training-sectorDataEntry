@@ -47,6 +47,11 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+            if (TempData["SelectedSectorId"] != null)
+            {
+                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["SelectedSectorId"]);
+
+            }
             ViewBag.existingComplaintsAndSuggestion = existingComplaintsAndSuggestionVM;
             return View();
         }
@@ -81,6 +86,7 @@ namespace TrainigSectorDataEntry.Controllers
                 var existingComplaintsAndSuggestionVM = _mapper.Map<List<ComplaintsAndSuggestionVM>>(existingComplaintsAndSuggestion);
 
                 ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+               
                 ViewBag.existingComplaintsAndSuggestion = existingComplaintsAndSuggestionVM;
 
                 return View(model);
@@ -103,7 +109,10 @@ namespace TrainigSectorDataEntry.Controllers
                 await _ComplaintsAndSuggestionService.AddAsync(entity);
             }
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["SelectedSectorId"] = model.TrainigSectorId;
+
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -167,6 +176,7 @@ namespace TrainigSectorDataEntry.Controllers
             await _ComplaintsAndSuggestionService.UpdateAsync(entity);
 
 
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -176,6 +186,7 @@ namespace TrainigSectorDataEntry.Controllers
             if (ComplaintsAndSuggestion == null) return NotFound();
 
             await _ComplaintsAndSuggestionService.DeleteAsync(id);
+            TempData["Success"] = "تم الحذف بنجاح";
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
