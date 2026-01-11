@@ -12,15 +12,23 @@
     <link rel="stylesheet" href="~/TrainigSectorDataEntry.styles.css" asp-append-version="true" />
     <link href="~/fontawesome/css/all.css" rel="stylesheet" />
     <link href="~/fontawesome/css/all.min.css" rel="stylesheet" />
+
+
+	<link href="~/gritter/jquery.gritter.css" rel="stylesheet" />
     <style>
         body {
             direction: rtl;
         }
 
     </style>
+
+
 </head>
 
+
+
 <body>
+
 
 
     <div class="container-fluid">
@@ -47,6 +55,7 @@
                 </div>
             </div>
         </div>
+       
         <div class="row">
 
             <div class="col-lg-3 bk-blk">
@@ -194,11 +203,62 @@
     </div>
 
 
+	<a href="~/lib/jquery/dist/jquery.min.map">~/lib/jquery/dist/jquery.min.map</a>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/jquery/dist/jquery.js"></script>
+    <!-- Toastr CSS -->
+    <link href="~/toastr/toastr.min.css" rel="stylesheet" />
 
+    <!-- jQuery (needed by Toastr) -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Toastr JS -->
+    <script src="~/toastr/toastr.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            // Toastr default options
+            toastr.options = {
+                "closeButton": false,
+                "progressBar": false,
+                "positionClass": "toast-bottom-left", // bottom-left
+                "timeOut": "4000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "rtl": true
+            };
+
+            // TempData Success
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                        toastr.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])));
+            </text>
+        }
+
+            // TempData Error
+        @if (TempData["Error"] != null)
+        {
+            <text>
+                        toastr.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])));
+            </text>
+        }
+
+        });
+    </script>
+
+
+    <!-- Bootstrap & site -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

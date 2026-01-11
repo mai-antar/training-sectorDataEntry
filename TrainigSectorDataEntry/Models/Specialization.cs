@@ -32,4 +32,6 @@ public partial class Specialization
     public virtual Departmentsandbranch Departmentsandbranches { get; set; } = null!;
 
     public virtual ICollection<SpecializationImage> SpecializationImages { get; set; } = new List<SpecializationImage>();
+
+    public virtual ICollection<StudentTablesAttachment> StudentTablesAttachments { get; set; } = new List<StudentTablesAttachment>();
 }

@@ -55,56 +55,62 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SliderVM model)
         {
-            // Validate that an image is uploaded
-            if (model.UploadedImage == null || model.UploadedImage.Length == 0)
+         
+            if (model.IsVideo == false)
             {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
+                if (model.UploadedFile == null || model.UploadedFile.Length == 0)
+                    ModelState.AddModelError("UploadedFile", "يجب تحميل صورة.");
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.FilePath))
+                    ModelState.AddModelError("FilePath", "يرجى إدخال رابط الفيديو.");
             }
 
             if (!ModelState.IsValid)
             {
                 var trainingSector = await _trainingSectorService.GetDropdownListAsync();
                 var existingSlider = await _sliderService.GetAllAsync();
-                var existingSliderVM = _mapper.Map<List<SliderVM>>(existingSlider);
 
-                ViewBag.trainingSectorList = new SelectList(trainingSector, "Id", "NameAr");
-                ViewBag.existingSlider = existingSliderVM;
+                ViewBag.trainingSectorList =
+                    new SelectList(trainingSector, "Id", "NameAr");
+
+                ViewBag.existingSlider =
+                    _mapper.Map<List<SliderVM>>(existingSlider);
 
                 return View(model);
             }
-            
 
-            // Save the image
+         
+            string filePath;
 
-            if (model.UploadedImage != null)
+            if (model.IsVideo == false)
             {
-
-
-                var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "SliderImage");
-
-                if (relativePath != null)
-                {
-                    await _sliderService.AddAsync(new Slider
-                    {
-
-                        TrainigSectorId = model.TrainigSectorId,
-                        TitleAr = model.TitleAr,
-                        TitleEn = model.TitleEn,
-                        DescriptionAr = model.DescriptionAr,
-                        DescriptionEn = model.DescriptionEn,
-                        IsDeleted = false,
-                        IsActive = true,
-                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
-                        ImagePath = relativePath
-                    });
-
-                }
-
+                filePath = await _fileStorageService
+                    .UploadImageAsync(model.UploadedFile, "SliderImage");
+            }
+            else
+            {
+                filePath = model.FilePath;
             }
 
+            await _sliderService.AddAsync(new Slider
+            {
+                TrainigSectorId = model.TrainigSectorId,
+                TitleAr = model.TitleAr,
+                TitleEn = model.TitleEn,
+                DescriptionAr = model.DescriptionAr,
+                DescriptionEn = model.DescriptionEn,
+                IsVideo = model.IsVideo,
+                IsActive = true,
+                IsDeleted = false,
+                UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
+                FilePath = filePath
+            });
 
             return RedirectToAction(nameof(Index));
         }
+
 
 
         public async Task<IActionResult> Edit(int id)
@@ -122,73 +128,69 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(SliderVM model)
         {
-            if (!ModelState.IsValid)
-            {
-                var trainingSector = await _trainingSectorService.GetDropdownListAsync();
-                ViewBag.trainingSectorList = new SelectList(trainingSector, "Id", "NameAr");
-                return View(model);
-            }
-
             var entity = await _sliderService.GetByIdAsync(model.Id);
             if (entity == null) return NotFound();
 
-            // If no new image uploaded AND no existing image, throw validation error
-            if (model.UploadedImage == null && string.IsNullOrEmpty(entity.ImagePath))
+
+            if (model.IsVideo == true)
             {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
+                if (string.IsNullOrWhiteSpace(model.FilePath))
+                    ModelState.AddModelError("FilePath", "يرجى إدخال رابط الفيديو.");
+            }
+            else
+            {
+                if (model.UploadedFile == null && string.IsNullOrEmpty(entity.FilePath))
+                    ModelState.AddModelError("UploadedFile", "يجب تحميل صورة.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var trainingSector = await _trainingSectorService.GetDropdownListAsync();
+                ViewBag.trainingSectorList =
+                    new SelectList(trainingSector, "Id", "NameAr");
+
                 return View(model);
             }
 
-
-
+         
             entity.TitleAr = model.TitleAr;
             entity.TitleEn = model.TitleEn;
             entity.DescriptionAr = model.DescriptionAr;
             entity.DescriptionEn = model.DescriptionEn;
             entity.TrainigSectorId = model.TrainigSectorId;
             entity.IsActive = model.IsActive;
+            entity.IsVideo = model.IsVideo;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
-            if (model.UploadedImage != null && model.UploadedImage.Length > 0)
+            
+            if (model.IsVideo == true)
             {
-
-                if (!string.IsNullOrEmpty(entity.ImagePath))
+                // delete old image if exists
+                if (!string.IsNullOrEmpty(entity.FilePath) &&
+                    !entity.FilePath.StartsWith("http"))
                 {
-                    await _fileStorageService.DeleteFileAsync(entity.ImagePath);
+                    await _fileStorageService.DeleteFileAsync(entity.FilePath);
                 }
 
-                var relativePath = await _fileStorageService
-                    .UploadImageAsync(model.UploadedImage, "AlertsAndAdvertismentImage");
-
-                entity.ImagePath = relativePath;
-
-                if (string.IsNullOrEmpty(relativePath))
-                {
-                    ModelState.AddModelError("UploadedImage", "حدث خطأ أثناء رفع الصورة.");
-                    var educationalFacility = await _sliderService.GetDropdownListAsync();
-                    ViewBag.educationalFacilityList =
-                        new SelectList(educationalFacility, "Id", "NameAr");
-                    return View(model);
-                }
-
-                entity.ImagePath = relativePath;
+                entity.FilePath = model.FilePath;
             }
-         
-
-            // Ensure image path is still set
-            if (string.IsNullOrEmpty(entity.ImagePath))
+          
+            else if (model.UploadedFile != null && model.UploadedFile.Length > 0)
             {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                var trainingSector = await _trainingSectorService.GetDropdownListAsync();
-                ViewBag.trainingSectorList = new SelectList(trainingSector, "Id", "NameAr");
-                return View(model);
+                if (!string.IsNullOrEmpty(entity.FilePath))
+                {
+                    await _fileStorageService.DeleteFileAsync(entity.FilePath);
+                }
+
+                entity.FilePath = await _fileStorageService
+                    .UploadImageAsync(model.UploadedFile, "SliderImage");
             }
 
             await _sliderService.UpdateAsync(entity);
 
-
             return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> Delete(int id)
         {

@@ -6,7 +6,7 @@
 
 <h2 class="text-center" style="margin-bottom: 80px;">تعديل الاعلانات وتنبيهات</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" id="editForm" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -80,5 +80,55 @@
     }
 
 
+
+    <script>
+        $(document).ready(function() {
+            $("#editForm").submit(function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "AlertsAndAdvertisment")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                           success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '',
+                    text: response.message,
+                    toast: true,
+                    position: 'bottom-left',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    background: '#198754',
+                    color: '#fff'
+                }).then(() => {
+                    // Redirect after toast
+                    window.location.href = response.redirectUrl;
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: response.message
+                });
+            }
+        },
+
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'خطأ',
+                            text: 'حدث خطأ أثناء الحفظ'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }
 

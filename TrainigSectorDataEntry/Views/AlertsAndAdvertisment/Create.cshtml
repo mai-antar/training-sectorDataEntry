@@ -14,7 +14,7 @@
 
 <h2>إضافة اعلانات وتنبيهات</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-action="Create" id="createForm" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <br />
@@ -83,6 +83,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+ 
     <script>
         $(document).ready(function() {
             $('#EducationalFacilitiesId').change(function() {
@@ -99,6 +100,56 @@
                 } else {
                     $('#alertsTable tbody').html(''); 
                 }
+            });
+               $("#createForm").on("submit", function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "AlertsAndAdvertisment")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '',
+                    text: response.message,
+                    toast: true,
+                    position: 'bottom-left',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    background: '#198754',
+                    color: '#000'
+                });
+
+                // Reset form but keep dropdown selection
+                var selectedFacility = $("#EducationalFacilitiesId").val();
+                $("#createForm")[0].reset();
+                $("#EducationalFacilitiesId").val(selectedFacility);
+
+                // Reload table for this facility
+                if(selectedFacility){
+                    $.get('@Url.Action("GetAlertsByFacility", "AlertsAndAdvertisment")',
+                          { facilityId: selectedFacility },
+                          function(data){
+                              $('#alertsTable tbody').html(data); // replace table rows
+                          });
+                }
+            }
+        },
+
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'خطأ',
+                            text: 'حدث خطأ أثناء الحفظ'
+                        });
+                    }
+                });
             });
         });
     </script>

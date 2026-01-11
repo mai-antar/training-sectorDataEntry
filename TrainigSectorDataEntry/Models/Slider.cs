@@ -17,7 +17,7 @@ public partial class Slider
 
     public string DescriptionEn { get; set; } = null!;
 
-    public string ImagePath { get; set; } = null!;
+    public string FilePath { get; set; } = null!;
 
     public bool IsActive { get; set; }
 
@@ -35,7 +35,7 @@ public partial class Slider
 
     public DateOnly? UserDeletionDate { get; set; }
 
-    public string? VedioPath { get; set; }
+    public bool? IsVideo { get; set; }
 
     public virtual TrainingSector TrainigSector { get; set; } = null!;
 }

@@ -35,5 +35,7 @@ public partial class EducationalLevel
 
     public virtual ICollection<Result> Results { get; set; } = new List<Result>();
 
+    public virtual ICollection<StudentTablesAttachment> StudentTablesAttachments { get; set; } = new List<StudentTablesAttachment>();
+
     public virtual ICollection<StudentsTimeTable> StudentsTimeTables { get; set; } = new List<StudentsTimeTable>();
 }

@@ -80,6 +80,24 @@
 
 
     <br />
+
+        <div class="form-group form-check mb-3">
+        <input asp-for="IsVideo" class="form-check-input" id="isVideoCheckbox" />
+        <label class="form-check-label">هذا Slider فيديو</label>
+    </div>
+<br />
+    <div class="form-group" id="imageSection">
+        <label>تحميل الصورة</label>
+        <input asp-for="UploadedFile" type="file" class="form-control" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+
+    <div class="form-group d-none" id="videoSection">
+        <label>رابط الفيديو</label>
+        <input asp-for="FilePath" class="form-control"
+               placeholder="https://youtube.com/..." />
+        <span asp-validation-for="FilePath" class="text-danger"></span>
+    </div>
     <div class="row">
         
             <div class="col-md-6">
@@ -143,7 +161,7 @@
                         </td>
                         <td>
 
-                            <img src="/Files/@slider.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                            <img src="/Files/@slider.FilePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
 
 
 
@@ -169,7 +187,23 @@
 
 </div>
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+        function toggleSliderType() {
+            if ($("#isVideoCheckbox").is(":checked")) {
+                $("#imageSection").addClass("d-none");
+                $("#videoSection").removeClass("d-none");
+            } else {
+                $("#imageSection").removeClass("d-none");
+                $("#videoSection").addClass("d-none");
+            }
+        }
+
+        $(document).ready(function () {
+            toggleSliderType();
+            $("#isVideoCheckbox").change(toggleSliderType);
+        });
+    </script>
 }
+
