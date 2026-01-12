@@ -37,16 +37,16 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var departmentType in Model)
+        @foreach (var departmentandbranch in Model)
         {
             <tr>
-                <td>@departmentType.NameAr</td>
-                <td>@departmentType.NameEn</td>
-                 <td>@departmentType.EducationalFacilities?.NameAr</td>
+                <td>@departmentandbranch.NameAr</td>
+                <td>@departmentandbranch.NameEn</td>
+                <td>@departmentandbranch.EducationalFacilities?.NameAr</td>
                 @*<td>@departmentType.Specialization?.NameAr</td> *@
-                 <td>@departmentType.DepatmentType?.NameAr</td>
+                <td>@departmentandbranch.DepatmentType?.NameAr</td>
                 <td>
-                    @if (departmentType.IsActive)
+                    @if (departmentandbranch.IsActive)
                     {
                         <span class="badge bg-success">مفعل</span>
                     }
@@ -57,12 +57,12 @@
                 </td>
 
                 <td>
-                    <a asp-controller="DepartmentsandBranchesImages" asp-action="Index" asp-route-departmentId="@departmentType.Id"
+                    <a asp-controller="DepartmentsandBranchesImages" asp-action="Index" asp-route-departmentId="@departmentandbranch.Id"
                         class="btn btn-sm btn-info">التفاصيل / الصور</a>
 
-                    
 
-                    <a asp-action="Edit" asp-route-id="@departmentType.Id" class="buttonedit right-4tens ">
+
+                    <a asp-action="Edit" asp-route-id="@departmentandbranch.Id" class="buttonedit right-4tens ">
                         <span class="buttonedit__text">تعديل</span>
                         <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
                     </a>
@@ -71,9 +71,10 @@
 
 
 
-                    
 
-                    <a asp-action="Delete" asp-route-id="@departmentType.Id" class="buttonremove right-4tens " >
+
+                    <a href="javascript:void(0);" class="buttonremove right-4tens "
+                       onclick="confirmDelete(@departmentandbranch.Id)">
                         <span class="buttonremove__text"> حذف</span>
                         <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
                     </a>
@@ -83,5 +84,23 @@
         }
     </tbody>
 </table>
-
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من التراجع عن هذا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // red
+            cancelButtonColor: '#6c757d', // grey
+            confirmButtonText: 'نعم، احذف!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to Delete action
+                window.location.href = '/Departmentsandbranches/Delete/' + id;
+            }
+        });
+    }
+</script>
 

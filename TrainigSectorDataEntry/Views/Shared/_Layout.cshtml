@@ -14,7 +14,6 @@
     <link href="~/fontawesome/css/all.min.css" rel="stylesheet" />
 
 
-	<link href="~/gritter/jquery.gritter.css" rel="stylesheet" />
     <style>
         body {
             direction: rtl;
@@ -215,8 +214,6 @@
     <!-- Toastr JS -->
     <script src="~/toastr/toastr.min.js"></script>
 
-
-
     <script>
         $(document).ready(function () {
 
@@ -239,6 +236,11 @@
         {
             <text>
                         toastr.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])));
+
+                        // Clear history so Back button won't replay alert
+                        if (window.history.replaceState) {
+                            window.history.replaceState(null, document.title, window.location.href);
+                        }
             </text>
         }
 
@@ -247,11 +249,19 @@
         {
             <text>
                         toastr.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])));
+
+                        // Clear history so Back button won't replay alert
+                        if (window.history.replaceState) {
+                            window.history.replaceState(null, document.title, window.location.href);
+                        }
             </text>
         }
 
         });
     </script>
+
+
+ 
 
 
     <!-- Bootstrap & site -->

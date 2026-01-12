@@ -56,8 +56,17 @@ namespace TrainigSectorDataEntry.Controllers
             var EducationalFacility = await _EducationalFacility.GetDropdownListAsync();
             ViewBag.EducationalFacilityList = new SelectList(EducationalFacility, "Id", "NameAr");
 
+           
+
             var DepartmentType = await _DepartmentType.GetDropdownListAsync();
             ViewBag.DepartmentTypeList = new SelectList(DepartmentType, "ID", "NameAr");
+
+            if (TempData["Dept_EducationalFacilitiesId"] != null&& TempData["Dept_DepartmentTypeId"] != null)
+            {
+                ViewBag.EducationalFacilityList = new SelectList(EducationalFacility, "Id", "NameAr", TempData["Dept_EducationalFacilitiesId"]);
+                ViewBag.DepartmentTypeList = new SelectList(DepartmentType, "ID", "NameAr", TempData["Dept_DepartmentTypeId"]);
+
+            }
 
             var existingDepartmentsandbranch = await _DepartmentsandbranchService.GetAllAsync();
             var existingDepartmentsandbranchVM = _mapper.Map<List<DepartmentsandbranchVM>>(existingDepartmentsandbranch);
@@ -98,7 +107,11 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _DepartmentsandbranchService.AddAsync(entity);
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["Dept_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            TempData["Dept_DepartmentTypeId"] = model.DepatmentTypeID;
+
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -155,7 +168,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _DepartmentsandbranchService.UpdateAsync(entity);
 
-
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -166,8 +179,8 @@ namespace TrainigSectorDataEntry.Controllers
             if (Departmentsandbranch == null) return NotFound();
 
             await _DepartmentsandbranchService.DeleteAsync(Id);
-        
 
+            TempData["Success"] = "تم حذف الإعلان بنجاح";
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]

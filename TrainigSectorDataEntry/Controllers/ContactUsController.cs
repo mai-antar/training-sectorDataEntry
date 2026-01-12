@@ -45,9 +45,9 @@ namespace TrainigSectorDataEntry.Controllers
 
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
 
-            if (TempData["SelectedSectorId"] != null)
+            if (TempData["ContactUS_SectorId"] != null)
             {
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["SelectedSectorId"]);
+                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["ContactUS_SectorId"]);
 
             }
             ViewBag.existingContactU = existingContactUVM;
@@ -81,7 +81,7 @@ namespace TrainigSectorDataEntry.Controllers
             await _ContactUService.AddAsync(entity);
 
             TempData["Success"] = "تمت الاضافة بنجاح";
-            TempData["SelectedSectorId"] = model.TrainigSectorId;
+            TempData["ContactUS_SectorId"] = model.TrainigSectorId;
 
             return RedirectToAction(nameof(Create));
         }

@@ -47,9 +47,9 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
-            if (TempData["SelectedSectorId"] != null)
+            if (TempData["Complaints_SectorId"] != null)
             {
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["SelectedSectorId"]);
+                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["Complaints_SectorId"]);
 
             }
             ViewBag.existingComplaintsAndSuggestion = existingComplaintsAndSuggestionVM;
@@ -110,7 +110,7 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             TempData["Success"] = "تمت الاضافة بنجاح";
-            TempData["SelectedSectorId"] = model.TrainigSectorId;
+            TempData["Complaints_SectorId"] = model.TrainigSectorId;
 
             return RedirectToAction(nameof(Create));
         }
