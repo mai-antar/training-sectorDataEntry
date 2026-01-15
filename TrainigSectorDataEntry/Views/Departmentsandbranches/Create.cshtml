@@ -16,7 +16,7 @@
 
         <div class="form-group">
             <label asp-for="DepatmentTypeID" class="control-label">اسم نوع القسم</label>
-            <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" class="form-control">
+            <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" id="DepatmentTypeID"  class="form-control">
                 <option value="">-- اختر نوع القسم --</option>
             </select>
             <span asp-validation-for="DepatmentTypeID" class="text-danger"></span>
@@ -25,7 +25,7 @@
     <br />
     <div class="form-group">
         <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
-        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilityList" class="form-control">
+            <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilityList" id="EducationalFacilitiesId" class="form-control">
             <option value="">-- اختر منشأة تعليمية --</option>
         </select>
         <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
@@ -125,8 +125,27 @@
                     $('#departmentTable tbody').html('');
                 }
             });
+                $('#DepatmentTypeID').change(function () {
+                        var departmentTypeId = $(this).val();
+
+                        //لو معمل او ورشة المنشأة لازم تكون قطاع التدريب
+                            if (departmentTypeId == 1 ||departmentTypeId == 3) {
+                            // force Educational Facility = 7
+                            $('#EducationalFacilitiesId').val('7').prop('disabled', true);
+                        } else {
+                            // enable again
+                            $('#EducationalFacilitiesId').prop('disabled', false);
+                        }
+                    });
+
+                    // ensure value is submitted even if disabled
+                    $('form').submit(function () {
+                        $('#EducationalFacilitiesId').prop('disabled', false);
+                    });
         });
     </script>
+  
+
 }
 
 </div>

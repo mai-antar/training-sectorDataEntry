@@ -81,7 +81,13 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create(DepartmentsandbranchVM model)
         {
 
-
+            if (model.DepatmentTypeID == 1 && model.EducationalFacilitiesId != 7)
+            {
+                ModelState.AddModelError(
+                    "EducationalFacilitiesId",
+                    "عند اختيار نوع القسم هذا يجب أن تكون المنشأة التعليمية محددة تلقائيًا"
+                );
+            }
             if (!ModelState.IsValid)
             {
            
