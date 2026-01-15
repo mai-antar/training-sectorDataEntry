@@ -121,7 +121,7 @@ namespace TrainigSectorDataEntry.Controllers
 
                 await _imageService.AddAsync(entity);
             }
-
+            TempData["Success"] = "تمت الاضافة بنجاح";
             return RedirectToAction("Index", new { departmentId = model.DepartmentsandbranchesId  });
         }
         public async Task<IActionResult> Edit(int id)
@@ -219,6 +219,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _imageService.UpdateAsync(entity);
 
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction("Index", new
             {
                 departmentId = model.DepartmentsandbranchesId,
@@ -234,6 +235,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _imageService.DeleteAsync(id);
 
+            TempData["Success"] = "تم الحذف بنجاح";
             return RedirectToAction("Index", new
             {
                 departmentId = image.DepartmentsandbranchesId
