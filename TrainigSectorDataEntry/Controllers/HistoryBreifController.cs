@@ -119,6 +119,8 @@ namespace TrainigSectorDataEntry.Controllers
                 }
             }
 
+            TempData["Success"] = "تمت الاضافة بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -201,6 +203,8 @@ namespace TrainigSectorDataEntry.Controllers
                 }
             }
 
+            TempData["Success"] = "تم التعديل بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> AddImages(int id)
@@ -273,6 +277,9 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             await _historyBreifService.DeleteAsync(id);
+
+            TempData["Success"] = "تم الحذف بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]

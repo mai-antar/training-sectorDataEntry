@@ -111,6 +111,9 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _specializationService.AddAsync(entity);
 
+
+            TempData["Success"] = "تمت الاضافة بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -151,6 +154,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _specializationService.UpdateAsync(entity);
 
+            TempData["Success"] = "تم التعديل بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
@@ -161,6 +165,9 @@ namespace TrainigSectorDataEntry.Controllers
             if (Specialization == null) return NotFound();
 
             await _specializationService.DeleteAsync(id);
+
+            TempData["Success"] = "تم الحذف بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
 

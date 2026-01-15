@@ -107,7 +107,8 @@ namespace TrainigSectorDataEntry.Controllers
                 await _TrainingCourseService.AddAsync(entity);
             }
 
-           
+
+            TempData["Success"] = "تمت الاضافة بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
@@ -176,6 +177,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _TrainingCourseService.UpdateAsync(entity);
 
+            TempData["Success"] = "تم التعديل بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
@@ -190,6 +192,9 @@ namespace TrainigSectorDataEntry.Controllers
                 await _fileStorageService.DeleteFileAsync(TrainingCourse.FilePath);
             }
             await _TrainingCourseService.DeleteAsync(id);
+
+            TempData["Success"] = "تم الحذف بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
 

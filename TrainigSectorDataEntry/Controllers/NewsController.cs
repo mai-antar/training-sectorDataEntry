@@ -116,6 +116,7 @@ namespace TrainigSectorDataEntry.Controllers
                 }
 
             }
+            TempData["Success"] = "تمت الاضافة بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
@@ -245,6 +246,7 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
 
+            TempData["Success"] = "تم التعديل بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
@@ -323,6 +325,9 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
             await _newsService.DeleteAsync(id);
+
+            TempData["Success"] = "تم الحذف بنجاح";
+
             return RedirectToAction(nameof(Index));
         }
        

@@ -75,6 +75,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _EducationalLevelService.AddAsync(entity);
 
+            TempData["Success"] = "تمت الاضافة بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -114,7 +115,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _EducationalLevelService.UpdateAsync(entity);
 
-
+            TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
 
@@ -124,6 +125,9 @@ namespace TrainigSectorDataEntry.Controllers
             if (EducationalLevel == null) return NotFound();
 
             await _EducationalLevelService.DeleteAsync(id);
+
+
+            TempData["Success"] = "تم الحذف بنجاح";
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]

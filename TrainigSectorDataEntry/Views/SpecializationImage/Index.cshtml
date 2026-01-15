@@ -1,16 +1,31 @@
 ﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.SpecializationImageVM>
 
 <h2>صور وتفاصيل تخصص: @ViewBag.specializationName</h2>
+<div class="row">
 
-<a asp-action="Create"
-   asp-route-specializationId="@ViewBag.SpecializationId"
-   asp-route-educationalFacilitiesName="@ViewBag.educationalFacilitiesName"
-   asp-route-specializationName="@ViewBag.specializationName"
-   asp-route-departmentName="@ViewBag.departmentName"
-  
-   class="btn btn-primary mb-3">
-    إضافة
-</a>
+    <div class="col-md-10">
+        <a asp-action="Create"
+           asp-route-specializationId="@ViewBag.SpecializationId"
+           asp-route-educationalFacilitiesName="@ViewBag.educationalFacilitiesName"
+           asp-route-specializationName="@ViewBag.specializationName"
+           asp-route-departmentName="@ViewBag.departmentName"
+           class="btn btn-primary mb-3">
+            إضافة
+        </a>
+    </div>
+    <div class="col-md-2">
+        <a asp-controller="Departmentsandbranches"
+           asp-action="Index"
+           class="button2 right-4tens">
+            <span class="button2__text"> رجوع للتخصصات </span>
+            <span class="button2__icon">
+
+                <i class="fa-solid fa-arrow-right" style="color:white"></i>
+            </span>
+        </a>
+    </div>
+</div>
+
 
 
 
@@ -44,11 +59,9 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">تعديل</a>
 
-
-
-                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-specializationId="@ViewBag.SpecializationId"
+                    <a href="javascript:void(0);"
                        class="btn btn-sm btn-danger"
-                       onclick="return confirm('هل أنت متأكد من الحذف؟');">
+                       onclick="confirmDelete(@item.Id)">
                         حذف
                     </a>
                   
@@ -58,3 +71,22 @@
         }
     </tbody>
 </table>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من التراجع عن هذا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // red
+            cancelButtonColor: '#6c757d', // grey
+            confirmButtonText: 'نعم، احذف!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to Delete action
+                window.location.href = '/SpecializationImage/Delete/' + id;
+            }
+        });
+    }
+</script>

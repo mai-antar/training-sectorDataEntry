@@ -33,7 +33,8 @@
                 <span class="buttonedit__text">تعديل</span>
                 <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
             </a>
-            <a class="buttonremove right-4tens " asp-action="Delete" asp-route-id="@service.Id">
+            <a href="javascript:void(0);" class="buttonremove right-4tens "
+               onclick="confirmDelete(@service.Id)">
                 <span class="buttonremove__text"> حذف</span>
                 <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
             </a>
@@ -41,3 +42,22 @@
     </tr>
 }
 
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من التراجع عن هذا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // red
+            cancelButtonColor: '#6c757d', // grey
+            confirmButtonText: 'نعم، احذف!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to Delete action
+                window.location.href = '/Service/Delete/' + id;
+            }
+        });
+    }
+</script>

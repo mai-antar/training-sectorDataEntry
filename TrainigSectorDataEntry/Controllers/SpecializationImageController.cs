@@ -129,6 +129,8 @@ namespace TrainigSectorDataEntry.Controllers
                 await _imageService.AddAsync(entity);
             }
 
+            TempData["Success"] = "تمت الاضافة بنجاح";
+
             return RedirectToAction("Index", new { SpecializationId = model.SpecializationId,
                 });
         }
@@ -239,6 +241,10 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _imageService.UpdateAsync(entity);
 
+
+            TempData["Success"] = "تم التعديل بنجاح";
+
+
             return RedirectToAction("Index", new
             {
                 specializationId = model.SpecializationId,
@@ -252,6 +258,9 @@ namespace TrainigSectorDataEntry.Controllers
                 return NotFound();
 
             await _imageService.DeleteAsync(id);
+
+
+            TempData["Success"] = "تم الحذف بنجاح";
 
             return RedirectToAction("Index", new
             {
