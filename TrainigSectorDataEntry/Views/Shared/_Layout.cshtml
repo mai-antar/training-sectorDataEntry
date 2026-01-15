@@ -121,8 +121,8 @@
                         </p>
                         <p>
                             <i class="fa-solid fa-table-columns"></i>
-                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "StudentsTimeTable") ? "active" : "")"
-                               asp-area="" asp-controller="StudentsTimeTable" asp-action="Index">الجداول الدراسية</a>
+                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "StudentTablesAttachment") ? "active" : "")"
+                               asp-area="" asp-controller="StudentTablesAttachment" asp-action="Index">الجداول الدراسية</a>
                         </p>
 
                         <p>
@@ -221,7 +221,7 @@
             toastr.options = {
                 "closeButton": false,
                 "progressBar": false,
-                "positionClass": "toast-bottom-left", // bottom-left
+                "positionClass": "toast-bottom-left",
                 "timeOut": "4000",
                 "extendedTimeOut": "1000",
                 "showEasing": "swing",
@@ -231,34 +231,35 @@
                 "rtl": true
             };
 
-            // TempData Success
+            // Function to show toastr safely
+            function showToastr(message, type) {
+                if (type === "success") toastr.success(message);
+                else if (type === "error") toastr.error(message);
+            }
+
+            // Only show alerts if the page is NOT loaded from bfcache
+            window.addEventListener('pageshow', function (event) {
+                if (!event.persisted) { // page is NOT loaded from cache
+        @* TempData Success *@
         @if (TempData["Success"] != null)
         {
             <text>
-                        toastr.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])));
-
-                        // Clear history so Back button won't replay alert
-                        if (window.history.replaceState) {
-                            window.history.replaceState(null, document.title, window.location.href);
-                        }
+                                showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])), "success");
             </text>
         }
 
-            // TempData Error
+        @* TempData Error *@
         @if (TempData["Error"] != null)
         {
             <text>
-                        toastr.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])));
-
-                        // Clear history so Back button won't replay alert
-                        if (window.history.replaceState) {
-                            window.history.replaceState(null, document.title, window.location.href);
-                        }
+                                showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])), "error");
             </text>
         }
-
+                }
+            });
         });
     </script>
+
 
 
  

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.StudentsTimeTableVM>
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.StudentTablesAttachmentVM>
 
 @{
     ViewData["Title"] = "جداول الطلاب";
@@ -29,9 +29,14 @@
 <table class="table table-bordered">
         <thead class="thead-dark">
         <tr>
-            <th>المرحلة التعليمية</th>
+            
+            <th> نوع الجدول</th>
             <th>المنشأة التعليمية</th>
-            <th>حالي؟</th>
+            <th>السنة الدراسية</th>
+            <th>الفصل الدراسي</th>
+            <th>القسم</th>
+            <th>التخصص</th>
+            @* <th>حالي؟</th> *@
             <th>مفعل؟</th>
             <th>الملف</th>
             <th></th>
@@ -41,9 +46,14 @@
         @foreach (var item in Model)
         {
             <tr>
+                
+                <td>@item.TableType?.NameAr</td>
+                <td>@item.EducationalLevel.EducationalFacilities?.NameAr</td>
                 <td>@item.EducationalLevel?.NameAr</td>
-                <td>@item.EducationalFacilities?.NameAr</td>
-                <td>
+                <td>@item.Terms?.NameAr</td>
+                <td>@item.Departmentsandbranches?.NameAr</td>
+                <td>@item.Specialization?.NameAr</td>
+           @*      <td>
                     @if (item.IsCurrent == true)
                     {
                         <span class="badge bg-success">نعم</span>
@@ -52,7 +62,7 @@
                     {
                         <span class="badge bg-secondary">لا</span>
                     }
-                </td>
+                </td> *@
                 <td>
                     @if (item.IsActive)
                     {
@@ -78,7 +88,8 @@
                             <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
                         </a>
 
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="buttonremove right-4tens ">
+                        <a href="javascript:void(0);" class="buttonremove right-4tens "
+                           onclick="confirmDelete(@item.Id)">
                             <span class="buttonremove__text"> حذف</span>
                             <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
                         </a>
@@ -89,3 +100,22 @@
     </tbody>
 </table>
 </div>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من التراجع عن هذا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // red
+            cancelButtonColor: '#6c757d', // grey
+            confirmButtonText: 'نعم، احذف!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to Delete action
+                window.location.href = '/StudentTablesAttachment/Delete/' + id;
+            }
+        });
+    }
+</script>

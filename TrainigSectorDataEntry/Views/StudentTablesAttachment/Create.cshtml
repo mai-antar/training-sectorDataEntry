@@ -1,0 +1,209 @@
+﻿@model TrainigSectorDataEntry.ViewModel.StudentTablesAttachmentVM
+
+@{
+    ViewData["Title"] = "إضافة جدول الطلاب";
+}
+
+
+<div class="container-fluid">
+    <div class="contPage">
+
+
+        <div class="orang2">
+            <h3>إضافة جدول الطلاب </h3>
+            <div></div>
+        </div>
+
+
+    </div>
+<br />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+                <!-- Table Type  -->
+                <div class="form-group">
+                    <label asp-for="TableTypeId" class="control-label">نوع الجدول</label>
+                    <select asp-for="TableTypeId" asp-items="ViewBag.TableTypeList" class="form-control">
+                        <option value="">-- اختر نوع الجدول --</option>
+                    </select>
+                    <span asp-validation-for="TableTypeId" class="text-danger"></span>
+                </div>
+         
+        </div>
+            <div class="col-md-6">
+                <!-- Educational Facility -->
+                <div class="form-group">
+                    <label asp-for="EducationalFacilitiesId" class="control-label"> المنشأة التعليمية</label>
+                    <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilityList" id="EducationalFacilitiesId" class="form-control">
+                        <option value="">-- اختر منشأة تعليمية --</option>
+                    </select>
+                    <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
+                </div>
+            </div>
+
+    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Educational Level -->
+                <div class="form-group">
+                    <label asp-for="EducationalLevelId" class="control-label"> السنة الدراسية</label>
+                    <select asp-for="EducationalLevelId" asp-items="ViewBag.EducationalLevelList" id="EducationalLevelId" class="form-control">
+                        <option value="">-- اختر سنة دراسية  --</option>
+                    </select>
+                    <span asp-validation-for="EducationalLevelId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+
+                <!-- Term  -->
+                <div class="form-group">
+                    <label asp-for="TermsId" class="control-label"> الفصل الدراسي</label>
+                    <select asp-for="TermsId" asp-items="ViewBag.TermList" class="form-control">
+                        <option value="">-- اختر الفصل الدراسي --</option>
+                    </select>
+                    <span asp-validation-for="TermsId" class="text-danger"></span>
+                </div>
+            
+            </div>
+          
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Departments and branches -->
+                <div class="form-group">
+
+
+                    <label asp-for="DepartmentsandbranchesId" class="control-label"> القسم</label>
+                    <select asp-for="DepartmentsandbranchesId" asp-items="ViewBag.departmentsandbranchList" id="DepartmentsandbranchesId" class="form-control">
+                        <option value="">-- اختر القسم --</option>
+                    </select>
+                    <span asp-validation-for="DepartmentsandbranchesId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Specialization  -->
+                <div class="form-group">
+                    <label asp-for="SpecializationId" class="control-label"> التخصص</label>
+                    <select asp-for="SpecializationId" asp-items="ViewBag.SpecializationList" id="SpecializationId" class="form-control">
+                        <option value="">-- اختر التخصص --</option>
+                    </select>
+                    <span asp-validation-for="SpecializationId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+
+        <div class="col-md-6">
+            <!-- IsActive -->
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label">مفعل؟</label>
+                <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Upload File -->
+            <div class="form-group">
+                <label for="UploadedFile">تحميل الملف</label>
+                <input asp-for="UploadedFile" type="file" class="form-control" />
+                <span asp-validation-for="UploadedFile" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+  
+   
+    <br />
+    <!-- Submit Buttons -->
+    <div class="row">
+
+        <div class="col-md-6">
+            <button type="submit" class="button right-4tens float-left">
+
+
+                <span class="button__text"> إضافة</span>
+                <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+
+            </button>
+        </div>
+        <div class="col-md-6">
+            <a class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" asp-action="Index">
+                <span class="buttonremove__text"> إلغاء</span>
+                <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>
+            </a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+  
+                    <script>
+            $(document).ready(function () {
+
+                // Facility → Levels
+                        $('#EducationalFacilitiesId').change(function () {
+                    var facilityId = $(this).val();
+
+                    $('#EducationalLevelId').empty().append('<option value="">-- اختر سنة دراسية --</option>');
+                    $('#DepartmentsandbranchesId').empty().append('<option value="">-- اختر القسم --</option>');
+                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>');
+
+                    if (facilityId) {
+                        $.get('/StudentTablesAttachment/GetLevelsByFacilityId',
+                            { facilityId: facilityId },
+                            function (data) {
+                                $.each(data, function (i, item) {
+                                    $('#EducationalLevelId')
+                                        .append(`<option value="${item.id}">${item.nameAr}</option>`);
+                                });
+                            });
+                    }
+                });
+
+                // Facility → Departments
+                        $('#EducationalFacilitiesId').change(function () {
+                        var facilityId = $(this).val();
+
+                    $('#DepartmentsandbranchesId').empty().append('<option value="">-- اختر القسم --</option>');
+                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>');
+
+                        if (facilityId) {
+                        $.get('/StudentTablesAttachment/GetDepartmentsByFacilityId',
+                                    { facilityId: facilityId },
+                            function (data) {
+                                $.each(data, function (i, item) {
+                                    $('#DepartmentsandbranchesId')
+                                        .append(`<option value="${item.id}">${item.nameAr}</option>`);
+                                });
+                            });
+                        }
+                });
+
+                // Department → Specializations
+                $('#DepartmentsandbranchesId').change(function () {
+                    var departmentId = $(this).val();
+
+                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>');
+
+                    if (departmentId) {
+                        $.get('/StudentTablesAttachment/GetSpecializationsByDepartmentId',
+                            { departmentId: departmentId },
+                            function (data) {
+                                $.each(data, function (i, item) {
+                                    $('#SpecializationId')
+                                        .append(`<option value="${item.id}">${item.nameAr}</option>`);
+                                });
+                            });
+                    }
+                });
+
+            });
+    </script>
+}
+</div>

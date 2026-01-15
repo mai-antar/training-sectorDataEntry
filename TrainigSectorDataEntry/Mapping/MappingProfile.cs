@@ -26,6 +26,7 @@ public class MappingProfile : Profile
         CreateMap<StudentActivite, StudentActiviteVM>().ReverseMap();
         CreateMap<EducationalLevel, EducationalLevelVM>().ReverseMap();
         CreateMap<StudentsTimeTable, StudentsTimeTableVM>().ReverseMap();
+        CreateMap<StudentTablesAttachment, StudentTablesAttachmentVM>().ReverseMap();
         CreateMap<SucessStory, SucessStoryVM>().ReverseMap();
         CreateMap<TrainingCoursesType, TrainingCoursesTypeVM>().ReverseMap();
         CreateMap<TrainingCourse, TrainingCourseVM>().ReverseMap();
