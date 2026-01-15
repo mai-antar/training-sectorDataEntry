@@ -42,11 +42,9 @@ namespace TrainigSectorDataEntry.Controllers
         }
 
 
-        public async Task<IActionResult> Index(int studentTablesAttachmentId)
+        public async Task<IActionResult> Index()
         {
-            var studentTablesAttachment = await _StudentTablesAttachmentService.GetByIdAsync(
-                studentTablesAttachmentId, x => x.EducationalLevel, x => x.EducationalLevel.EducationalFacilities, x => x.Departmentsandbranches,
-                x => x.TableType, x => x.Terms, x => x.Specialization );
+         
 
             var studentTablesAttachmentList = await _StudentTablesAttachmentService.GetAllAsync(
               false, x => x.EducationalLevel, x => x.EducationalLevel.EducationalFacilities, x => x.Departmentsandbranches,
@@ -68,7 +66,7 @@ namespace TrainigSectorDataEntry.Controllers
             var existingStudentTablesAttachmentVM = _mapper.Map<List<StudentTablesAttachmentVM>>(existingStudentTablesAttachment);
 
 
-            ViewBag.EducationalLevelList = new List<SelectListItem>();
+          
             ViewBag.ExistingStudentTablesAttachment = existingStudentTablesAttachmentVM;
 
             var model = new StudentTablesAttachmentVM();

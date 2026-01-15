@@ -12,6 +12,15 @@
 <form asp-action="Create" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+        <br />
+
+        <div class="form-group">
+            <label asp-for="DepatmentTypeID" class="control-label">اسم نوع القسم</label>
+            <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" class="form-control">
+                <option value="">-- اختر نوع القسم --</option>
+            </select>
+            <span asp-validation-for="DepatmentTypeID" class="text-danger"></span>
+        </div>
   
     <br />
     <div class="form-group">
@@ -20,16 +29,6 @@
             <option value="">-- اختر منشأة تعليمية --</option>
         </select>
         <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
-    </div>
-
-    <br />
-
-    <div class="form-group">
-        <label asp-for="DepatmentTypeID" class="control-label">اسم نوع القسم</label>
-        <select asp-for="DepatmentTypeID" asp-items="ViewBag.DepartmentTypeList" class="form-control">
-            <option value="">-- اختر نوع القسم --</option>
-        </select>
-        <span asp-validation-for="DepatmentTypeID" class="text-danger"></span>
     </div>
     <br />
     <div class="form-group">
