@@ -91,6 +91,7 @@ namespace TrainigSectorDataEntry.Controllers
             var entity = _mapper.Map<News>(model);
             entity.IsDeleted = false;
             entity.IsActive = true;
+            entity.Date = model.Date;
             entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
 
             await _newsService.AddAsync(entity);
@@ -162,6 +163,7 @@ namespace TrainigSectorDataEntry.Controllers
             entity.ShortDescriptionEn = model.ShortDescriptionEn;
             entity.DescriptionAr = model.DescriptionAr;
             entity.DescriptionEn = model.DescriptionEn;
+            entity.Date = model.Date;
             entity.TrainigSectorId = model.TrainigSectorId;
             entity.IsActive = model.IsActive;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);

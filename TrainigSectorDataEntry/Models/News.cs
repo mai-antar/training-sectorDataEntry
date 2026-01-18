@@ -21,6 +21,8 @@ public partial class News
 
     public string DescriptionEn { get; set; } = null!;
 
+    public DateOnly Date { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? UserCreationId { get; set; }

@@ -16,13 +16,13 @@
 
     </div>
 
-    <a asp-action="Create" class="button right-4tens ">إ
+@*     <a asp-action="Create" class="button right-4tens ">إ
 
 
         <span class="button__text"> إضافة شكاوى والمقترحات</span>
         <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 
-    </a>
+    </a> *@
 
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
@@ -38,7 +38,7 @@
 
 
 
-            <th></th>
+          @*   <th></th> *@
         </tr>
     </thead>
     <tbody>
@@ -69,7 +69,7 @@
                         </a>
                     }
                 </td>
-                <td>
+             @*    <td>
                         <a asp-action="Edit" asp-route-id="@complaintsAndSuggestion.Id" class="buttonedit right-4tens ">
                             <span class="buttonedit__text">تعديل</span>
                             <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
@@ -80,7 +80,7 @@
                             <span class="buttonremove__text"> حذف</span>
                         <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
                     </a>
-                </td>
+                </td> *@
             </tr>
         }
     </tbody>

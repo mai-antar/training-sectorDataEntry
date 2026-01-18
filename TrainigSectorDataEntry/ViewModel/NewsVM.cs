@@ -38,6 +38,7 @@ namespace TrainigSectorDataEntry.ViewModel
         [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string DescriptionEn { get; set; }
 
+        public DateOnly Date { get; set; }
         public bool? IsDeleted { get; set; }
 
         public int? UserCreationId { get; set; }

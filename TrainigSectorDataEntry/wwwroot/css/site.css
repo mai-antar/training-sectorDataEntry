@@ -872,3 +872,6 @@ i {
     background-color: #ffc107 !important; /* yellow */
     color: black !important;
 }
+.my-textarea {
+    height: 250px !important;
+}

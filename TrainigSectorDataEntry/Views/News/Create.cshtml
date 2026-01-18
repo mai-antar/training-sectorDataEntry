@@ -29,15 +29,24 @@
                 <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
-                <input asp-for="TitleAr" class="form-control" />
-                <span asp-validation-for="TitleAr" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label">تاريخ الخبر</label>
+                    <input asp-for="Date" class="form-control" type="date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
             </div>
-        </div>
+        
     </div>
+  
     <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
+                    <input asp-for="TitleAr" class="form-control" />
+                    <span asp-validation-for="TitleAr" class="text-danger"></span>
+                </div>
+            </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="TitleEn" class="control-label">عنوان الخبر بالانجليزي</label>
@@ -45,15 +54,16 @@
                 <span asp-validation-for="TitleEn" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="ShortDescriptionAr" class="control-label">الخبر بالعربي</label>
-                <input asp-for="ShortDescriptionAr" class="form-control" />
-                <span asp-validation-for="ShortDescriptionAr" class="text-danger"></span>
-            </div>
-        </div>
+     
     </div>
     <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ShortDescriptionAr" class="control-label">الخبر بالعربي</label>
+                    <input asp-for="ShortDescriptionAr" class="form-control" />
+                    <span asp-validation-for="ShortDescriptionAr" class="text-danger"></span>
+                </div>
+            </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="ShortDescriptionEn" class="control-label">الخبر بالانجليزي</label>
@@ -61,15 +71,16 @@
                 <span asp-validation-for="ShortDescriptionEn" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
-                <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
-                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-            </div>
-        </div>
+    
     </div>
     <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
+                    <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                </div>
+            </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="DescriptionEn" class="control-label">تفاصيل الخبر بالانجليزي</label>
@@ -77,17 +88,21 @@
                 <span asp-validation-for="DescriptionEn" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="UploadedImages">تحميل الصور</label>
-                <input asp-for="UploadedImages" type="file" multiple class="form-control" />
-                <span asp-validation-for="UploadedImages" class="text-danger"></span>
+      
+    </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="UploadedImages">تحميل الصور</label>
+                    <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+                    <span asp-validation-for="UploadedImages" class="text-danger"></span>
+                </div>
             </div>
         </div>
-    </div>
     
     <br />
-
+   
     <div class="row">
 
         <div class="col-md-6">
@@ -138,7 +153,7 @@
                         <td>@news.TitleAr</td>
                         <td>@news.TitleEn</td>
                         <td>@news.TrainigSector?.NameAr</td>
-                        <td>@news.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@news.Date.ToString("yyyy-MM-dd")</td>
                         <td>
                             @if (news.IsActive)
                             {

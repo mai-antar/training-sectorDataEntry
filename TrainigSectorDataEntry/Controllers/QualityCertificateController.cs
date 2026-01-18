@@ -85,6 +85,8 @@ namespace TrainigSectorDataEntry.Controllers
                     await _QualityCertificateService.AddAsync(new QualityCertificate
                     {
                         EducationalFacilitiesId = model.EducationalFacilitiesId,
+                        TitleAr = model.TitleAr,
+                        TitleEn = model.TitleEn,
                         IsDeleted = false,
                         IsActive = true,
                         UserCreationDate = DateOnly.FromDateTime(DateTime.Today),

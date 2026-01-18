@@ -17,7 +17,7 @@ public partial class StudentTablesAttachment
 
     public int? SpecializationId { get; set; }
 
-    public string? FilePath { get; set; }
+    public string FilePath { get; set; } = null!;
 
     public bool IsActive { get; set; }
 

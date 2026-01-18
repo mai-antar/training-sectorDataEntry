@@ -19,6 +19,13 @@
         <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
     </div>
     <br />
+
+    <div class="form-group">
+        <label asp-for="Date" class="control-label">تاريخ الخبر</label>
+        <input asp-for="Date" class="form-control" type="date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <br />
     <div class="form-group">
         <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
         <input asp-for="TitleAr" class="form-control" />
@@ -42,6 +49,7 @@
         <input asp-for="ShortDescriptionEn" class="form-control" />
         <span asp-validation-for="ShortDescriptionEn" class="text-danger"></span>
     </div>
+
     <br />
     <div class="form-group">
         <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
@@ -56,6 +64,8 @@
         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
     </div>
     <br />
+
+ 
     <!-- Existing Images -->
     <div class="form-group">
         <label>الصور الحالية</label>
