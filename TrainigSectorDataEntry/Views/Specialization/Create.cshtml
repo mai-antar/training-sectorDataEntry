@@ -100,7 +100,7 @@
                         <td>
                             <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
 
-                            <a asp-action="Delete" asp-route-id="@specialization.Id" class="btn btn-sm btn-danger">حذف</a>
+                            <a href="javascript:void(0);" onclick="confirmDelete(@specialization.Id)" class="btn btn-sm btn-danger">حذف</a>
                         </td>
                     </tr>
                 }
@@ -134,7 +134,25 @@
                     });
             }
         });
+          function confirmDelete(id) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من التراجع عن هذا!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545', // red
+                cancelButtonColor: '#6c757d', // grey
+                confirmButtonText: 'نعم، احذف!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Navigate to Delete action
+                    window.location.href = '/Specialization/Delete/' + id;
+                }
+            });
+        }
     </script>
+
 
       @*   <script>
             $(document).ready(function () {
