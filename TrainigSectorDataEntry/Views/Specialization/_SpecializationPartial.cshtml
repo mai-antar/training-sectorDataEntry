@@ -1,0 +1,53 @@
+﻿@model List<TrainigSectorDataEntry.ViewModel.SpecializationVM>
+
+
+@foreach (var specialization in Model)
+{
+    <tr>
+        <td>@specialization.NameAr</td>
+        <td>@specialization.NameEn</td>
+        <td>@specialization.EducationalFacilityName</td>
+        <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+        <td>
+            @if (specialization.IsActive)
+            {
+                <span class="badge bg-success">مفعل</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">غير مفعل</span>
+            }
+        </td>
+
+        <td>
+            <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
+
+            <a href="javascript:void(0);" onclick="confirmDelete(@specialization.Id)" class="btn btn-sm btn-danger">حذف</a>
+        </td>
+    </tr>
+}
+
+
+
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لن تتمكن من التراجع عن هذا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545', // red
+            cancelButtonColor: '#6c757d', // grey
+            confirmButtonText: 'نعم، احذف!',
+            cancelButtonText: 'إلغاء'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to Delete action
+                window.location.href = '/Specialization/Delete/' + id;
+            }
+        });
+    }
+</script>
+
+

@@ -79,32 +79,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var specialization in (List<TrainigSectorDataEntry.ViewModel.SpecializationVM>)ViewBag.existingSpecialization)
-                {
-                    <tr>
-                        <td>@specialization.NameAr</td>
-                        <td>@specialization.NameEn</td>
-                        <td>@specialization.EducationalFacilityName</td>
-                        <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            @if (specialization.IsActive)
-                            {
-                                <span class="badge bg-success">مفعل</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">غير مفعل</span>
-                            }
-                        </td>
-                     
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
+                @Html.Partial("_SpecializationPartial", (List<TrainigSectorDataEntry.ViewModel.SpecializationVM>)ViewBag.existingSpecialization)
 
-                            <a href="javascript:void(0);" onclick="confirmDelete(@specialization.Id)" class="btn btn-sm btn-danger">حذف</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                       </tbody>
         </table>
 
     </div>
@@ -154,30 +131,6 @@
     </script>
 
 
-      @*   <script>
-            $(document).ready(function () {
-                $('#EducationalFacilityId').change(function () {
-                var facilityId = $(this).val();
 
-                    if (departmentId) {
-                        $.ajax({
-                        url: '/Specialization/GetDepartmentsByFacilityId',
-                            type: 'GET',
-                            data: { facilityId: facilityId },
-                            success: function (data) {
-                                var $departments = $('#DepartmentsandbranchesId');
-                                $departments.empty();
-                                $departments.append('<option value="">-- اختر القسم --</option>');
-                                $.each(data, function (i, department) {
-                                    $departments.append('<option value="' + department.value + '">' + department.text + '</option>');
-                                });
-                            }
-                        });
-                    } else {
-                        $('#DepartmentsandbranchesId').empty().append('<option value="">-- اختر القسم --</option>');
-                    }
-                });
-            });
-        </script> *@
     
 }

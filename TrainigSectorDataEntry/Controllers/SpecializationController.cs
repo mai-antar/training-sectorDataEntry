@@ -75,6 +75,12 @@ namespace TrainigSectorDataEntry.Controllers
                 UserCreationDate = x.UserCreationDate
             }).ToList();
 
+            if (TempData["Spec_EducationalFacilitiesId"] != null)
+            {
+                ViewBag.EducationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["Spec_EducationalFacilitiesId"]);
+             
+
+            }
             ViewBag.existingSpecialization = existingSpecializationVM;
 
             return View();
@@ -113,6 +119,8 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["Spec_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            
 
             return RedirectToAction(nameof(Index));
         }
