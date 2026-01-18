@@ -224,22 +224,24 @@
 
             // Only show alerts if the page is NOT loaded from bfcache
             window.addEventListener('pageshow', function (event) {
-                if (!event.persisted) { // page is NOT loaded from cache
-      
-        @if (TempData["Success"] != null)
-        {
-            <text>
-                                showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])), "success");
-            </text>
-        }
 
-       
-        @if (TempData["Error"] != null)
-        {
-            <text>
-                                showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])), "error");
-            </text>
-        }
+
+                // page is NOT loaded from cache
+                if (!event.persisted)
+                { 
+
+                  @if (TempData["Success"] != null)
+                    {
+                       <text>showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])), "success"); </text>
+                    }
+
+
+                  @if (TempData["Error"] != null)
+                    {
+                       <text> showToastr(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Error"])), "error"); </text>
+                    }
+      
+      
                 }
             });
         });
