@@ -73,15 +73,6 @@
                                asp-area="" asp-controller="Slider" asp-action="Index">الصور المتحركة</a>
                         </p>
                         <p>
-                            <i class="fa-solid fa-book-open-reader"></i>
-                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "EducationalLevel") ? "active" : "")"
-                               asp-area="" asp-controller="EducationalLevel" asp-action="Index">المستوى التعليمي</a>
-                        </p>
-
-
-
-
-                        <p>
                             <i class="fa-solid fa-newspaper"></i>
                             <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "News") ? "active" : "")"
                                asp-area="" asp-controller="News" asp-action="Index">الأخبار</a>
@@ -142,12 +133,6 @@
                             <i class="fa-solid fa-chalkboard"></i>
                             <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "TrainingCourse") ? "active" : "")"
                                asp-area="" asp-controller="TrainingCourse" asp-action="Index">الدورات التدريبية</a>
-                        </p>
-
-                        <p>
-                            <i class="fa-solid fa-timeline inverse90"></i>
-                            <a class="nav-link display-inline @((ViewContext.RouteData.Values["controller"] as string == "DepartmentType") ? "active" : "")"
-                               asp-area="" asp-controller="DepartmentType" asp-action="Index">انواع الاقسام</a>
                         </p>
 
                         <p>
@@ -240,7 +225,7 @@
             // Only show alerts if the page is NOT loaded from bfcache
             window.addEventListener('pageshow', function (event) {
                 if (!event.persisted) { // page is NOT loaded from cache
-        @* TempData Success *@
+      
         @if (TempData["Success"] != null)
         {
             <text>
@@ -248,7 +233,7 @@
             </text>
         }
 
-        @* TempData Error *@
+       
         @if (TempData["Error"] != null)
         {
             <text>
