@@ -10,7 +10,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <br />
-    <select id="facilityDropdown" class="form-control">
+ @*    <select id="facilityDropdown" class="form-control">
         <option value="">-- اختر منشأة تعليمية --</option>
         @foreach (var item in ViewBag.educationalFacilityList)
         {
@@ -22,9 +22,9 @@
             name="DepartmentsandbranchesId"
             class="form-control">
         <option value="">-- اختر قسم --</option>
-    </select>
+    </select> *@
 
-@* 
+
     <div class="form-group">
         <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
         <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
@@ -40,7 +40,7 @@
             <option value="">-- اختر القسم --</option>
         </select>
         <span asp-validation-for="DepartmentsandbranchesId" class="text-danger"></span>
-    </div> *@
+    </div>
     <br />
 
     <div class="form-group">
@@ -67,7 +67,7 @@
     <div class="card-body">
         <h3>التخصصات</h3>
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" id="specializationTable">
             <thead>
                 <tr>
                     <th>الاسم باللغة العربية</th>
@@ -93,24 +93,40 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
-        $('#facilityDropdown').change(function () {
-            var facilityId = $(this).val();
-            $('#departmentDropdown').empty();
-
-            if (facilityId) {
-                $.getJSON('/Specialization/GetDepartmentsByFacilityId',
-                    { facilityId: facilityId },
-                    function (data) {
-                        $('#departmentDropdown')
-                            .append('<option value="">-- اختر قسم --</option>');
-
-                        $.each(data, function (i, item) {
-                            $('#departmentDropdown')
-                                .append(`<option value="${item.id}">${item.name}</option>`);
-                        });
+           $('#EducationalFacilitiesId').change(function() {
+                var facilityId = $(this).val();
+                if (facilityId) {
+                    $.ajax({
+                        url: '@Url.Action("GetDepartmentsByFacilityId", "Specialization")',
+                        type: 'GET',
+                        data: { facilityId: facilityId },
+                        success: function(data) {
+                            $('#specializationTable tbody').html(data);
+                        }
                     });
-            }
-        });
+                } else {
+                    $('#specializationTable tbody').html('');
+                }
+            });
+        // $('#facilityDropdown').change(function () {
+        //     var facilityId = $(this).val();
+        //     $('#departmentDropdown').empty();
+
+        //     if (facilityId) {
+        //         $.getJSON('/Specialization/GetDepartmentsByFacilityId',
+        //             { facilityId: facilityId },
+        //             function (data) {
+        //                 $('#departmentDropdown')
+        //                     .append('<option value="">-- اختر قسم --</option>');
+
+        //                 $.each(data, function (i, item) {
+        //                     $('#departmentDropdown')
+        //                         .append(`<option value="${item.id}">${item.name}</option>`);
+        //                 });
+        //             });
+        //     }
+        // });
+
           function confirmDelete(id) {
             Swal.fire({
                 title: 'هل أنت متأكد؟',

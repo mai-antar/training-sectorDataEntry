@@ -75,9 +75,10 @@ namespace TrainigSectorDataEntry.Controllers
                 UserCreationDate = x.UserCreationDate
             }).ToList();
 
-            if (TempData["Spec_EducationalFacilitiesId"] != null)
+            if (TempData["Spec_EducationalFacilitiesId"] != null && TempData["Spec_DepartmentsandbranchesId"] != null)
             {
-                ViewBag.EducationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["Spec_EducationalFacilitiesId"]);
+                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["Spec_EducationalFacilitiesId"]);
+                ViewBag.departmentsandbranchList = new SelectList(departmentsandbranch, "Id", "NameAr", TempData["Spec_DepartmentsandbranchesId"]);
              
 
             }
@@ -120,6 +121,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             TempData["Success"] = "تمت الاضافة بنجاح";
             TempData["Spec_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            TempData["Spec_DepartmentsandbranchesId"] = model.DepartmentsandbranchesId;
             
 
             return RedirectToAction(nameof(Index));
