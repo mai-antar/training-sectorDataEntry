@@ -10,19 +10,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <br />
- @*    <select id="facilityDropdown" class="form-control">
-        <option value="">-- اختر منشأة تعليمية --</option>
-        @foreach (var item in ViewBag.educationalFacilityList)
-        {
-            <option value="@item.Value">@item.Text</option>
-        }
-    </select>
-    <br />
-    <select id="departmentDropdown"
-            name="DepartmentsandbranchesId"
-            class="form-control">
-        <option value="">-- اختر قسم --</option>
-    </select> *@
+
 
 
     <div class="form-group">
@@ -35,9 +23,9 @@
 
     <br />
     <div class="form-group">
-        <label asp-for="DepartmentsandbranchesId" class="control-label">اسم القسم</label>
+        <label asp-for="DepartmentsandbranchesId" class="control-label">اسم الشعبة</label>
         <select asp-for="DepartmentsandbranchesId" asp-items="ViewBag.departmentsandbranchList" class="form-control">
-            <option value="">-- اختر القسم --</option>
+            <option value="">-- اختر الشعبة --</option>
         </select>
         <span asp-validation-for="DepartmentsandbranchesId" class="text-danger"></span>
     </div>
@@ -97,7 +85,7 @@
                 var facilityId = $(this).val();
                 if (facilityId) {
                     $.ajax({
-                        url: '@Url.Action("GetDepartmentsByFacilityId", "Specialization")',
+                        url: '@Url.Action("GetspecializationByFacilityId", "Specialization")',
                         type: 'GET',
                         data: { facilityId: facilityId },
                         success: function(data) {
@@ -108,24 +96,7 @@
                     $('#specializationTable tbody').html('');
                 }
             });
-        // $('#facilityDropdown').change(function () {
-        //     var facilityId = $(this).val();
-        //     $('#departmentDropdown').empty();
 
-        //     if (facilityId) {
-        //         $.getJSON('/Specialization/GetDepartmentsByFacilityId',
-        //             { facilityId: facilityId },
-        //             function (data) {
-        //                 $('#departmentDropdown')
-        //                     .append('<option value="">-- اختر قسم --</option>');
-
-        //                 $.each(data, function (i, item) {
-        //                     $('#departmentDropdown')
-        //                         .append(`<option value="${item.id}">${item.name}</option>`);
-        //                 });
-        //             });
-        //     }
-        // });
 
           function confirmDelete(id) {
             Swal.fire({

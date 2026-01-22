@@ -41,9 +41,6 @@ namespace TrainigSectorDataEntry.Controllers
             }).ToList();
 
             return View(viewModelList);
-
-
-
       
         }
 
@@ -55,25 +52,23 @@ namespace TrainigSectorDataEntry.Controllers
             var departmentsandbranch = await _departmentsandbranch.GetDropdownListAsync();
 
 
-            //var existingSpecialization = await _specializationService.GetAllAsync();
-            //var existingSpecializationVM = _mapper.Map<List<SpecializationVM>>(existingSpecialization);
-
-
             ViewBag.departmentsandbranchList = new SelectList(departmentsandbranch, "Id", "NameAr");
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
 
             var existingSpecialization = await _specializationService.GetAllAsync(false,x => x.Departmentsandbranches,x => x.Departmentsandbranches.EducationalFacilities);
-
-            var existingSpecializationVM = existingSpecialization.Select(x => new SpecializationVM
-            {
-                Id = x.Id,
-                NameAr = x.NameAr,
-                NameEn = x.NameEn,
-                DepartmentName = x.Departmentsandbranches?.NameAr,
-                EducationalFacilityName =x.Departmentsandbranches?.EducationalFacilities?.NameAr,
-                IsActive = x.IsActive,
-                UserCreationDate = x.UserCreationDate
-            }).ToList();
+            var existingSpecializationVM = _mapper.Map<List<SpecializationVM>>(existingSpecialization);
+            //var existingSpecializationVM = existingSpecialization.Select(x => new SpecializationVM
+            //{
+            //    Id = x.Id,
+            //    NameAr = x.NameAr,
+            //    NameEn = x.NameEn,
+            //    DepartmentsandbranchesId = x.DepartmentsandbranchesId,
+            //    DepartmentName = x.Departmentsandbranches?.NameAr,
+            //    EducationalFacilityName =x.Departmentsandbranches?.EducationalFacilities?.NameAr,
+            //    EducationalFacilitiesId = x.Departmentsandbranches.EducationalFacilitiesId,
+            //    IsActive = x.IsActive,
+            //    UserCreationDate = x.UserCreationDate
+            //}).ToList();
 
             if (TempData["Spec_EducationalFacilitiesId"] != null && TempData["Spec_DepartmentsandbranchesId"] != null)
             {
@@ -122,9 +117,11 @@ namespace TrainigSectorDataEntry.Controllers
             TempData["Success"] = "تمت الاضافة بنجاح";
             TempData["Spec_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
             TempData["Spec_DepartmentsandbranchesId"] = model.DepartmentsandbranchesId;
-            
 
-            return RedirectToAction(nameof(Index));
+
+          
+
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -180,26 +177,18 @@ namespace TrainigSectorDataEntry.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
         [HttpGet]
-        public async Task<JsonResult> GetDepartmentsByFacilityId(int facilityId)
+        public async Task<IActionResult> GetspecializationByFacilityId(int facilityId)
         {
-            var departments = await _departmentsandbranch.GetAllAsync(
-                false,
-                x => x.EducationalFacilities
-            );
+            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+            var specializations = await _specializationService.GetAllAsync(false, x => x.Departmentsandbranches, x=>x.Departmentsandbranches.EducationalFacilities);
 
-            var result = departments
-                .Where(x => x.EducationalFacilitiesId == facilityId)
-                .Select(x => new
-                {
-                    id = x.Id,
-                    name = x.NameAr
-                })
-                .ToList();
+            specializations = specializations.Where(a => a.Departmentsandbranches.EducationalFacilitiesId == facilityId).ToList();
 
-            return Json(result);
+            var vmList = _mapper.Map<List<SpecializationVM>>(specializations);
+
+
+            return PartialView("_SpecializationPartial", vmList);
         }
 
     }

@@ -9,23 +9,27 @@
 
     <br />
     <div class="form-group">
-        <label class="control-label"> المنشأة التعليمية:</label>
-        <span>@ViewBag.educationalFacilitiesName</span>
+        <strong class="control-label"> المنشأة التعليمية: @ViewBag.educationalFacilitiesName</strong>
+    
 
 
     </div>
     <br />
+@*     <div class="form-group">
+        <label class="control-label">القسم:</label>
+        <strong class="ms-2">@ViewBag.departmentName</strong>
+    </div> *@
     <div class="form-group">
-
-        <label class="control-label"> القسم:</label>
-        <span>@ViewBag.departmentName</span>
-
+        <strong class="control-label">القسم: @ViewBag.departmentName</strong>
+      
     </div>
+
+  
     <br />
 
     <div class="form-group">
-        <label class="control-label"> التخصص:</label>
-        <span>@ViewBag.specializationName</span>
+        <strong class="control-label"> التخصص: @ViewBag.specializationName</strong>
+      
         <input asp-for="SpecializationId" value="@ViewBag.SpecializationId" hidden />
         <input asp-for="educationalFacilitiesName" value="@ViewBag.educationalFacilitiesName" hidden />
         <input asp-for="departmentName" value="@ViewBag.departmentName" hidden />
