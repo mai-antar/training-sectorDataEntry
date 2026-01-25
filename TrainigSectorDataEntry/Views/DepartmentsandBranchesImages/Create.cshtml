@@ -22,20 +22,17 @@
 
     <br />
     <div class="form-group">
-        <label  class="control-label"> المنشأة التعليمية:</label>
-        <span>@ViewBag.educationalFacilitiesName</span>
-     
-    
+            <strong class="control-label"> المنشأة التعليمية: @ViewBag.educationalFacilitiesName</strong>
     </div>
 
     <br />
 
     <div class="form-group">
-        <label  class="control-label"> نوع القسم:</label>
-        <span>@ViewBag.depatmentTypeName</span>
+            <strong class="control-label"> الشعبة: @ViewBag.depatmentName</strong>
+   
         <input asp-for="DepartmentsandbranchesId" value="@ViewBag.DepartmentId" hidden />
         <input asp-for="educationalFacilitiesName" value="@ViewBag.educationalFacilitiesName" hidden />
-        <input asp-for="depatmentTypeName" value="@ViewBag.depatmentTypeName" hidden />
+            <input asp-for="DepartmentsandbranchesName" value="@ViewBag.depatmentName" hidden />
    
     </div>
     <br />
@@ -84,7 +81,7 @@
             </div>
             <div class="col-md-6">
 
-                <a asp-action="Index" class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;" >
+                <a asp-action="Index" asp-route-departmentId="@ViewBag.DepartmentId" class="buttonremove right-4tens float-right" style="border: 1px solid #333333;background-color: #333333;">
 
                     <span class="buttonremove__text"> إلغاء</span>
                     <span class="buttonremove__icon" style="background-color: #333333;"> <i class="fa-solid fa-x"></i></span>

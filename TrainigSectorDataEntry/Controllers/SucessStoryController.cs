@@ -46,9 +46,13 @@ namespace TrainigSectorDataEntry.Controllers
             var existingSucessStory = await _SucessStoryService.GetAllAsync();
             var existingSucessStoryVM = _mapper.Map<List<SucessStoryVM>>(existingSucessStory);
 
-           
-
             ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
+
+            if (TempData["SucessStory_TrainigSectorId"] != null )
+            {
+                ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr", TempData["SucessStory_TrainigSectorId"]);
+            }
+
             ViewBag.ExistingSucessStory = existingSucessStoryVM;
             return View();
         }
@@ -126,8 +130,10 @@ namespace TrainigSectorDataEntry.Controllers
              
             }
             TempData["Success"] = "تمت الاضافة بنجاح";
-
-            return RedirectToAction(nameof(Index));
+           
+            TempData["SucessStory_TrainigSectorId"] = model.TrainigSectorId;
+            return RedirectToAction(nameof(Create));
+            //return RedirectToAction(nameof(Index));
         }
 
 
@@ -249,6 +255,19 @@ namespace TrainigSectorDataEntry.Controllers
             TempData["Success"] = "تم الحذف بنجاح";
 
             return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetSucessStoryByTrainingSectorId(int trainingSectorId)
+        {
+           
+            var sectors = await _trainingSectorService.GetDropdownListAsync();
+           var SucessStory = await _SucessStoryService.GetAllAsync();
+            SucessStory = SucessStory.Where(a => a.TrainigSectorId == trainingSectorId).ToList();
+
+            var vmList = _mapper.Map<List<SucessStoryVM>>(SucessStory);
+
+
+            return PartialView("_SucessStoryPartial", vmList);
         }
     }
 }

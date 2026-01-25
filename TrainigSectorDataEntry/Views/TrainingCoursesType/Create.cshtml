@@ -77,9 +77,9 @@
         <strong class="text-center" style="margin-bottom: 80px;">انواع الدورات التدريبية</strong>
     </div>
     <div class="card-body">
-      
 
-        <table class="table table-bordered table-striped">
+
+            <table class="table table-bordered table-striped" id="trainingCoursesTypeTable">
                 <thead class="thead-dark">
                 <tr>
                     <th>الاسم باللغة العربية</th>
@@ -91,41 +91,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var trainingCoursesType in (List<TrainigSectorDataEntry.ViewModel.TrainingCoursesTypeVM>)ViewBag.existingTrainingCoursesType)
-                {
-                    <tr>
-                        <td>@trainingCoursesType.NameAr</td>
-                        <td>@trainingCoursesType.NameEn</td>
-                        <td>@trainingCoursesType.TrainingSector?.NameAr</td>
-                        <td>@trainingCoursesType.UserCreationDate?.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            @if (trainingCoursesType.IsActive)
-                            {
-                                <span class="badge bg-success">مفعل</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">غير مفعل</span>
-                            }
-                        </td>
-
-                        <td>
-      
-                                <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@trainingCoursesType.Id">
-                                    <span class="buttonedit__text">تعديل</span>
-                                    <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
-                                </a>
-                                <a href="javascript:void(0);" class="buttonremove right-4tens "
-                                   onclick="confirmDelete(@trainingCoursesType.Id)">
-                                    <span class="buttonremove__text"> حذف</span>
-                                    <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
-                                </a>
-                        
-                        
-                        </td>
-                    </tr>
-                }
-            </tbody>
+                    @Html.Partial("_TrainingCoursesTypePartial", (List<TrainigSectorDataEntry.ViewModel.TrainingCoursesTypeVM>)ViewBag.existingTrainingCoursesType)
+                         </tbody>
         </table>
 
     </div>
@@ -137,23 +104,24 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
         <script>
-            function confirmDelete(id) {
-                Swal.fire({
-                    title: 'هل أنت متأكد؟',
-                    text: "لن تتمكن من التراجع عن هذا!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545', // red
-                    cancelButtonColor: '#6c757d', // grey
-                    confirmButtonText: 'نعم، احذف!',
-                    cancelButtonText: 'إلغاء'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Navigate to Delete action
-                        window.location.href = '/TrainingCoursesType/Delete/' + id;
+                $(document).ready(function() {
+                $('#TrainigSectorId').change(function() {
+                    var trainingSectorId = $(this).val();
+                    if (trainingSectorId) {
+                        $.ajax({
+                            url: '@Url.Action("GetTrainingCoursesTypeTrainingSectorId", "TrainingCoursesType")',
+                            type: 'GET',
+                            data: { trainingSectorId: trainingSectorId },
+                            success: function(data) {
+                                $('#trainingCoursesTypeTable tbody').html(data);
+                            }
+                        });
+                    } else {
+                        $('#trainingCoursesTypeTable tbody').html('');
                     }
                 });
-            }
+            });
+
         </script>
 }
 </div>

@@ -41,9 +41,14 @@ namespace TrainigSectorDataEntry.Controllers
             var existingTrainingCoursesType = await _TrainingCoursesTypeService.GetAllAsync();
             var existingTrainingCoursesTypeVM = _mapper.Map<List<TrainingCoursesTypeVM>>(existingTrainingCoursesType);
 
-
-
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+
+
+            if (TempData["TrainingCoursesType_TrainigSectorId"] != null)
+            {
+                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["TrainingCoursesType_TrainigSectorId"]);
+            }
+
             ViewBag.existingTrainingCoursesType = existingTrainingCoursesTypeVM;
             return View();
         }
@@ -75,8 +80,9 @@ namespace TrainigSectorDataEntry.Controllers
             await _TrainingCoursesTypeService.AddAsync(entity);
 
             TempData["Success"] = "تمت الاضافة بنجاح";
-
-            return RedirectToAction(nameof(Index));
+            TempData["TrainingCoursesType_TrainigSectorId"] = model.TrainingSectorId;
+            return RedirectToAction(nameof(Create));
+            //return RedirectToAction(nameof(Index));
         }
 
 
@@ -119,8 +125,8 @@ namespace TrainigSectorDataEntry.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id, string returnTo)
         {
             var TrainingCoursesType = await _TrainingCoursesTypeService.GetByIdAsync(id);
             if (TrainingCoursesType == null) return NotFound();
@@ -129,7 +135,21 @@ namespace TrainigSectorDataEntry.Controllers
 
             TempData["Success"] = "تم الحذف بنجاح";
 
-            return RedirectToAction(nameof(Index));
+            return returnTo == "Create" ? RedirectToAction(nameof(Create)) : RedirectToAction(nameof(Index));
+           // return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetTrainingCoursesTypeTrainingSectorId(int trainingSectorId)
+        {
+
+            var sectors = await _TrainingSectorService.GetDropdownListAsync();
+            var TrainingSector = await _TrainingCoursesTypeService.GetAllAsync();
+            TrainingSector = TrainingSector.Where(a => a.TrainingSectorId == trainingSectorId).ToList();
+
+            var vmList = _mapper.Map<List<TrainingCoursesTypeVM>>(TrainingSector);
+
+
+            return PartialView("_TrainingCoursesTypePartial", vmList);
         }
     }
 }

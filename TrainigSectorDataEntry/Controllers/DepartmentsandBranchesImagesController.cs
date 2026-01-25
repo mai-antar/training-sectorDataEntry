@@ -96,7 +96,8 @@ namespace TrainigSectorDataEntry.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.DepartmentId = model.DepartmentsandbranchesId;
-                ViewBag.depatmentTypeName = model.depatmentTypeName;
+                //ViewBag.depatmentTypeName = model.depatmentTypeName;
+                ViewBag.depatmentName = model.DepartmentsandbranchesName;
                 ViewBag.educationalFacilitiesName = model.educationalFacilitiesName;
                 return View(model);
             }

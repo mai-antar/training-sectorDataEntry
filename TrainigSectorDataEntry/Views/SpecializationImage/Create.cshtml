@@ -17,7 +17,7 @@
     <br />
 
     <div class="form-group">
-        <strong class="control-label">القسم: @ViewBag.departmentName</strong>
+        <strong class="control-label">الشعبة: @ViewBag.departmentName</strong>
       
     </div>
 
@@ -67,6 +67,6 @@
 
     <br />
     <button type="submit" class="btn btn-primary">إضافة</button>
-    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+    <a asp-action="Index" asp-route-specializationId="@ViewBag.SpecializationId" class="btn btn-secondary">إلغاء</a>
 </form>
 <br />
