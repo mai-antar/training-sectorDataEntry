@@ -182,7 +182,7 @@ namespace TrainigSectorDataEntry.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string returnTo)
         {
             var TrainingCourse = await _TrainingCourseService.GetByIdAsync(id);
             if (TrainingCourse == null) return NotFound();
@@ -195,7 +195,8 @@ namespace TrainigSectorDataEntry.Controllers
 
             TempData["Success"] = "تم الحذف بنجاح";
 
-            return RedirectToAction(nameof(Index));
+            return returnTo == "Create" ? RedirectToAction(nameof(Create)) : RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

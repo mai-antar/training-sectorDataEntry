@@ -37,7 +37,7 @@
                 <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
             </a>
             <a href="javascript:void(0);" class="buttonremove right-4tens "
-               onclick="confirmDelete(@trainingCourse.Id)">
+               onclick="confirmDelete(@trainingCourse.Id,'Create')">
                 <span class="buttonremove__text"> حذف</span>
                 <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
             </a>
@@ -61,7 +61,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Navigate to Delete action
-                window.location.href = '/TrainingCourse/Delete/' + id;
+                window.location.href = '/TrainingCourse/Delete/' + id+ '?returnTo=' + returnTo;
             }
         });
     }

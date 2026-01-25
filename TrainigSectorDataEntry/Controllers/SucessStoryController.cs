@@ -240,7 +240,7 @@ namespace TrainigSectorDataEntry.Controllers
         }
 
  
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string returnTo)
         {
             var SucessStory = await _SucessStoryService.GetByIdAsync(id);
             if (SucessStory == null) return NotFound();
@@ -254,7 +254,8 @@ namespace TrainigSectorDataEntry.Controllers
 
             TempData["Success"] = "تم الحذف بنجاح";
 
-            return RedirectToAction(nameof(Index));
+            return returnTo == "Create" ? RedirectToAction(nameof(Create)) : RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> GetSucessStoryByTrainingSectorId(int trainingSectorId)
