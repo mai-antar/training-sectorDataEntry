@@ -86,6 +86,15 @@ namespace TrainigSectorDataEntry.Controllers
             {
                 ModelState.AddModelError("UploadedFile", "يجب تحميل ملف.");
             }
+            else
+            {
+                // Only allow PDF
+                var extension = Path.GetExtension(model.UploadedFile.FileName).ToLowerInvariant();
+                if (extension != ".pdf")
+                {
+                    ModelState.AddModelError("UploadedFile", "يجب أن يكون الملف بصيغة PDF فقط.");
+                }
+            }
 
             if (!ModelState.IsValid)
             {
@@ -109,7 +118,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             if (model.UploadedFile != null)
             {
-                string[] allowedDocs = { ".pdf", ".docx", ".xlsx" };
+                string[] allowedDocs = { ".pdf" };
                 var relativePath = await _fileStorageService.UploadFileAsync(model.UploadedFile, "StudentTablesAttachmentFile", allowedDocs);
 
 
@@ -151,6 +160,7 @@ namespace TrainigSectorDataEntry.Controllers
             var facilityId = entity.EducationalLevel?.EducationalFacilitiesId;
             var levelId = entity.EducationalLevelId;
             var departmentId = entity.DepartmentsandbranchesId;
+            var specializationId = entity.SpecializationId;
 
             model.EducationalFacilitiesId = facilityId ?? 0;
             await RefillViewBags(model);
@@ -167,6 +177,29 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(StudentTablesAttachmentVM model)
         {
+
+            var entity = await _StudentTablesAttachmentService.GetByIdAsync(model.Id);
+            if (entity == null) return NotFound();
+
+            if (model.UploadedFile == null && string.IsNullOrEmpty(entity.FilePath))
+            {
+                ModelState.AddModelError("UploadedFile", "يجب تحميل ملف.");
+                await RefillViewBags(model);
+
+                return View(model);
+            }
+            else
+            {
+                // Only allow PDF
+                var extension = Path.GetExtension(model.UploadedFile.FileName).ToLowerInvariant();
+                if (extension != ".pdf")
+                {
+                    ModelState.AddModelError("UploadedFile", "يجب أن يكون الملف بصيغة PDF فقط.");
+                    await RefillViewBags(model);
+                }
+            }
+
+
             if (!ModelState.IsValid)
             {
 
@@ -178,19 +211,11 @@ namespace TrainigSectorDataEntry.Controllers
                 return View(model);
             }
 
-            var entity = await _StudentTablesAttachmentService.GetByIdAsync(model.Id);
-            if (entity == null) return NotFound();
+
+            //var entity = await _StudentTablesAttachmentService.GetByIdAsync(model.Id);
+            //if (entity == null) return NotFound();
 
 
-            if (model.UploadedFile == null && string.IsNullOrEmpty(entity.FilePath))
-            {
-                ModelState.AddModelError("UploadedFile", "يجب تحميل ملف.");
-                await RefillViewBags(model);
-
-                return View(model);
-            }
-
-          
             entity.TableTypeId = model.TableTypeId;
             entity.EducationalLevelId = model.EducationalLevelId;
             entity.DepartmentsandbranchesId = model.DepartmentsandbranchesId;
@@ -202,7 +227,7 @@ namespace TrainigSectorDataEntry.Controllers
             //  File upload
             if (model.UploadedFile != null && model.UploadedFile.Length > 0)
             {
-                string[] allowedDocs = { ".pdf", ".docx", ".xlsx" };
+                string[] allowedDocs = { ".pdf"};
 
                 var uploadedPath = await _fileStorageService.UploadFileAsync(
                     model.UploadedFile,
@@ -240,7 +265,7 @@ namespace TrainigSectorDataEntry.Controllers
         }
 
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string returnTo)
         {
             var StudentTablesAttachment = await _StudentTablesAttachmentService.GetByIdAsync(id);
             if (StudentTablesAttachment == null) return NotFound();
@@ -248,7 +273,9 @@ namespace TrainigSectorDataEntry.Controllers
             await _StudentTablesAttachmentService.DeleteAsync(id);
 
             TempData["Success"] = "تم حذف الملف بنجاح ";
-            return RedirectToAction(nameof(Index));
+
+            return returnTo == "Create" ? RedirectToAction(nameof(Create)) : RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<JsonResult> GetLevelsByFacilityId(int facilityId)
@@ -289,7 +316,23 @@ namespace TrainigSectorDataEntry.Controllers
             return Json(data);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetStudentTablesAttachmentByEducationalFacilityId(int educationalFacilityId)
+        {
 
+            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+
+            var studentTablesAttachment = await _StudentTablesAttachmentService.GetAllAsync(
+              false, x => x.EducationalLevel, x => x.EducationalLevel.EducationalFacilities, x => x.Departmentsandbranches,
+              x => x.TableType, x => x.Terms, x => x.Specialization);
+
+            studentTablesAttachment = studentTablesAttachment.Where(a => a.EducationalLevel.EducationalFacilitiesId == educationalFacilityId).ToList();
+
+            var vmList = _mapper.Map<List<StudentTablesAttachmentVM>>(studentTablesAttachment);
+
+
+            return PartialView("_StudentTablesAttachmentPartial", vmList);
+        }
 
         private async Task RefillViewBags(StudentTablesAttachmentVM model)
         {

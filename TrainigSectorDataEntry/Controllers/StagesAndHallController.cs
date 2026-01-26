@@ -206,6 +206,18 @@ namespace TrainigSectorDataEntry.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> GetStagesAndHallByTrainingSectorId(int trainingSectorId)
+        {
 
+            var sectors = await _TrainingSectorService.GetDropdownListAsync();
+            var StagesAndHall = await _StagesAndHallService.GetAllAsync();
+            StagesAndHall = StagesAndHall.Where(a => a.TrainigSectorId == trainingSectorId).ToList();
+
+            var vmList = _mapper.Map<List<StagesAndHallVM>>(StagesAndHall);
+
+
+            return PartialView("_StagesAndHallPartial", vmList);
+        }
     }
 }

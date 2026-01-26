@@ -30,35 +30,25 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
-                <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
-                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-            </div>
+       
         </div>
     </div>
      <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
-                <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
-                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
+                    <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                </div>
+         
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">قاعة أم مسرح؟</label><br />
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" asp-for="ISStage" type="radio" value="true" />
-                    <label class="form-check-label">مسرح</label>
+                <div class="form-group">
+                    <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
+                    <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionEn" class="text-danger"></span>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" asp-for="ISStage" type="radio" value="false" />
-                    <label class="form-check-label">قاعة</label>
-                </div>
-                <span asp-validation-for="ISStage" class="text-danger"></span>
-            </div>
+         
         </div>
     </div>
     <div class="row">
@@ -69,7 +59,21 @@
                 <span asp-validation-for="UploadedImage" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6"></div>
+        <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">قاعة أم مسرح؟</label><br />
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" asp-for="ISStage" type="radio" value="true" />
+                        <label class="form-check-label">مسرح</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" asp-for="ISStage" type="radio" value="false" />
+                        <label class="form-check-label">قاعة</label>
+                    </div>
+                    <span asp-validation-for="ISStage" class="text-danger"></span>
+                </div>
+        </div>
     </div>
   
   
@@ -100,9 +104,9 @@
         <strong class="text-center" style="margin-bottom: 80px;">شهادات الجودة</strong>
     </div>
     <div class="card-body">
-        
 
-        <table class="table table-bordered table-striped">
+
+            <table class="table table-bordered table-striped" id="stagesAndHallTable">
             <thead class="thead-dark">
                 <tr>
                     <th>الوصف باللغة العربية</th>
@@ -114,54 +118,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var stagesAndHall in (List<TrainigSectorDataEntry.ViewModel.StagesAndHallVM>)ViewBag.ExistingStagesAndHall)
-                {
-                    <tr>
-                        <td>@stagesAndHall.DescriptionAr</td>
-                        <td>@stagesAndHall.DescriptionAr</td>
-                        <td>@stagesAndHall.TrainigSector?.NameAr</td>
-                        <td>@stagesAndHall.UserCreationDate?.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            @if (stagesAndHall.ISStage == true)
-                            {
-                                <span class="badge bg-success">مسرح</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">قاعة</span>
-                            }
-                        </td>
-                        <td>
-                            @if (stagesAndHall.IsActive)
-                            {
-                                <span class="badge bg-success">مفعل</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">غير مفعل</span>
-                            }
-                        </td>
-                        <td>
-
-                            <img src="/Files/@stagesAndHall.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
-
-
-
-                        </td>
-                        <td>
-                            <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@stagesAndHall.Id">
-                                <span class="buttonedit__text">تعديل</span>
-                                <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
-                            </a>
-                                <a href="javascript:void(0);" class="buttonremove right-4tens "
-                                   onclick="confirmDelete(@stagesAndHall.Id)">
-                                <span class="buttonremove__text"> حذف</span>
-                                <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
-                            </a>
-                            </td>
-                    </tr>
-                }
-            </tbody>
+                    @Html.Partial("_StagesAndHallPartial", (List<TrainigSectorDataEntry.ViewModel.StagesAndHallVM>)ViewBag.ExistingStagesAndHall)
+                        </tbody>
         </table>
 
     </div>
@@ -173,23 +131,23 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
         <script>
-            function confirmDelete(id) {
-                Swal.fire({
-                    title: 'هل أنت متأكد؟',
-                    text: "لن تتمكن من التراجع عن هذا!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545', // red
-                    cancelButtonColor: '#6c757d', // grey
-                    confirmButtonText: 'نعم، احذف!',
-                    cancelButtonText: 'إلغاء'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Navigate to Delete action
-                        window.location.href = '/StagesAndHall/Delete/' + id;
+               $(document).ready(function() {
+                $('#TrainigSectorId').change(function() {
+                    var trainingSectorId = $(this).val();
+                    if (trainingSectorId) {
+                        $.ajax({
+                            url: '@Url.Action("GetStagesAndHallByTrainingSectorId", "StagesAndHall")',
+                            type: 'GET',
+                            data: { trainingSectorId: trainingSectorId },
+                            success: function(data) {
+                                $('#stagesAndHallTable tbody').html(data);
+                            }
+                        });
+                    } else {
+                        $('#stagesAndHallTable tbody').html('');
                     }
                 });
-            }
+            });
         </script>
 }
 </div>

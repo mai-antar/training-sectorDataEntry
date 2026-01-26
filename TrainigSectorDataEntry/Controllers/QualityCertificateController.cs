@@ -43,10 +43,15 @@ namespace TrainigSectorDataEntry.Controllers
 
             var existingQualityCertificate = await _QualityCertificateService.GetAllAsync();
             var existingQualityCertificateVM = _mapper.Map<List<QualityCertificateVM>>(existingQualityCertificate);
-
-         
+       
 
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+
+
+            if (TempData["QualityCertificate_EducationalFacilitiesId"] != null)
+            {
+                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["QualityCertificate_EducationalFacilitiesId"]);
+            }
             ViewBag.existingQualityCertificate = existingQualityCertificateVM;
             return View();
         }
@@ -97,8 +102,9 @@ namespace TrainigSectorDataEntry.Controllers
 
             }
             TempData["Success"] = "تمت الاضافة بنجاح";
-
-            return RedirectToAction(nameof(Index));
+            TempData["QualityCertificate_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            return RedirectToAction(nameof(Create));
+            //return RedirectToAction(nameof(Index));
         }
 
 

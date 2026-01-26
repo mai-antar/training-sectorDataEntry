@@ -30,7 +30,8 @@ namespace TrainigSectorDataEntry.Services
 
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtensions.Contains(extension))
-                return null;
+                throw new InvalidOperationException("File type not allowed. Only PDF is permitted.");
+           
 
             var storage = _config.GetSection("FileStorage");
             string username = storage["Username"];

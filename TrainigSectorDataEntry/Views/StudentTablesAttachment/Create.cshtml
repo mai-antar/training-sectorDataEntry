@@ -83,8 +83,10 @@
                     <span asp-validation-for="DepartmentsandbranchesId" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" id="specializationContainer" style="display:none;">
                 <!-- Specialization  -->
+            
+
                 <div class="form-group">
                     <label asp-for="SpecializationId" class="control-label"> التخصص</label>
                     <select asp-for="SpecializationId" asp-items="ViewBag.SpecializationList" id="SpecializationId" class="form-control">
@@ -108,8 +110,9 @@
         <div class="col-md-6">
             <!-- Upload File -->
             <div class="form-group">
+                   
                 <label for="UploadedFile">تحميل الملف</label>
-                <input asp-for="UploadedFile" type="file" class="form-control" />
+                    <input asp-for="UploadedFile" type="file" class="form-control"  />
                 <span asp-validation-for="UploadedFile" class="text-danger"></span>
             </div>
         </div>
@@ -138,16 +141,60 @@
         </div>
     </div>
 </form>
+    <div class="card mt-5">
+        <div class="card-header">
+            <strong class="text-center" style="margin-bottom: 80px;">قصة نجاح</strong>
+        </div>
+        <div class="card-body">
 
+
+            <table class="table table-bordered table-striped" id="studentTablesAttachmentTable">
+                <thead class="thead-dark">
+                    <tr>
+
+                        <th> نوع الجدول</th>
+                        <th>المنشأة التعليمية</th>
+                        <th>السنة الدراسية</th>
+                        <th>الفصل الدراسي</th>
+                        <th>القسم</th>
+                        <th>التخصص</th>
+                        <th>مفعل؟</th>
+                        <th>الملف</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.Partial("_StudentTablesAttachmentPartial", (List<TrainigSectorDataEntry.ViewModel.StudentTablesAttachmentVM>)ViewBag.ExistingStudentTablesAttachment)
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
   
                     <script>
             $(document).ready(function () {
+                    $('#EducationalFacilitiesId').change(function() {
+                var educationalFacilityId = $(this).val();
+                if (educationalFacilityId) {
+                    $.ajax({
+                        url: '@Url.Action("GetStudentTablesAttachmentByEducationalFacilityId", "StudentTablesAttachment")',
+                        type: 'GET',
+                        data: { educationalFacilityId: educationalFacilityId },
+                        success: function(data) {
+                            $('#studentTablesAttachmentTable tbody').html(data);
+                        }
+                    });
+                } else {
+                    $('#studentTablesAttachmentTable tbody').html('');
+                }
+            });
 
-                // Facility → Levels
-                        $('#EducationalFacilitiesId').change(function () {
+   
+            // Facility → Levels
+                 $('#EducationalFacilitiesId').change(function () {
                     var facilityId = $(this).val();
 
                     $('#EducationalLevelId').empty().append('<option value="">-- اختر سنة دراسية --</option>');
@@ -171,7 +218,8 @@
                         var facilityId = $(this).val();
 
                     $('#DepartmentsandbranchesId').empty().append('<option value="">-- اختر القسم --</option>');
-                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>');
+                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>') .prop('required', false);
+                      $('#specializationContainer').hide();
 
                         if (facilityId) {
                         $.get('/StudentTablesAttachment/GetDepartmentsByFacilityId',
@@ -185,25 +233,43 @@
                         }
                 });
 
+
+
                 // Department → Specializations
                 $('#DepartmentsandbranchesId').change(function () {
-                    var departmentId = $(this).val();
+                var departmentId = $(this).val();
 
-                    $('#SpecializationId').empty().append('<option value="">-- اختر التخصص --</option>');
+                $('#SpecializationId').empty()
+                    .append('<option value="">-- اختر التخصص --</option>');
 
-                    if (departmentId) {
-                        $.get('/StudentTablesAttachment/GetSpecializationsByDepartmentId',
-                            { departmentId: departmentId },
-                            function (data) {
+                $('#specializationContainer').hide(); // إخفاء مبدئي
+
+                if (departmentId) {
+                    $.get('/StudentTablesAttachment/GetSpecializationsByDepartmentId',
+                        { departmentId: departmentId },
+                        function (data) {
+
+                            if (data.length > 0) {
                                 $.each(data, function (i, item) {
                                     $('#SpecializationId')
                                         .append(`<option value="${item.id}">${item.nameAr}</option>`);
                                 });
-                            });
-                    }
-                });
 
+                                $('#specializationContainer').show(); // إظهار فقط لو فيه بيانات
+
+
+                                $('#SpecializationId').prop('required', true);
+
+
+                                $('#SpecializationId').removeClass('input-validation-error');
+                            }
+                        });
+                }
             });
+
+
+
+             });
     </script>
 }
 </div>

@@ -28,7 +28,7 @@ namespace TrainigSectorDataEntry.ViewModel
 
         public int? DepartmentsandbranchesId { get; set; }
 
-        [Required(ErrorMessage = ".برجاء اختيار التخصص")]
+       
 
         public int? SpecializationId { get; set; }
 
