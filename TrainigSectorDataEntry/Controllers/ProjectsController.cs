@@ -232,6 +232,7 @@ namespace TrainigSectorDataEntry.Controllers
             return View(vm);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddImages(ProjectImageVM model)
@@ -239,47 +240,99 @@ namespace TrainigSectorDataEntry.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var Project = await _projectService.GetByIdAsync(model.ProjectsId);
-            if (Project == null)
+            var project = await _projectService.GetByIdAsync(model.ProjectsId);
+            if (project == null)
                 return NotFound();
 
-            string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/ProjectImage");
-            if (!Directory.Exists(uploadDir))
-                Directory.CreateDirectory(uploadDir);
-
-            foreach (var image in model.UploadedImages)
+            if (model.UploadedImages != null && model.UploadedImages.Any())
             {
-                if (image.Length > 0 && image.ContentType.StartsWith("image/"))
+                foreach (var image in model.UploadedImages)
                 {
-                    var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-                    var filePath = Path.Combine(uploadDir, fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (image != null && image.Length > 0)
                     {
-                        await image.CopyToAsync(stream);
+                        // رفع الصورة باستخدام FileStorageService
+                        var relativePath = await _fileStorageService
+                            .UploadImageAsync(image, "ProjectImage");
+
+                        if (string.IsNullOrEmpty(relativePath))
+                        {
+                            ModelState.AddModelError("UploadedImages", "حدث خطأ أثناء رفع إحدى الصور.");
+                            return View(model);
+                        }
+
+                        var projectImage = new ProjectImage
+                        {
+                            ProjectId = model.ProjectsId,
+                            ImagePath = relativePath,
+                            IsActive = true,
+                            IsDeleted = false,
+                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+                        };
+
+                        await _projectImagesService.AddAsync(projectImage);
                     }
-
-                    var ProjectImage = new ProjectImage
-                    {
-                        ProjectId = model.Id,
-                        ImagePath = "/uploads/ProjectImage/" + fileName,
-                        IsActive = true,
-                        IsDeleted = false,
-                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                    };
-
-                    await _projectImagesService.AddAsync(ProjectImage);
                 }
             }
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AddImages(ProjectImageVM model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
+
+        //    var Project = await _projectService.GetByIdAsync(model.ProjectsId);
+        //    if (Project == null)
+        //        return NotFound();
+
+
+        //    string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/ProjectImage");
+        //    if (!Directory.Exists(uploadDir))
+        //        Directory.CreateDirectory(uploadDir);
+
+        //    foreach (var image in model.UploadedImages)
+        //    {
+        //        if (image.Length > 0 && image.ContentType.StartsWith("image/"))
+        //        {
+        //            var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+        //            var filePath = Path.Combine(uploadDir, fileName);
+
+        //            using (var stream = new FileStream(filePath, FileMode.Create))
+        //            {
+        //                await image.CopyToAsync(stream);
+        //            }
+
+        //            var ProjectImage = new ProjectImage
+        //            {
+        //                ProjectId = model.Id,
+        //                ImagePath = "/uploads/ProjectImage/" + fileName,
+        //                IsActive = true,
+        //                IsDeleted = false,
+        //                UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+        //            };
+
+        //            await _projectImagesService.AddAsync(ProjectImage);
+        //        }
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
         [HttpGet]
         public async Task<IActionResult> DeleteImage(int id)
         {
+    
+
             var image = await _projectImagesService.GetByIdAsync(id);
             if (image == null) return NotFound();
 
+
+            // Delete physical file
+            await _fileStorageService.DeleteFileAsync(image.ImagePath);
             await _projectImagesService.DeleteAsync(id);
             return RedirectToAction("Edit", new { id = image.ProjectId });
         }
