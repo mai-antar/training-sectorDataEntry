@@ -13,7 +13,7 @@ public partial class Project
 
     public string? TitleEn { get; set; }
 
-    public DateOnly Date { get; set; }
+    public DateOnly? Date { get; set; }
 
     public string? DescriptionAr { get; set; }
 

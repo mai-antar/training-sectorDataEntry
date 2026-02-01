@@ -12,25 +12,25 @@ namespace TrainigSectorDataEntry.ViewModel
 
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان المشروع باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string? TitleAr { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان المشروع باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string? TitleEn { get; set; }
 
-        [Required(ErrorMessage = "برجاء ادخال تاريخ المشروع.")]
-        public DateOnly Date { get; set; }
+        //[Required(ErrorMessage = "برجاء ادخال تاريخ المشروع.")]
+        public DateOnly? Date { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل المشروع باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string? DescriptionAr { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل المشروع باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string? DescriptionEn { get; set; }
 
         public bool? IsDeleted { get; set; }

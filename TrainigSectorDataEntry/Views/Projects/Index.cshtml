@@ -26,7 +26,7 @@
             <th>العنوان باللغة العربية</th>
             <th>العنوان باللغة الانجليزية</th>
             <th>المنشأت التعليمية</th>
-            <th>التاريخ</th>
+    @*         <th>التاريخ</th> *@
             <th>التفعيل</th>
             <th>الصور</th>
 
@@ -40,7 +40,7 @@
                 <td>@project.TitleAr</td>
                 <td>@project.TitleEn</td>
                 <td>@project.EducationalFacilities?.NameAr</td>
-                <td>@project.Date.ToString("yyyy-MM-dd")</td>
+         @*        <td>@project.Date.ToString("yyyy-MM-dd")</td> *@
                 <td>
                     @if (project.IsActive)
                     {
