@@ -9,9 +9,9 @@ public partial class HistoryBreif
 
     public int EducationalFacilitiesId { get; set; }
 
-    public string NameAr { get; set; } = null!;
+    public string? NameAr { get; set; }
 
-    public string NameEn { get; set; } = null!;
+    public string? NameEn { get; set; }
 
     public string? TitleAr { get; set; }
 

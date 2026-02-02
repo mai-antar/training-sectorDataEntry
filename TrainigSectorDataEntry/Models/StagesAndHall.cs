@@ -9,6 +9,10 @@ public partial class StagesAndHall
 
     public int TrainigSectorId { get; set; }
 
+    public string? TitleAr { get; set; }
+
+    public string? TitleEn { get; set; }
+
     public string DescriptionAr { get; set; } = null!;
 
     public string DescriptionEn { get; set; } = null!;
@@ -32,6 +36,8 @@ public partial class StagesAndHall
     public DateOnly? UserDeletionDate { get; set; }
 
     public bool? ISStage { get; set; }
+
+    public virtual ICollection<StagesAndHallsImage> StagesAndHallsImages { get; set; } = new List<StagesAndHallsImage>();
 
     public virtual TrainingSector TrainigSector { get; set; } = null!;
 }

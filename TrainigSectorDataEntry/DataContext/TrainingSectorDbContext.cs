@@ -60,6 +60,8 @@ public partial class TrainingSectorDbContext : DbContext
 
     public virtual DbSet<StagesAndHall> StagesAndHalls { get; set; }
 
+    public virtual DbSet<StagesAndHallsImage> StagesAndHallsImages { get; set; }
+
     public virtual DbSet<StudentActivite> StudentActivites { get; set; }
 
     public virtual DbSet<StudentTablesAttachment> StudentTablesAttachments { get; set; }
@@ -361,12 +363,24 @@ public partial class TrainingSectorDbContext : DbContext
             entity.ToTable(tb => tb.HasComment(""));
 
             entity.Property(e => e.ISStage).HasComment("");
+            entity.Property(e => e.TitleAr).HasMaxLength(500);
+            entity.Property(e => e.TitleEn).HasMaxLength(500);
             entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.TrainigSector).WithMany(p => p.StagesAndHalls)
                 .HasForeignKey(d => d.TrainigSectorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_StagesAndHalls_TrainingSector");
+        });
+
+        modelBuilder.Entity<StagesAndHallsImage>(entity =>
+        {
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.StagesAndHalls).WithMany(p => p.StagesAndHallsImages)
+                .HasForeignKey(d => d.StagesAndHallsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StagesAndHallsImages_StagesAndHallsImages");
         });
 
         modelBuilder.Entity<StudentActivite>(entity =>
