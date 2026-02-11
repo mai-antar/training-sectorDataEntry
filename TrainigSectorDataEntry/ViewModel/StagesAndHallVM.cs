@@ -20,7 +20,9 @@ namespace TrainigSectorDataEntry.ViewModel
         public string DescriptionEn { get; set; } = null!;
         [ValidateNever]
         public string ImagePath { get; set; } = null!;
+        public string? TitleAr { get; set; }
 
+        public string? TitleEn { get; set; }
         public bool IsActive { get; set; }
 
         public bool? IsDeleted { get; set; }
@@ -40,6 +42,10 @@ namespace TrainigSectorDataEntry.ViewModel
         public bool? ISStage { get; set; }
         [ValidateNever]
         public virtual TrainingSector TrainigSector { get; set; } = null!;
-        public IFormFile? UploadedImage { get; set; }
+  
+        public virtual ICollection<StagesAndHallsImage> StagesAndHallsImages { get; set; } = new List<StagesAndHallsImage>();
+
+        public List<IFormFile>? UploadedImages { get; set; }
+        public List<int?> DeletedImageIds { get; set; } = new List<int?>();
     }
 }

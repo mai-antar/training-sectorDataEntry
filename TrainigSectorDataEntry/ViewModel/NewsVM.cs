@@ -11,31 +11,31 @@ namespace TrainigSectorDataEntry.ViewModel
         public int TrainigSectorId { get; set; }
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان الخبر باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string TitleAr { get; set; } = null!;
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان الخبر باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string TitleEn { get; set; } = null!;
 
 
         [Required(ErrorMessage = ".برجاء ادخال الخبر باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string ShortDescriptionAr { get; set; } = null!;
 
 
         [Required(ErrorMessage = ".برجاء ادخال الخبر باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string ShortDescriptionEn { get; set; }
  
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل الخبر باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string DescriptionAr { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل الخبر باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string DescriptionEn { get; set; }
 
         public DateOnly Date { get; set; }

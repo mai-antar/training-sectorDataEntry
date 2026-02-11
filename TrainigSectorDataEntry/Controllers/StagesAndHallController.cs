@@ -13,29 +13,41 @@ namespace TrainigSectorDataEntry.Controllers
     public class StagesAndHallController : Controller
     {
         private readonly IGenericService<StagesAndHall> _StagesAndHallService;
+        private readonly IGenericService<StagesAndHallsImage> _StagesAndHallsImageService;
         private readonly IGenericService<TrainingSector> _TrainingSectorService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         private readonly IFileStorageService _fileStorageService;
 
         public StagesAndHallController(IGenericService<StagesAndHall> StagesAndHallService,
-            IGenericService<TrainingSector> TrainingSectorService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
+            IGenericService<TrainingSector> TrainingSectorService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService, IGenericService<StagesAndHallsImage> stagesAndHallsImageService)
         {
             _StagesAndHallService = StagesAndHallService;
             _TrainingSectorService = TrainingSectorService;
             _mapper = mapper;
             _logger = logger;
             _fileStorageService = fileStorageService;
+            _StagesAndHallsImageService = stagesAndHallsImageService;
         }
         public async Task<IActionResult> Index()
         {
             var StagesAndHallList = await _StagesAndHallService.GetAllAsync();
-     
+            var StagesAndHallImageList = await _StagesAndHallsImageService.GetAllAsync();
 
             var sectors = await _TrainingSectorService.GetDropdownListAsync();
 
             ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
-         
+
+            foreach (var item in StagesAndHallList)
+            {
+                if (StagesAndHallImageList.Where(a => a.StagesAndHallsId == item.Id).ToList().Count > 0)
+                {
+
+                    item.StagesAndHallsImages = StagesAndHallImageList.Where(a => a.StagesAndHallsId == item.Id).ToList();
+                }
+            }
+
+
             var viewModelList = _mapper.Map<List<StagesAndHallVM>>(StagesAndHallList);
 
             return View(viewModelList);
@@ -44,12 +56,19 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create()
         {
             var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-
+            var StagesAndHallImageList = await _StagesAndHallsImageService.GetAllAsync();
             var existingStagesAndHall = await _StagesAndHallService.GetAllAsync();
             var existingStagesAndHallVM = _mapper.Map<List<StagesAndHallVM>>(existingStagesAndHall);
 
-  
-       
+            foreach (var item in existingStagesAndHall)
+            {
+                if (StagesAndHallImageList.Where(a => a.StagesAndHallsId == item.Id).ToList().Count > 0)
+                {
+
+                    item.StagesAndHallsImages = StagesAndHallImageList.Where(a => a.StagesAndHallsId == item.Id).ToList();
+                }
+            }
+
             ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
             ViewBag.ExistingStagesAndHall = existingStagesAndHallVM;
             return View();
@@ -60,7 +79,7 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create(StagesAndHallVM model)
         {
             // Validate that an image is uploaded
-            if (model.UploadedImage == null || model.UploadedImage.Length == 0)
+            if (model.UploadedImages == null || model.UploadedImages.Any())
             {
                 ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
             }
@@ -77,29 +96,35 @@ namespace TrainigSectorDataEntry.Controllers
 
                 return View(model);
             }
+
+            var entity = _mapper.Map<StagesAndHall>(model);
+            entity.IsDeleted = false;
+            entity.IsActive = true;
+            entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
+
+            await _StagesAndHallService.AddAsync(entity);
             // Save the image
 
-            if (model.UploadedImage != null)
+            if (model.UploadedImages != null)
             {
+                foreach (var file in model.UploadedImages)
+                { 
 
-
-                var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "StagesAndHallImage");
+                    var relativePath = await _fileStorageService.UploadImageAsync(file, "StagesAndHallImage");
 
                 if (relativePath != null)
                 {
-                    await _StagesAndHallService.AddAsync(new StagesAndHall
-                    {
-                        TrainigSectorId = model.TrainigSectorId,
-                        DescriptionAr = model.DescriptionAr,
-                        DescriptionEn = model.DescriptionEn,
-                        IsDeleted = false,
-                        IsActive = true,
-                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
-                        ImagePath = relativePath
-                    });
+                        await _StagesAndHallsImageService.AddAsync(new StagesAndHallsImage
+                        {
+                            StagesAndHallsId = entity.Id,
+                            ImagePath = relativePath,
+                            IsActive = true,
+                            IsDeleted = false,
+                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+                        });
 
-                }
-
+                    }
+            }
             }
 
             TempData["Success"] = "تمت الاضافة بنجاح";
@@ -110,7 +135,8 @@ namespace TrainigSectorDataEntry.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var StagesAndHall = await _StagesAndHallService.GetByIdAsync(id);
+     
+            var StagesAndHall = await _StagesAndHallService.GetByIdAsync(id, n => ((StagesAndHall)n).StagesAndHallsImages);
             if (StagesAndHall == null) return NotFound();
 
             var model = _mapper.Map<StagesAndHallVM>(StagesAndHall);
@@ -134,14 +160,15 @@ namespace TrainigSectorDataEntry.Controllers
             if (entity == null) return NotFound();
 
             // If no new image uploaded AND no existing image, throw validation error
-            if (model.UploadedImage == null && string.IsNullOrEmpty(entity.ImagePath))
+            if (model.UploadedImages == null && string.IsNullOrEmpty(entity.ImagePath))
             {
                 ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
                 return View(model);
             }
 
 
-
+            entity.TitleAr = model.TitleAr;
+            entity.TitleEn = model.TitleEn;
             entity.DescriptionAr = model.DescriptionAr;
             entity.DescriptionEn = model.DescriptionEn;
             entity.TrainigSectorId = model.TrainigSectorId;
@@ -149,52 +176,107 @@ namespace TrainigSectorDataEntry.Controllers
             entity.ISStage = model.ISStage;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
-
-
-            if (model.UploadedImage != null && model.UploadedImage.Length > 0)
-            {
-
-                if (!string.IsNullOrEmpty(entity.ImagePath))
-                {
-                    await _fileStorageService.DeleteFileAsync(entity.ImagePath);
-                }
-
-                var relativePath = await _fileStorageService
-                    .UploadImageAsync(model.UploadedImage, "StagesAndHallImage");
-
-                entity.ImagePath = relativePath;
-
-                if (string.IsNullOrEmpty(relativePath))
-                {
-                    ModelState.AddModelError("UploadedImage", "حدث خطأ أثناء رفع الصورة.");
-                    var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-
-                    ViewBag.TrainingSectorList =
-                        new SelectList(TrainingSector, "Id", "NameAr");
-                    return View(model);
-                }
-
-                entity.ImagePath = relativePath;
-            }
-
-      
-
-            // Ensure image path is still set
-            if (string.IsNullOrEmpty(entity.ImagePath))
-            {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
-                return View(model);
-            }
-
+        
             await _StagesAndHallService.UpdateAsync(entity);
+
+            if (model.DeletedImageIds != null && model.DeletedImageIds.Any())
+            {
+                foreach (var id in model.DeletedImageIds.Where(x => x.HasValue).Select(x => x.Value))
+                {
+                    var image = await _StagesAndHallsImageService.GetByIdAsync(id);
+                    if (image != null)
+                    {
+                        await _fileStorageService.DeleteFileAsync(image.ImagePath);
+                        await _StagesAndHallsImageService.DeleteAsync(id);
+                   
+                    }
+                }
+            }
+
+            if (model.UploadedImages != null && model.UploadedImages.Any())
+            {
+                foreach (var image in model.UploadedImages)
+                {
+
+                    var relativePath = await _fileStorageService.UploadImageAsync(image, "StagesAndHallImage");
+
+                    if (relativePath != null)
+                    {
+                        await _StagesAndHallsImageService.AddAsync(new StagesAndHallsImage
+                        {
+                            StagesAndHallsId = entity.Id,
+                            ImagePath = relativePath,
+                            IsActive = true,
+                            IsDeleted = false,
+                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+                        });
+
+                    }
+                }
+            }
+            
 
             TempData["Success"] = "تم التعديل بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> AddImages(int id)
+        {
+            var StagesAndHallsImage = await _StagesAndHallService.GetByIdAsync(id);
+            if (StagesAndHallsImage == null)
+                return NotFound();
 
+            var vm = new StagesAndHallsImageVM
+            {
+                StagesAndHallsId = id,
+                Name = StagesAndHallsImage.TitleAr
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImages(StagesAndHallsImageVM model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var news = await _StagesAndHallService.GetByIdAsync(model.StagesAndHallsId);
+            if (news == null)
+                return NotFound();
+
+
+            foreach (var image in model.UploadedImages)
+            {
+                var relativePath = await _fileStorageService.UploadImageAsync(image, "StagesAndHallsImages");
+
+                if (relativePath != null)
+                {
+                    await _StagesAndHallsImageService.AddAsync(new StagesAndHallsImage
+                    {
+                        StagesAndHallsId = model.Id,
+                        ImagePath = relativePath,
+                        IsActive = true,
+                        IsDeleted = false,
+                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+                    });
+                }
+
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            var image = await _StagesAndHallsImageService.GetByIdAsync(id);
+            if (image == null) return NotFound();
+
+            await _fileStorageService.DeleteFileAsync(image.ImagePath);
+            await _StagesAndHallsImageService.DeleteAsync(id);
+            return RedirectToAction("Edit", new { id = image.StagesAndHallsId });
+        }
         public async Task<IActionResult> Delete(int id)
         {
             var StagesAndHall = await _StagesAndHallService.GetByIdAsync(id);

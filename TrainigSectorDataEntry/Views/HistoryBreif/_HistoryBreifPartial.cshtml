@@ -4,8 +4,8 @@
 @foreach (var historyBreif in Model)
 {
     <tr>
-        <td>@historyBreif.NameAr</td>
-        <td>@historyBreif.NameEn</td>
+        <td>@historyBreif.TitleAr</td>
+        <td>@historyBreif.TitleEn</td>
         <td>@historyBreif.EducationalFacilities?.NameAr</td>
         <td>@historyBreif.UserCreationDate?.ToString("yyyy-MM-dd")</td>
         <td>
@@ -19,12 +19,7 @@
             }
         </td>
         <td>
-          @*   @foreach (var item in historyBreif.HistoryBerifImages)
-            {
-             
-                <img src=" /Files/@item.ImagePath" alt="History Berif Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
-
-            } *@
+      
             <a class="buttoneimg right-4tens " asp-route-id="@historyBreif.Id"  asp-action="AddImages">
                 <span class="buttoneimg__text">إضافة صورة</span>
                 <span class="buttoneimg__icon">

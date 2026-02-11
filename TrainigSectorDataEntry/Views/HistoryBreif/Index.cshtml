@@ -23,8 +23,8 @@
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
         <tr>
-            <th>الاسم باللغة العربية</th>
-            <th>الاسم باللغة الانجليزية</th>
+            <th>العنوان باللغة العربية</th>
+            <th>العنوان باللغة الانجليزية</th>
             <th>المنشأت التعليمية</th>
             <th>التاريخ</th>
             <th>التفعيل</th>
@@ -37,8 +37,8 @@
         @foreach (var historyBreif in Model)
         {
             <tr>
-                <td>@historyBreif.NameAr</td>
-                <td>@historyBreif.NameEn</td>
+                <td>@historyBreif.TitleAr</td>
+                <td>@historyBreif.TitleEn</td>
                 <td>@historyBreif.EducationalFacilities?.NameAr</td>
                 <td>@historyBreif.UserCreationDate?.ToString("yyyy-MM-dd")</td>
                 <td>
@@ -55,8 +55,8 @@
 
                     @foreach (var item in historyBreif.HistoryBerifImages)
                     {
-                        @* <img src="/Files/@item.ImagePath" style="width:60px;height:60px;object-fit:cover" />
-                        *@ @* <img src="@("/Storage/" + item.ImagePath)" alt="News Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" /> *@
+                        <img src="/Files/@item.ImagePath" style="width:60px;height:60px;object-fit:cover" />
+                        @* <img src="@("/Storage/" + item.ImagePath)" alt="News Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" /> *@
 
                     }
 

@@ -13,7 +13,7 @@ public partial class TrainingCourse
 
     public string? NameEn { get; set; }
 
-    public string FilePath { get; set; } = null!;
+    public string FilePathAr { get; set; } = null!;
 
     public bool? IsActive { get; set; }
 
@@ -30,6 +30,8 @@ public partial class TrainingCourse
     public int? UserDeletionId { get; set; }
 
     public DateOnly? UserDeletionDate { get; set; }
+
+    public string? FilePathEn { get; set; }
 
     public virtual TrainingCoursesType TrainigCoursesTypes { get; set; } = null!;
 }
