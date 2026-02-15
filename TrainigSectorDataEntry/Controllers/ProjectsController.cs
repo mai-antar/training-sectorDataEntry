@@ -53,6 +53,7 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create()
         {
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
 
             var existingProjects = await _projectService.GetAllAsync();
             var existingProjectVM = _mapper.Map<List<ProjectVM>>(existingProjects);
@@ -66,8 +67,11 @@ namespace TrainigSectorDataEntry.Controllers
                     item.ProjectImages = projectImagesList.Where(a => a.ProjectId == item.Id).ToList();
                 }
             }
-
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+            if (TempData["educationalFacility"] != null )
+            {
+                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["educationalFacility"]);
+            }
+   
             ViewBag.existingProjects = existingProjectVM;
             return View();
         }
@@ -120,7 +124,13 @@ namespace TrainigSectorDataEntry.Controllers
                 }
             }
             TempData["Success"] = "تمت الاضافة بنجاح";
-            return RedirectToAction(nameof(Index));
+            TempData["Projects_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+        
+
+            return RedirectToAction(nameof(Create));
+
+            //TempData["Success"] = "تمت الاضافة بنجاح";
+            //return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)

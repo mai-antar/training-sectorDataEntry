@@ -19,7 +19,9 @@ namespace TrainigSectorDataEntry.ViewModel
         //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string? NameEn { get; set; }
         [ValidateNever]
-        public string FilePath { get; set; } = null!;
+        public string FilePathAr { get; set; } = null!;
+
+        public string? FilePathEn { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -39,7 +41,9 @@ namespace TrainigSectorDataEntry.ViewModel
 
         [ValidateNever]
         public virtual TrainingCoursesType TrainigCoursesTypes { get; set; } = null!;
-        public IFormFile? UploadedFile { get; set; }
+        public IFormFile? UploadedFileAr { get; set; }
+        public IFormFile? UploadedFileEn { get; set; }
+    
 
     }
 }

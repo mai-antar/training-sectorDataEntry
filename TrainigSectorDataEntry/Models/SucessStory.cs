@@ -35,5 +35,9 @@ public partial class SucessStory
 
     public DateOnly? UserDeletionDate { get; set; }
 
+    public string? DescriptionAr { get; set; }
+
+    public string? DescriptionEn { get; set; }
+
     public virtual TrainingSector TrainigSector { get; set; } = null!;
 }

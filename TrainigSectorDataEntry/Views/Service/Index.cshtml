@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.ServiceVM>
 
 @{
-    ViewData["Title"] = "الخدمات";
+    ViewData["Title"] = "المشاركات المجتمعية و الدولية";
 }
 
 <div class="container-fluid">
@@ -9,7 +9,7 @@
 
 
         <div class="orang2">
-            <h3>الخدمات </h3>
+            <h3>المشاركات المجتمعية و الدولية </h3>
             <div></div>
         </div>
 
@@ -17,7 +17,7 @@
     </div>
 
     <a asp-action="Create" class="button right-4tens ">
-        <span class="button__text">  إضافة خدمات</span>
+        <span class="button__text">  إضافة مشاركات مجتمعية و دولية</span>
         <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 
        </a>
@@ -27,9 +27,8 @@
         <tr>
             <th>العنوان باللغة العربية</th>
             <th>العنوان باللغة الانجليزية</th>
-            <th>التفاصيل باللغة العربية</th>
-            <th>التفاصيل باللغة الانجليزية</th>
-            <th>المنشأت التعليمية</th>
+          
+            <th>النوع</th>
             <th>التفعيل</th>
             <th>الصورة</th>
             <th></th>
@@ -41,9 +40,17 @@
             <tr>
                 <td>@service.TitleAr</td>
                 <td>@service.TitleEn</td>
-                <td>@service.DescriptionAr</td>
-                <td>@service.DescriptionEn</td>
-                <td>@service.EducationalFacilities?.NameAr</td>
+         
+                    <td>
+                        @if (service.Type == true)
+                        {
+                            <span class="badge bg-success">محلية</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">دولية</span>
+                        }
+                    </td>
                 <td>
                     @if (service.IsActive)
                     {

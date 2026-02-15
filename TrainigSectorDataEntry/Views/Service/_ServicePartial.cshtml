@@ -6,10 +6,18 @@
     <tr>
         <td>@service.TitleAr</td>
         <td>@service.TitleEn</td>
-        <td>@service.DescriptionAr</td>
-        <td>@service.DescriptionEn</td>
-        <td>@service.EducationalFacilities?.NameAr</td>
-        <td>@service.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+
+        <td>
+             @if (service.Type == true)
+                        {
+                            <span class="badge bg-success">محلية</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">دولية</span>
+                        }
+        </td>
+    
         <td>
             @if (service.IsActive)
             {

@@ -7,7 +7,7 @@ public partial class ContactU
 {
     public int Id { get; set; }
 
-    public int TrainigSectorId { get; set; }
+    public int EducationalFacilitiesId { get; set; }
 
     public string Address { get; set; } = null!;
 
@@ -33,5 +33,5 @@ public partial class ContactU
 
     public DateOnly? UserDeletionDate { get; set; }
 
-    public virtual TrainingSector TrainigSector { get; set; } = null!;
+    public virtual EducationalFacility EducationalFacilities { get; set; } = null!;
 }

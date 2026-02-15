@@ -166,6 +166,8 @@ namespace TrainigSectorDataEntry.Controllers
             // Update fields
             entity.TitleAr = model.TitleAr;
             entity.TitleEn = model.TitleEn;
+            entity.DescriptionEn = model.DescriptionEn;
+            entity.DescriptionAr = model.DescriptionAr;
             entity.TrainigSectorId = model.TrainigSectorId;
             entity.IsActive = model.IsActive;
             //entity.IsExternalLink = model.IsExternalLink;

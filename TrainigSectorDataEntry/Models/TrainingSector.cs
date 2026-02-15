@@ -31,8 +31,6 @@ public partial class TrainingSector
 
     public virtual ICollection<ComplaintsAndSuggestion> ComplaintsAndSuggestions { get; set; } = new List<ComplaintsAndSuggestion>();
 
-    public virtual ICollection<ContactU> ContactUs { get; set; } = new List<ContactU>();
-
     public virtual ICollection<EducationalFacility> EducationalFacilities { get; set; } = new List<EducationalFacility>();
 
     public virtual ICollection<News> News { get; set; } = new List<News>();

@@ -1,20 +1,20 @@
 ﻿@model TrainigSectorDataEntry.ViewModel.SpecializationImageVM
 
 
-<h2>تعديل صورة التخصص: @ViewBag.specializationName</h2>
+<h4>تعديل صورة التخصص: @ViewBag.specializationName</h4>
 <br />
-<span>المنشأة التعليمية: @ViewBag.educationalFacilitiesName</span>
+<h4>المنشأة التعليمية: @ViewBag.educationalFacilitiesName</h4>
 
 <br />
-<span>القسم: @ViewBag.DepartmentName</span>
+<h4>القسم: @ViewBag.DepartmentName</h4>
 
-
+<br />
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="SpecializationId" />
     <input type="hidden" asp-for="educationalFacilitiesName" value="@ViewBag.educationalFacilitiesName" />
     <input type="hidden" asp-for="departmentName" value="@ViewBag.DepartmentName" />
-    <br />
+
     <div class="mb-3">
         <label>العنوان العربي</label>
         <input asp-for="TitleAr" class="form-control" />

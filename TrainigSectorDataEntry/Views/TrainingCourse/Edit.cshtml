@@ -31,6 +31,9 @@
                     <span asp-validation-for="TrainigCoursesTypesId" class="text-danger"></span>
                 </div>
             </div>
+           
+    </div>
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
@@ -38,8 +41,6 @@
                     <span asp-validation-for="NameAr" class="text-danger"></span>
                 </div>
             </div>
-    </div>
-        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
@@ -47,15 +48,32 @@
                     <span asp-validation-for="NameEn" class="text-danger"></span>
                 </div>
             </div>
+         
+        </div>
+        <div class="row">
             <div class="col-md-6">
                 <!-- Existing File Preview -->
-                @if (!string.IsNullOrEmpty(Model.FilePath))
+                @if (!string.IsNullOrEmpty(Model.FilePathAr))
                 {
                     <div class="form-group">
-                        <label>الملف الحالي:</label><br />
+                        <label>الملف العربي الحالي:</label><br />
 
-                        <a asp-controller="Files" asp-action="Download" asp-route-filePath="@Model.FilePath">
-                            تحميل الملف الحالي
+                        <a asp-controller="Files" asp-action="Download" asp-route-filePath="@Model.FilePathAr">
+                            تحميل الملف العربي الحالي
+                        </a>
+                        @* <a href="@("/Storage/" + Model.FilePath)" target="_blank">تحميل الملف الحالي</a> *@
+
+
+
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.FilePathEn))
+                {
+                    <div class="form-group">
+                        <label>الملف الانجليزي الحالي:</label><br />
+
+                        <a asp-controller="Files" asp-action="Download" asp-route-filePath="@Model.FilePathEn">
+                            تحميل الملف الانجليزي الحالي
                         </a>
                         @* <a href="@("/Storage/" + Model.FilePath)" target="_blank">تحميل الملف الحالي</a> *@
 
@@ -64,16 +82,22 @@
                     </div>
                 }
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 <!-- File Upload -->
                 <div class="form-group">
-                    <label for="UploadedFile">تحديث الملف (اختياري)</label>
-                    <input asp-for="UploadedFile" type="file" class="form-control" />
-                    <span asp-validation-for="UploadedFile" class="text-danger"></span>
+                    <label for="UploadedFile">تحديث الملف العربي الحالي (اختياري)</label>
+                    <input asp-for="UploadedFileAr" type="file" class="form-control" />
+                    <span asp-validation-for="UploadedFileAr" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="UploadedFile">تحديث الملف الانجليزي الحالي (اختياري)</label>
+                    <input asp-for="UploadedFileEn" type="file" class="form-control" />
+                    <span asp-validation-for="UploadedFileEn" class="text-danger"></span>
                 </div>
             </div>
+         
+        </div>
+    <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="IsActive" class="control-label">التفعيل</label>
@@ -81,8 +105,8 @@
                     <span asp-validation-for="IsActive" class="text-danger"></span>
                 </div>
             </div>
-        </div>
-    
+
+    </div>
   
 
     <br />

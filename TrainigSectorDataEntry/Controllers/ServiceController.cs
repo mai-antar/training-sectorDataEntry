@@ -13,15 +13,15 @@ namespace TrainigSectorDataEntry.Controllers
     public class ServiceController : Controller
     {
         private readonly IGenericService<Service> _Services;
-        private readonly IGenericService<EducationalFacility> _educationalFacilityService;
+  
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         private readonly IFileStorageService _fileStorageService;
         public ServiceController(IGenericService<Service> Services,
-            IGenericService<EducationalFacility> educationalFacilityService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
+             IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
         {
             _Services = Services;
-            _educationalFacilityService = educationalFacilityService;
+
             _mapper = mapper;
             _logger = logger;
             _fileStorageService = fileStorageService;
@@ -29,9 +29,7 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Index()
         {
             var ServiceList = await _Services.GetAllAsync();
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+        
 
             var viewModelList = _mapper.Map<List<ServiceVM>>(ServiceList);
 
@@ -40,14 +38,13 @@ namespace TrainigSectorDataEntry.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+        
 
             var existingService = await _Services.GetAllAsync();
             var existingServiceVM = _mapper.Map<List<ServiceVM>>(existingService);
 
 
 
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
             ViewBag.existingService = existingServiceVM;
             return View();
         }
@@ -64,11 +61,11 @@ namespace TrainigSectorDataEntry.Controllers
 
             if (!ModelState.IsValid)
             {
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+         
                 var existingService = await _Services.GetAllAsync();
                 var existingServiceVM = _mapper.Map<List<ServiceVM>>(existingService);
 
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+               
                 ViewBag.existingService = existingServiceVM;
 
                 return View(model);
@@ -104,8 +101,7 @@ namespace TrainigSectorDataEntry.Controllers
             if (Service == null) return NotFound();
 
             var model = _mapper.Map<ServiceVM>(Service);
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+     
             return View(model);
         }
 
@@ -113,13 +109,7 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ServiceVM model)
         {
-            if (!ModelState.IsValid)
-            {
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
-                return View(model);
-            }
-
+        
             var entity = await _Services.GetByIdAsync(model.Id);
             if (entity == null) return NotFound();
 
@@ -136,7 +126,7 @@ namespace TrainigSectorDataEntry.Controllers
             entity.TitleEn = model.TitleEn;
             entity.DescriptionAr = model.DescriptionAr;
             entity.DescriptionEn = model.DescriptionEn;
-            entity.EducationalFacilitiesId = model.EducationalFacilitiesId;
+            entity.Type = model.Type;
             entity.IsActive = model.IsActive;
             entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
@@ -164,8 +154,7 @@ namespace TrainigSectorDataEntry.Controllers
             if (string.IsNullOrEmpty(entity.ImagePath))
             {
                 ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+       
                 return View(model);
             }
 
@@ -192,17 +181,6 @@ namespace TrainigSectorDataEntry.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        [HttpGet]
-        public async Task<IActionResult> GetServicesByFacility(int facilityId)
-        {
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-            var services = await _Services.GetAllAsync();
-            services = services.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
 
-            var vmList = _mapper.Map<List<ServiceVM>>(services);
-
-
-            return PartialView("_ServicePartial", vmList);
-        }
     }
 }

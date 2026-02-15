@@ -31,6 +31,8 @@ public partial class EducationalFacility
 
     public virtual ICollection<AlertsAndAdvertisment> AlertsAndAdvertisments { get; set; } = new List<AlertsAndAdvertisment>();
 
+    public virtual ICollection<ContactU> ContactUs { get; set; } = new List<ContactU>();
+
     public virtual ICollection<Departmentsandbranch> Departmentsandbranches { get; set; } = new List<Departmentsandbranch>();
 
     public virtual ICollection<EducationalLevel> EducationalLevels { get; set; } = new List<EducationalLevel>();
@@ -40,8 +42,6 @@ public partial class EducationalFacility
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
     public virtual ICollection<QualityCertificate> QualityCertificates { get; set; } = new List<QualityCertificate>();
-
-    public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 
     public virtual ICollection<StudentActivite> StudentActivites { get; set; } = new List<StudentActivite>();
 

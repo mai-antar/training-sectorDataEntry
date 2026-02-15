@@ -1,31 +1,44 @@
 ﻿@model List<TrainigSectorDataEntry.ViewModel.SpecializationVM>
 
 
-@foreach (var specialization in Model)
-{
-    <tr>
-        <td>@specialization.NameAr</td>
-        <td>@specialization.NameEn</td>
+ @foreach (var specialization in Model)
+        {
+            <tr>
+                <td>@specialization.NameAr</td>
+                <td>@specialization.NameEn</td>
         <td>@specialization.Departmentsandbranches.EducationalFacilities.NameAr</td>
-        <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td>
-        <td>
-            @if (specialization.IsActive)
-            {
-                <span class="badge bg-success">مفعل</span>
-            }
-            else
-            {
-                <span class="badge bg-danger">غير مفعل</span>
-            }
-        </td>
+         @*        <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td> *@
+                <td>
+                    @if (specialization.IsActive)
+                    {
+                        <span class="badge bg-success">مفعل</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">غير مفعل</span>
+                    }
+                </td>
+      
+                <td>
+                        <a asp-controller="SpecializationImage" asp-action="Index" asp-route-specializationId="@specialization.Id"
+                           asp-route-departmentName="@specialization.DepartmentName"
+                           asp-route-educationalFacilitiesName="@specialization.EducationalFacilityName"
+                           class="btn btn-sm btn-info"><i class="fas fa-link"></i> التفاصيل / الصور</a>
 
-        <td>
-            <a asp-action="Edit" asp-route-id="@specialization.Id" class="btn btn-sm btn-warning">تعديل</a>
+                        <a asp-action="Edit" asp-route-id="@specialization.Id" class="buttonedit right-4tens ">
+                            <span class="buttonedit__text">تعديل</span>
+                            <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
+                        </a>
 
-            <a href="javascript:void(0);" onclick="confirmDelete(@specialization.Id)" class="btn btn-sm btn-danger">حذف</a>
-        </td>
-    </tr>
-}
+                        <a href="javascript:void(0);" class="buttonremove right-4tens "
+                           onclick="confirmDelete(@specialization.Id)">
+                            <span class="buttonremove__text"> حذف</span>
+                            <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
+                        </a>
+                </td>
+            </tr>
+        }
+
 
 
 

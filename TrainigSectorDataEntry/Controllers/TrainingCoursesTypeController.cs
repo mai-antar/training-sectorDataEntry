@@ -86,14 +86,21 @@ namespace TrainigSectorDataEntry.Controllers
         }
 
 
+
+
         public async Task<IActionResult> Edit(int id)
         {
+            
+            var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
+            ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+
             var TrainingCoursesType = await _TrainingCoursesTypeService.GetByIdAsync(id);
             if (TrainingCoursesType == null) return NotFound();
 
             var model = _mapper.Map<TrainingCoursesTypeVM>(TrainingCoursesType);
-            var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-            ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+
+            //var trainingCourestypeTrainingSector = TrainingSector.Where(a => a.Id == TrainingCoursesType.TrainingSectorId).ToList();
+
             return View(model);
         }
 

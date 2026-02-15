@@ -8,13 +8,24 @@
         <td>@trainingCourse.TrainigCoursesTypes?.NameAr</td>
         <td>
 
-            @if (!string.IsNullOrEmpty(trainingCourse.FilePath))
+            @if (!string.IsNullOrEmpty(trainingCourse.FilePathAr))
             {
-                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@trainingCourse.FilePath">
+                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@trainingCourse.FilePathAr">
                     تحميل
                 </a>
 
                 @* <a href="@("/Storage/" + trainingCourse.FilePath)" target="_blank">تحميل</a> *@
+            }
+        </td>
+        <td>
+
+            @if (!string.IsNullOrEmpty(trainingCourse.FilePathEn))
+            {
+                <a asp-controller="Files" asp-action="Download" asp-route-filePath="@trainingCourse.FilePathEn">
+                    تحميل
+                </a>
+
+      
             }
         </td>
         <td>

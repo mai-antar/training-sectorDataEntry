@@ -1,25 +1,16 @@
-﻿@model List<TrainigSectorDataEntry.ViewModel.StagesAndHallVM>
+﻿@model List<TrainigSectorDataEntry.ViewModel.StudentActiviteVM>
 
 
-@foreach (var stagesAndHall in Model)
+@foreach (var StudentActivite in Model)
 {
     <tr>
-        <td>@stagesAndHall.DescriptionAr</td>
-        <td>@stagesAndHall.DescriptionEn</td>
-        <td>@stagesAndHall.TrainigSector?.NameAr</td>
-        <td>@stagesAndHall.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+        <td>@StudentActivite.DescriptionAr</td>
+        <td>@StudentActivite.DescriptionEn</td>
+        <td>@StudentActivite.EducationalFacilities?.NameAr</td>
+      
+     
         <td>
-            @if (stagesAndHall.ISStage == true)
-            {
-                <span class="badge bg-success">مسرح</span>
-            }
-            else
-            {
-                <span class="badge bg-danger">قاعة</span>
-            }
-        </td>
-        <td>
-            @if (stagesAndHall.IsActive)
+            @if (StudentActivite.IsActive)
             {
                 <span class="badge bg-success">مفعل</span>
             }
@@ -28,20 +19,21 @@
                 <span class="badge bg-danger">غير مفعل</span>
             }
         </td>
+
         <td>
 
-            <img src="/Files/@stagesAndHall.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+            <img src="/Files/@StudentActivite.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
 
 
 
         </td>
         <td>
-            <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@stagesAndHall.Id">
+            <a class="buttonedit right-4tens " asp-action="Edit" asp-route-id="@StudentActivite.Id">
                 <span class="buttonedit__text">تعديل</span>
                 <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
             </a>
             <a href="javascript:void(0);" class="buttonremove right-4tens "
-               onclick="confirmDelete(@stagesAndHall.Id)">
+               onclick="confirmDelete(@StudentActivite.Id)">
                 <span class="buttonremove__text"> حذف</span>
                 <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
             </a>
@@ -63,7 +55,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Navigate to Delete action
-                  window.location.href = '/StagesAndHall/Delete/' + id;
+                  window.location.href = '/StudentActivite/Delete/' + id;
             }
         });
     }

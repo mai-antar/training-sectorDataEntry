@@ -13,6 +13,7 @@ namespace TrainigSectorDataEntry.Controllers
         private readonly IGenericService<Specialization> _specializationService;
         private readonly IGenericService<EducationalFacility> _educationalFacilityService;
         private readonly IGenericService<Departmentsandbranch> _departmentsandbranch;
+
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         public SpecializationController(IGenericService<Specialization> specialization,
@@ -125,14 +126,22 @@ namespace TrainigSectorDataEntry.Controllers
         }
 
 
+
         public async Task<IActionResult> Edit(int id)
         {
             var Specialization = await _specializationService.GetByIdAsync(id);
             if (Specialization == null) return NotFound();
 
-            var model = _mapper.Map<SpecializationVM>(Specialization);
+           
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+
+            var departmentsandbranch = await _departmentsandbranch.GetByIdAsync(Specialization.DepartmentsandbranchesId);
+            if (departmentsandbranch == null) return NotFound();
+           
+
+            var model = _mapper.Map<SpecializationVM>(Specialization);
+            model.EducationalFacilitiesId = departmentsandbranch.EducationalFacilitiesId;
 
             return View(model);
         }

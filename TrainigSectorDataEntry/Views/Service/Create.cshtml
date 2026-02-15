@@ -1,7 +1,7 @@
 ﻿@model TrainigSectorDataEntry.ViewModel.ServiceVM
 
 @{
-    ViewData["Title"] = "الخدمات";
+    ViewData["Title"] = "المشاركات المجتمعية و الدولية";
 }
 
 
@@ -10,7 +10,7 @@
 
 
         <div class="orang2">
-            <h3>إضافة خدمات </h3>
+            <h3> إضافة مشاركات مجتمعية و دولية </h3>
             <div></div>
         </div>
 
@@ -22,29 +22,21 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأة التعليمية</label>
-                <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.educationalFacilityList" class="form-control">
-                    <option value="">-- اختر منشأة تعليمية --</option>
-                </select>
-                <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
                 <label asp-for="TitleAr" class="control-label">العنوان باللغة العربية</label>
                 <input asp-for="TitleAr" class="form-control" />
                 <span asp-validation-for="TitleAr" class="text-danger"></span>
             </div>
         </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزية</label>
+                    <input asp-for="TitleEn" class="form-control " />
+                    <span asp-validation-for="TitleEn" class="text-danger"></span>
+                </div>
+            </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="TitleEn" class="control-label">العنوان باللغة الانجليزية</label>
-                <input asp-for="TitleEn" class="form-control " />
-                <span asp-validation-for="TitleEn" class="text-danger"></span>
-            </div>
-        </div>
+      
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="DescriptionAr" class="control-label">التفاصيل باللغة العربية</label>
@@ -52,15 +44,16 @@
                 <span asp-validation-for="DescriptionAr" class="text-danger"></span>
             </div>
         </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
+                    <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                </div>
+            </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="DescriptionEn" class="control-label">التفاصيل باللغة الانجليزية</label>
-                <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
-                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-            </div>
-        </div>
+      
         <div class="col-md-6">
             <div class="form-group">
                 <label for="UploadedImage">تحميل الصورة</label>
@@ -68,8 +61,23 @@
                 <span asp-validation-for="UploadedImage" class="text-danger"></span>
             </div>
         </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">محلية ام دولية </label><br />
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" asp-for="Type" type="radio" value="true" />
+                        <label class="form-check-label">محلية</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" asp-for="Type" type="radio" value="false" />
+                        <label class="form-check-label">دولية</label>
+                    </div>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+            </div>
     </div>
-   
+ 
    
 
    
@@ -101,21 +109,21 @@
 </form>
 <div class="card mt-5">
     <div class="card-header">
-        <strong class="text-center" style="margin-bottom: 80px;">الخدمات</strong>
+            <strong class="text-center" style="margin-bottom: 80px;">المشاركات المجتمعية و الدولية</strong>
     </div>
     <div class="card-body">
-        <h3>الخدمات</h3>
+            <h3>المشاركات المجتمعية و الدولية</h3>
 
         <table class="table table-bordered table-striped" id="servicesTable">
             <thead class="thead-dark">
                 <tr>
-                    <th>العنوان باللغة العربية</th>
-                    <th>العنوان باللغة الانجليزية</th>
-                    <th>التفاصيل باللغة العربية</th>
-                    <th>التفاصيل باللغة الانجليزية</th>
-                    <th>المنشأت التعليمية</th>
-                    <th>التفعيل</th>
-                    <th>الصورة</th>
+                        <th>العنوان باللغة العربية</th>
+                        <th>العنوان باللغة الانجليزية</th>
+                      
+                        <th>النوع</th>
+                        <th>التفعيل</th>
+                        <th>الصورة</th>
+                        <th></th>
                 </tr>
             </thead>
             <tbody>

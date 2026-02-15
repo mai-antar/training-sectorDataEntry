@@ -7,8 +7,6 @@ public partial class Service
 {
     public int Id { get; set; }
 
-    public int EducationalFacilitiesId { get; set; }
-
     public string? TitleAr { get; set; }
 
     public string? TitleEn { get; set; }
@@ -35,5 +33,5 @@ public partial class Service
 
     public DateOnly? UserDeletionDate { get; set; }
 
-    public virtual EducationalFacility EducationalFacilities { get; set; } = null!;
+    public bool? Type { get; set; }
 }

@@ -16,12 +16,12 @@ namespace TrainigSectorDataEntry.ViewModel
         public string ImagePath { get; set; } = null!;
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل القاعات والمسارح باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string? DescriptionAr { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل القاعات والمسارح باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string? DescriptionEn { get; set; }
 
         public bool IsActive { get; set; }

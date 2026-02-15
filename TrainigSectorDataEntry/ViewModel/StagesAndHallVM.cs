@@ -18,8 +18,8 @@ namespace TrainigSectorDataEntry.ViewModel
         //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
 
         public string DescriptionEn { get; set; } = null!;
-        [ValidateNever]
-        public string ImagePath { get; set; } = null!;
+        //[ValidateNever]
+        //public string ImagePath { get; set; } = null!;
         public string? TitleAr { get; set; }
 
         public string? TitleEn { get; set; }

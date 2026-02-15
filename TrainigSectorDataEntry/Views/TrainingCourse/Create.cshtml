@@ -29,6 +29,9 @@
                     <span asp-validation-for="TrainigCoursesTypesId" class="text-danger"></span>
                 </div>
             </div>
+        
+    </div>
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="NameAr" class="control-label">الاسم باللغة العربية</label>
@@ -36,8 +39,6 @@
                     <span asp-validation-for="NameAr" class="text-danger"></span>
                 </div>
             </div>
-    </div>
-        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="NameEn" class="control-label">الاسم باللغة الانجليزي</label>
@@ -45,11 +46,22 @@
                     <span asp-validation-for="NameEn" class="text-danger"></span>
                 </div>
             </div>
+           
+        </div>
+
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="UploadedFile">تحميل الملف</label>
-                    <input asp-for="UploadedFile" type="file" class="form-control" />
-                    <span asp-validation-for="UploadedFile" class="text-danger"></span>
+                    <label for="UploadedFile">  تحميل الملف العربي</label>
+                    <input asp-for="UploadedFileAr" type="file" class="form-control" />
+                    <span asp-validation-for="UploadedFileAr" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="UploadedFile">تحميل الملف الانجليزي</label>
+                    <input asp-for="UploadedFileEn" type="file" class="form-control" />
+                    <span asp-validation-for="UploadedFileEn" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -89,8 +101,10 @@
                     <th>الاسم باللغة العربية</th>
                     <th>الاسم باللغة الانجليزية</th>
                     <th>نوع الدورات التدريبية</th>
-                    <th>الملف</th>
+                     <th>الملف العربي</th>
+                     <th>الملف الانجليزي</th>
                     <th>التفعيل</th>
+                    <th></th>
 
                 </tr>
             </thead>

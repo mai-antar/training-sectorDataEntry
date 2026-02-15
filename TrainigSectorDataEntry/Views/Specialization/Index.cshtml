@@ -33,9 +33,9 @@
             <th>الاسم باللغة العربية</th>
             <th>الاسم باللغة الانجليزية</th>
             <th>المنشأت التعليمية</th>
-            <th>التاريخ</th>
+    @*         <th>التاريخ</th> *@
             <th>التفعيل</th>
-            <th>التفاصيل</th>
+  
 
             <th></th>
         </tr>
@@ -47,7 +47,7 @@
                 <td>@specialization.NameAr</td>
                 <td>@specialization.NameEn</td>
                 <td>@specialization.EducationalFacilityName</td>
-                <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td>
+         @*        <td>@specialization.UserCreationDate?.ToString("yyyy-MM-dd")</td> *@
                 <td>
                     @if (specialization.IsActive)
                     {
@@ -58,14 +58,12 @@
                         <span class="badge bg-danger">غير مفعل</span>
                     }
                 </td>
+      
                 <td>
-                    <a asp-controller="SpecializationImage" asp-action="Index" asp-route-specializationId="@specialization.Id"
-                       asp-route-departmentName="@specialization.DepartmentName"
-                       asp-route-educationalFacilitiesName="@specialization.EducationalFacilityName"
+                        <a asp-controller="SpecializationImage" asp-action="Index" asp-route-specializationId="@specialization.Id"
+                           asp-route-departmentName="@specialization.DepartmentName"
+                           asp-route-educationalFacilitiesName="@specialization.EducationalFacilityName"
                            class="btn btn-sm btn-info"><i class="fas fa-link"></i> التفاصيل / الصور</a>
-                </td>
-                <td>
-
 
                         <a asp-action="Edit" asp-route-id="@specialization.Id" class="buttonedit right-4tens ">
                             <span class="buttonedit__text">تعديل</span>

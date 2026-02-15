@@ -11,23 +11,23 @@ namespace TrainigSectorDataEntry.Controllers
     public class ContactUsController : Controller
     {
         private readonly IGenericService<ContactU> _ContactUService;
-        private readonly IGenericService<TrainingSector> _TrainingSectorService;
+        private readonly IGenericService<EducationalFacility> _EducationalFacilitiesService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         public ContactUsController(IGenericService<ContactU> ContactU,
-            IGenericService<TrainingSector> TrainingSectorService, IMapper mapper, ILoggerRepository logger)
+            IGenericService<EducationalFacility> EducationalFacilitiesService, IMapper mapper, ILoggerRepository logger)
         {
             _ContactUService = ContactU;
-            _TrainingSectorService = TrainingSectorService;
+            _EducationalFacilitiesService = EducationalFacilitiesService;
             _mapper = mapper;
             _logger = logger;
         }
         public async Task<IActionResult> Index()
         {
             var ContactUList = await _ContactUService.GetAllAsync();
-            var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
+            var EducationalFacilities = await _EducationalFacilitiesService.GetDropdownListAsync();
 
-            ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+            ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr");
 
             var viewModelList = _mapper.Map<List<ContactUVM>>(ContactUList);
 
@@ -36,18 +36,18 @@ namespace TrainigSectorDataEntry.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
+            var EducationalFacilities = await _EducationalFacilitiesService.GetDropdownListAsync();
 
             var existingContactU = await _ContactUService.GetAllAsync();
             var existingContactUVM = _mapper.Map<List<ContactUVM>>(existingContactU);
 
 
 
-            ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+            ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr");
 
-            if (TempData["ContactUS_SectorId"] != null)
+            if (TempData["ContactUS_EducationalFacilitiesId"] != null)
             {
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr", TempData["ContactUS_SectorId"]);
+                ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr", TempData["ContactUS_EducationalFacilitiesId"]);
 
             }
             ViewBag.existingContactU = existingContactUVM;
@@ -62,11 +62,11 @@ namespace TrainigSectorDataEntry.Controllers
 
             if (!ModelState.IsValid)
             {
-                var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
+                var EducationalFacilities = await _EducationalFacilitiesService.GetDropdownListAsync();
                 var existingContactU = await _ContactUService.GetAllAsync();
                 var existingContactUVM = _mapper.Map<List<ContactUVM>>(existingContactU);
 
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+                ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr");
                 ViewBag.existingContactU = existingContactUVM;
 
                 return View(model);
@@ -81,7 +81,7 @@ namespace TrainigSectorDataEntry.Controllers
             await _ContactUService.AddAsync(entity);
 
             TempData["Success"] = "تمت الاضافة بنجاح";
-            TempData["ContactUS_SectorId"] = model.TrainigSectorId;
+            TempData["ContactUS_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
 
             return RedirectToAction(nameof(Create));
         }
@@ -93,8 +93,8 @@ namespace TrainigSectorDataEntry.Controllers
             if (ContactU == null) return NotFound();
 
             var model = _mapper.Map<ContactUVM>(ContactU);
-            var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-            ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+            var EducationalFacilities = await _EducationalFacilitiesService.GetDropdownListAsync();
+            ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr");
             return View(model);
         }
 
@@ -104,8 +104,8 @@ namespace TrainigSectorDataEntry.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var TrainingSector = await _TrainingSectorService.GetDropdownListAsync();
-                ViewBag.TrainingSectorList = new SelectList(TrainingSector, "Id", "NameAr");
+                var EducationalFacilities = await _EducationalFacilitiesService.GetDropdownListAsync();
+                ViewBag.EducationalFacilitiesList = new SelectList(EducationalFacilities, "Id", "NameAr");
                 return View(model);
             }
 
@@ -114,7 +114,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             entity.Address = model.Address;
             entity.Telephone = model.Telephone;
-            entity.TrainigSectorId = model.TrainigSectorId;
+            entity.EducationalFacilitiesId = model.EducationalFacilitiesId;
             entity.Fax = model.Fax;
             entity.Email = model.Email;
             entity.IsActive = model.IsActive;

@@ -124,10 +124,10 @@ public partial class TrainingSectorDbContext : DbContext
         {
             entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.TrainigSector).WithMany(p => p.ContactUs)
-                .HasForeignKey(d => d.TrainigSectorId)
+            entity.HasOne(d => d.EducationalFacilities).WithMany(p => p.ContactUs)
+                .HasForeignKey(d => d.EducationalFacilitiesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ContactUs_TrainingSector");
+                .HasConstraintName("FK_ContactUs_EducationalFacilities");
         });
 
         modelBuilder.Entity<DepartmentType>(entity =>
@@ -311,11 +311,6 @@ public partial class TrainingSectorDbContext : DbContext
             entity.Property(e => e.TitleAr).HasMaxLength(500);
             entity.Property(e => e.TitleEn).HasMaxLength(500);
             entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
-
-            entity.HasOne(d => d.EducationalFacilities).WithMany(p => p.Services)
-                .HasForeignKey(d => d.EducationalFacilitiesId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Services_EducationalFacilities");
         });
 
         modelBuilder.Entity<Slider>(entity =>

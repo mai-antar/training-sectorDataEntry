@@ -10,11 +10,11 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
     <div class="form-group">
-        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
-        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+        <label asp-for="EducationalFacilitiesId" class="control-label">اسم المنشأه</label>
+        <select asp-for="EducationalFacilitiesId" asp-items="ViewBag.EducationalFacilitiesList" class="form-control">
             <option value="">-- اختر الجهة --</option>
         </select>
-        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+        <span asp-validation-for="EducationalFacilitiesId" class="text-danger"></span>
     </div>
     <br />
     <div class="form-group">
@@ -55,12 +55,13 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>اسم الجهة</th>
+                    <th>اسم المنشأه</th>
                     <th>العنوان</th>
                     <th>التليفون</th>
                     <th>الفاكس</th>
                     <th>البريد الالكتروني</th>
                     <th>التفعيل</th>
+                    <th></th>
 
                 </tr>
             </thead>
@@ -68,7 +69,7 @@
                 @foreach (var contact in (List<TrainigSectorDataEntry.ViewModel.ContactUVM>)ViewBag.existingContactU)
                 {
                     <tr>
-                        <td>@contact.TrainigSector?.NameAr</td>
+                        <td>@contact.EducationalFacilities?.NameAr</td>
                         <td>@contact.Address</td>
                         <td>@contact.Telephone</td>
                         <td>@contact.Fax</td>

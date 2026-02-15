@@ -12,13 +12,15 @@ namespace TrainigSectorDataEntry.ViewModel
         public int TrainigSectorId { get; set; }
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان الخبر باللغة العربية")]
-        [RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
+        //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
         public string TitleAr { get; set; } = null!;
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان الخبر باللغة الانجليزية")]
-        [RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
+        //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
         public string TitleEn { get; set; } = null!;
+        public string? DescriptionAr { get; set; }
 
+        public string? DescriptionEn { get; set; }
         [ValidateNever]
         public string VedioPath { get; set; } = null!;
         public string? ImagePath { get; set; } = null!;

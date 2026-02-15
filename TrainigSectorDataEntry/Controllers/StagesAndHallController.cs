@@ -79,10 +79,10 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create(StagesAndHallVM model)
         {
             // Validate that an image is uploaded
-            if (model.UploadedImages == null || model.UploadedImages.Any())
-            {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-            }
+            //if (model.UploadedImages == null || model.UploadedImages.Any())
+            //{
+            //    ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
+            //}
 
             if (!ModelState.IsValid)
             {
@@ -159,12 +159,12 @@ namespace TrainigSectorDataEntry.Controllers
             var entity = await _StagesAndHallService.GetByIdAsync(model.Id);
             if (entity == null) return NotFound();
 
-            // If no new image uploaded AND no existing image, throw validation error
-            if (model.UploadedImages == null && string.IsNullOrEmpty(entity.ImagePath))
-            {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                return View(model);
-            }
+            //// If no new image uploaded AND no existing image, throw validation error
+            //if (model.UploadedImages == null && string.IsNullOrEmpty(entity.ImagePath))
+            //{
+            //    ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
+            //    return View(model);
+            //}
 
 
             entity.TitleAr = model.TitleAr;

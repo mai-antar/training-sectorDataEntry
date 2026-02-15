@@ -11,7 +11,7 @@ namespace TrainigSectorDataEntry.ViewModel
 
         [Required(ErrorMessage = ".برجاء اختيار اسم الجهة")]
 
-        public int TrainigSectorId { get; set; }
+        public int EducationalFacilitiesId { get; set; }
 
 
         [Required(ErrorMessage = ".برجاء اختيار  العنوان")]
@@ -42,6 +42,7 @@ namespace TrainigSectorDataEntry.ViewModel
 
         public DateOnly? UserDeletionDate { get; set; }
         [ValidateNever]
-        public virtual TrainingSector TrainigSector { get; set; } = null!;
+       
+        public virtual EducationalFacility EducationalFacilities { get; set; } = null!;
     }
 }

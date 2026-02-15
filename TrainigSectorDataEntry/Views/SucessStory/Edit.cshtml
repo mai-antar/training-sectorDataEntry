@@ -22,6 +22,7 @@
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
+    
     <div class="row">
         <div class="col-md-6">  <div class="form-group">
         <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
@@ -30,55 +31,83 @@
         </select>
         <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
     </div></div>
-        <div class="col-md-6">  <div class="form-group">
-        <label asp-for="TitleAr" class="control-label">عنوان قصة النجاح باللغة العربية</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
-    </div></div>
+       
     </div>
      <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TitleAr" class="control-label">عنوان قصة النجاح باللغة العربية</label>
+                    <input asp-for="TitleAr" class="form-control" />
+                    <span asp-validation-for="TitleAr" class="text-danger"></span>
+                </div>
+            </div>
         <div class="col-md-6"> <div class="form-group">
         <label asp-for="TitleEn" class="control-label">عنوان قصة النجاح باللغة الانجليزية</label>
         <input asp-for="TitleEn" class="form-control" />
         <span asp-validation-for="TitleEn" class="text-danger"></span>
     </div></div>
-        <div class="col-md-6">  <!-- Existing Images -->
-    <div class="form-group">
-        <label>الصورة الحالية</label>
-
-        <div>
-            @if (Model.ImagePath != null)
-            {
-
-                <div class="image-container" data-id="@Model.Id" style="display: inline-block; position: relative; margin: 5px;">
-                    <img src="/Files/@Model.ImagePath" alt="Project Image"
-                         style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
-
+       
+    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DescriptionAr" class="control-label">تفاصيل قصة النجاح باللغة العربية</label>
+                    <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionAr" class="text-danger"></span>
                 </div>
 
-            }
-            else
-            {
-                <p>لا توجد صور.</p>
-            }
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DescriptionEn" class="control-label">تفاصيل قصة النجاح باللغة الانجليزية</label>
+                    <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                </div>
+
+            </div>
         </div>
-    </div></div>
-    </div>
      <div class="row">
+            <div class="col-md-6">
+                <!-- Existing Images -->
+                <div class="form-group">
+                    <label>الصورة الحالية</label>
+
+                    <div>
+                        @if (Model.ImagePath != null)
+                        {
+
+                            <div class="image-container" data-id="@Model.Id" style="display: inline-block; position: relative; margin: 5px;">
+                                <img src="/Files/@Model.ImagePath" alt="Project Image"
+                                     style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
+
+                            </div>
+
+                        }
+                        else
+                        {
+                            <p>لا توجد صور.</p>
+                        }
+                    </div>
+                </div>
+            </div>
         <div class="col-md-6">  <!-- Upload New Images -->
     <div class="form-group">
         <label for="UploadedImages">تحديث الصورة</label>
         <input asp-for="UploadedImage" type="file" class="form-control" />
         <span asp-validation-for="UploadedImage" class="text-danger"></span>
     </div></div>
-        <div class="col-md-6"><div class="form-group">
-        <label asp-for="IsActive" class="control-label">التفعيل</label>
-        <input asp-for="IsActive" class="form-check-input" />
-        <span asp-validation-for="IsActive" class="text-danger"></span>
-    </div></div>
+        
     </div>
   
-   
+   <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="IsActive" class="control-label">التفعيل</label>
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                </div>
+            </div>
+   </div>
   
  @*    <!-- Existing Video Display -->
     <div class="form-group">

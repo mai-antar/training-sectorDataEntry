@@ -24,6 +24,18 @@
     <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
+                    <label asp-for="TrainigSectorId">الجهة</label>
+                    <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+                        <option value="">-- اختر الجهة --</option>
+                    </select>
+
+                    <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
                     <label asp-for="TitleAr">عنوان قصة النجاح باللغة العربية</label>
                     <input asp-for="TitleAr" class="form-control" />
                     <span asp-validation-for="TitleAr" class="text-danger"></span>
@@ -40,14 +52,24 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label asp-for="TrainigSectorId">الجهة</label>
-                    <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
-                        <option value="">-- اختر الجهة --</option>
-                    </select>
-
-                    <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+                    <label asp-for="DescriptionAr" class="control-label">تفاصيل قصة النجاح باللغة العربية</label>
+                    <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionAr" class="text-danger"></span>
                 </div>
+
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="DescriptionEn" class="control-label">تفاصيل قصة النجاح باللغة الانجليزية</label>
+                    <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                    <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+    
+        <div class="row">
+            
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="UploadedImage">تحميل الصورة</label>
@@ -114,6 +136,7 @@
                     <th>الجهة</th>
                     <th>التفعيل</th>
                     <th>الصورة</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

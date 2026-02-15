@@ -25,7 +25,7 @@
 <table class="table table-bordered table-striped">
     <thead class="thead-dark">
         <tr>
-            <th>اسم الجهة</th>
+            <th>اسم المنشأه</th>
             <th>العنوان</th>
             <th>التليفون</th>
             <th>الفاكس</th>
@@ -41,7 +41,7 @@
         @foreach (var contact in Model)
         {
             <tr>
-                <td>@contact.TrainigSector?.NameAr</td>
+                <td>@contact.EducationalFacilities?.NameAr</td>
                 <td>@contact.Address</td>
                 <td>@contact.Telephone</td>
                 <td>@contact.Fax</td>

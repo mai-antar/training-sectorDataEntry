@@ -30,14 +30,15 @@
 
 
 <table class="table table-bordered">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>المنشأه التعليمية</th>
             <th>نوع القسم</th>
             <th>العنوان</th>
-            <th>الوصف</th>
+            @* <th>الوصف</th> *@
             <th>الصورة</th>
             <th>الحالة</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -47,7 +48,7 @@
                 <td>@ViewBag.educationalFacilitiesName</td>
                 <td>@ViewBag.departmentName</td>
                 <td>@item.TitleAr</td>
-                <td>@item.DescriptionAr</td>
+                @* <td>@item.DescriptionAr</td> *@
                 <td>
                     <img src="/Files/@item.ImagePath"
                          style="width:60px;height:60px;object-fit:cover" />
