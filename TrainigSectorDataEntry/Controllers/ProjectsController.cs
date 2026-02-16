@@ -15,6 +15,8 @@ namespace TrainigSectorDataEntry.Controllers
     {
         private readonly IGenericService<Project> _projectService;
         private readonly IGenericService<ProjectImage> _projectImagesService;
+        private readonly IGenericService<EntityImage> _entityImageService;
+
         private readonly IFileStorageService _fileStorageService;
         private readonly IGenericService<EducationalFacility> _educationalFacilityService;
         private readonly IMapper _mapper;
@@ -32,46 +34,88 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Index()
         {
             var ProjectsList = await _projectService.GetAllAsync();
-            var projectImagesList = await _projectImagesService.GetAllAsync();
+            //var projectImagesList = await _projectImagesService.GetAllAsync();
+
+            var projectImagesList = await _entityImageService.FindAsync(
+                x => x.EntityType == "Project" && x.IsDeleted == false);
+
+            var viewModelList = _mapper.Map<List<ProjectVM>>(ProjectsList);
 
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
 
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
-            foreach (var item in ProjectsList)
+            foreach (var item in viewModelList)
             {
-                if (projectImagesList.Where(a => a.ProjectId == item.Id).ToList().Count > 0)
+                if (projectImagesList.Where(a => a.EntityId == item.Id).ToList().Count > 0)
                 {
 
-                    item.ProjectImages = projectImagesList.Where(a => a.ProjectId == item.Id).ToList();
+                    item.Images = projectImagesList.Where(a => a.EntityId == item.Id).ToList();
                 }
             }
-            var viewModelList = _mapper.Map<List<ProjectVM>>(ProjectsList);
+            
 
             return View(viewModelList);
         }
 
+        //public async Task<IActionResult> Create()
+        //{
+        //    var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+        //    ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+
+        //    var existingProjects = await _projectService.GetAllAsync();
+        //    var existingProjectVM = _mapper.Map<List<ProjectVM>>(existingProjects);
+
+        //    var projectImagesList = await _projectImagesService.GetAllAsync();
+        //    foreach (var item in existingProjectVM)
+        //    {
+        //        if (projectImagesList.Where(a => a.ProjectId == item.Id).ToList().Count > 0)
+        //        {
+
+        //            item.ProjectImages = projectImagesList.Where(a => a.ProjectId == item.Id).ToList();
+        //        }
+        //    }
+        //    if (TempData["educationalFacility"] != null )
+        //    {
+        //        ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["educationalFacility"]);
+        //    }
+   
+        //    ViewBag.existingProjects = existingProjectVM;
+        //    return View();
+        //}
         public async Task<IActionResult> Create()
         {
+            // Dropdown
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+            ViewBag.educationalFacilityList =
+                new SelectList(educationalFacility, "Id", "NameAr");
 
+            // Existing projects
             var existingProjects = await _projectService.GetAllAsync();
             var existingProjectVM = _mapper.Map<List<ProjectVM>>(existingProjects);
 
-            var projectImagesList = await _projectImagesService.GetAllAsync();
-            foreach (var item in existingProjectVM)
-            {
-                if (projectImagesList.Where(a => a.ProjectId == item.Id).ToList().Count > 0)
-                {
+            //  Load ONLY project images 
+            var projectImages = await _entityImageService.FindAsync(
+                x => x.EntityType == "Project" && x.IsDeleted==false
+            );
 
-                    item.ProjectImages = projectImagesList.Where(a => a.ProjectId == item.Id).ToList();
-                }
-            }
-            if (TempData["educationalFacility"] != null )
+            //  Attach images to each project
+            foreach (var project in existingProjectVM)
             {
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["educationalFacility"]);
+                project.Images = projectImages
+                    .Where(x => x.EntityId == project.Id)
+                    .ToList();
             }
-   
+
+            // Preserve selected facility
+            if (TempData["educationalFacility"] != null)
+            {
+                ViewBag.educationalFacilityList = new SelectList(
+                    educationalFacility,
+                    "Id",
+                    "NameAr",
+                    TempData["educationalFacility"]);
+            }
+
             ViewBag.existingProjects = existingProjectVM;
             return View();
         }
@@ -103,6 +147,7 @@ namespace TrainigSectorDataEntry.Controllers
       
             if (model.UploadedImages != null && model.UploadedImages.Any())
             {
+               
 
 
                 foreach (var file in model.UploadedImages)
@@ -111,9 +156,10 @@ namespace TrainigSectorDataEntry.Controllers
 
                     if (relativePath != null)
                     {
-                        await _projectImagesService.AddAsync(new ProjectImage
+                        await _entityImageService.AddAsync(new EntityImage
                         {
-                            ProjectId = entity.Id,
+                            EntityType = "Project",
+                            EntityId = entity.Id,
                             ImagePath = relativePath,
                             IsActive = true,
                             IsDeleted = false,
@@ -135,11 +181,17 @@ namespace TrainigSectorDataEntry.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            //var Project = await _projectService.GetByIdAsync(id);
-            var Project = await _projectService.GetByIdAsync(id, n => ((Project)n).ProjectImages);
-            if (Project == null) return NotFound();
+            var Project = await _projectService.GetByIdAsync(id);
 
             var model = _mapper.Map<ProjectVM>(Project);
+
+            var projectImages = await _entityImageService.FindAsync(x => x.EntityType == "Project" && x.EntityId == id && x.IsDeleted == false);
+
+            model.Images = projectImages;
+            //var Project = await _projectService.GetByIdAsync(id, n => ((Project)n).ProjectImages);
+            //if (Project == null) return NotFound();
+
+         
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
             return View(model);
@@ -173,28 +225,17 @@ namespace TrainigSectorDataEntry.Controllers
 
             await _projectService.UpdateAsync(entity);
 
-            if (model.DeletedImageIds != null && model.DeletedImageIds.Any())
-            {
-                foreach (var id in model.DeletedImageIds.Where(x => x.HasValue).Select(x => x.Value))
-                {
-                    var image = await _projectImagesService.GetByIdAsync(id);
-                    if (image != null)
-                    {
-                        image.IsDeleted = true;
-                        await _projectImagesService.UpdateAsync(image);
-                    }
-                }
-            }
+    
 
             if (model.DeletedImageIds != null && model.DeletedImageIds.Any())
             {
                 foreach (var id in model.DeletedImageIds.Where(x => x.HasValue).Select(x => x.Value))
                 {
-                    var image = await _projectImagesService.GetByIdAsync(id);
+                    var image = await _entityImageService.GetByIdAsync(id);
                     if (image != null)
                     {
                         await _fileStorageService.DeleteFileAsync(image.ImagePath);
-                        await _projectImagesService.DeleteAsync(id);
+                        await _entityImageService.DeleteAsync(id);
                       
                     }
                 }
@@ -205,13 +246,16 @@ namespace TrainigSectorDataEntry.Controllers
                 foreach (var image in model.UploadedImages)
                 {
 
+
+
                     var relativePath = await _fileStorageService.UploadImageAsync(image, "ProjectImage");
 
                     if (relativePath != null)
                     {
-                        await _projectImagesService.AddAsync(new ProjectImage
+                        await _entityImageService.AddAsync(new EntityImage
                         {
-                            ProjectId = entity.Id,
+                            EntityType = "Project",
+                            EntityId = entity.Id,
                             ImagePath = relativePath,
                             IsActive = true,
                             IsDeleted = false,
@@ -226,67 +270,21 @@ namespace TrainigSectorDataEntry.Controllers
             TempData["Success"] = "تم التعديل بنجاح";
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> AddImages(int id)
-        {
+        //public async Task<IActionResult> AddImages(int id)
+        //{
          
-            var Project = await _projectService.GetByIdAsync(id);
-            if (Project == null)
-                return NotFound();
+        //    var Project = await _projectService.GetByIdAsync(id);
+        //    if (Project == null)
+        //        return NotFound();
 
-            var vm = new ProjectImageVM
-            {
-                ProjectsId = id,
-                TitleAr = Project.TitleAr
-            };
+        //    var vm = new ProjectImageVM
+        //    {
+        //        ProjectsId = id,
+        //        TitleAr = Project.TitleAr
+        //    };
 
-            return View(vm);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddImages(ProjectImageVM model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var project = await _projectService.GetByIdAsync(model.ProjectsId);
-            if (project == null)
-                return NotFound();
-
-            if (model.UploadedImages != null && model.UploadedImages.Any())
-            {
-                foreach (var image in model.UploadedImages)
-                {
-                    if (image != null && image.Length > 0)
-                    {
-                        // رفع الصورة باستخدام FileStorageService
-                        var relativePath = await _fileStorageService
-                            .UploadImageAsync(image, "ProjectImage");
-
-                        if (string.IsNullOrEmpty(relativePath))
-                        {
-                            ModelState.AddModelError("UploadedImages", "حدث خطأ أثناء رفع إحدى الصور.");
-                            return View(model);
-                        }
-
-                        var projectImage = new ProjectImage
-                        {
-                            ProjectId = model.ProjectsId,
-                            ImagePath = relativePath,
-                            IsActive = true,
-                            IsDeleted = false,
-                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                        };
-
-                        await _projectImagesService.AddAsync(projectImage);
-                    }
-                }
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
+        //    return View(vm);
+        //}
 
 
         //[HttpPost]
@@ -296,55 +294,58 @@ namespace TrainigSectorDataEntry.Controllers
         //    if (!ModelState.IsValid)
         //        return View(model);
 
-        //    var Project = await _projectService.GetByIdAsync(model.ProjectsId);
-        //    if (Project == null)
+        //    var project = await _projectService.GetByIdAsync(model.ProjectsId);
+        //    if (project == null)
         //        return NotFound();
 
-
-        //    string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/ProjectImage");
-        //    if (!Directory.Exists(uploadDir))
-        //        Directory.CreateDirectory(uploadDir);
-
-        //    foreach (var image in model.UploadedImages)
+        //    if (model.UploadedImages != null && model.UploadedImages.Any())
         //    {
-        //        if (image.Length > 0 && image.ContentType.StartsWith("image/"))
+        //        foreach (var image in model.UploadedImages)
         //        {
-        //            var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-        //            var filePath = Path.Combine(uploadDir, fileName);
-
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
+        //            if (image != null && image.Length > 0)
         //            {
-        //                await image.CopyToAsync(stream);
+        //                // رفع الصورة باستخدام FileStorageService
+        //                var relativePath = await _fileStorageService
+        //                    .UploadImageAsync(image, "ProjectImage");
+
+        //                if (string.IsNullOrEmpty(relativePath))
+        //                {
+        //                    ModelState.AddModelError("UploadedImages", "حدث خطأ أثناء رفع إحدى الصور.");
+        //                    return View(model);
+        //                }
+
+        //                var projectImage = new ProjectImage
+        //                {
+        //                    ProjectId = model.ProjectsId,
+        //                    ImagePath = relativePath,
+        //                    IsActive = true,
+        //                    IsDeleted = false,
+        //                    UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
+        //                };
+
+        //                await _projectImagesService.AddAsync(projectImage);
         //            }
-
-        //            var ProjectImage = new ProjectImage
-        //            {
-        //                ProjectId = model.Id,
-        //                ImagePath = "/uploads/ProjectImage/" + fileName,
-        //                IsActive = true,
-        //                IsDeleted = false,
-        //                UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-        //            };
-
-        //            await _projectImagesService.AddAsync(ProjectImage);
         //        }
         //    }
 
         //    return RedirectToAction(nameof(Index));
         //}
+
+
+
         [HttpGet]
         public async Task<IActionResult> DeleteImage(int id)
         {
     
 
-            var image = await _projectImagesService.GetByIdAsync(id);
+            var image = await _entityImageService.GetByIdAsync(id);
             if (image == null) return NotFound();
 
 
             // Delete physical file
             await _fileStorageService.DeleteFileAsync(image.ImagePath);
-            await _projectImagesService.DeleteAsync(id);
-            return RedirectToAction("Edit", new { id = image.ProjectId });
+            await _entityImageService.DeleteAsync(id);
+            return RedirectToAction("Edit", new { id = image.EntityId });
         }
         public async Task<IActionResult> Delete(int id)
         {
@@ -361,12 +362,18 @@ namespace TrainigSectorDataEntry.Controllers
         {
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
 
-            var projects = await _projectService.GetAllAsync(false, x => x.EducationalFacilities,
-                  x => x.ProjectImages);
+
+            var projects = await _projectService.GetAllAsync();
 
             projects = projects.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
-
             var vmList = _mapper.Map<List<ProjectVM>>(projects);
+
+            var projectImages = await _entityImageService.FindAsync(x => x.EntityType == "Project" && x.IsDeleted == false);
+
+            foreach (var vm in vmList)
+            {
+                vm.Images = projectImages.Where(x => x.EntityId == vm.Id).ToList();
+            }
 
 
             return PartialView("_ProjectsPartial", vmList);

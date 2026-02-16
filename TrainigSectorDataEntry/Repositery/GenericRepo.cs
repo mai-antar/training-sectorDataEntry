@@ -126,7 +126,10 @@ namespace TrainigSectorDataEntry.Repositery
 
             return await query.ToListAsync();
         }
-
+        public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
 
     }
 }

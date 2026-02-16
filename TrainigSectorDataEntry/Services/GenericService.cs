@@ -46,7 +46,10 @@ namespace TrainigSectorDataEntry.Services
         {
             return await _repository.GetAllAsync(includeDeleted, includes);
         }
-
+        public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.FindAsync( predicate);
+        }
     }
 }
 

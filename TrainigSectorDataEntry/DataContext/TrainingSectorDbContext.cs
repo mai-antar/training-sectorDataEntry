@@ -20,6 +20,8 @@ public partial class TrainingSectorDbContext : DbContext
 
     public virtual DbSet<CommunityAndInternationalEngagement> CommunityAndInternationalEngagements { get; set; }
 
+    public virtual DbSet<CommunityAndInternationalEngagementsImage> CommunityAndInternationalEngagementsImages { get; set; }
+
     public virtual DbSet<ComplaintsAndSuggestion> ComplaintsAndSuggestions { get; set; }
 
     public virtual DbSet<ContactU> ContactUs { get; set; }
@@ -33,6 +35,8 @@ public partial class TrainingSectorDbContext : DbContext
     public virtual DbSet<EducationalFacility> EducationalFacilities { get; set; }
 
     public virtual DbSet<EducationalLevel> EducationalLevels { get; set; }
+
+    public virtual DbSet<EntityImage> EntityImages { get; set; }
 
     public virtual DbSet<ExamSchedual> ExamScheduals { get; set; }
 
@@ -116,6 +120,17 @@ public partial class TrainingSectorDbContext : DbContext
             entity.Property(e => e.TitleAr).HasMaxLength(500);
             entity.Property(e => e.TitleEn).HasMaxLength(500);
             entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
+        });
+
+        modelBuilder.Entity<CommunityAndInternationalEngagementsImage>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.CommunityAndInternationalEngagements).WithMany(p => p.InverseCommunityAndInternationalEngagements)
+                .HasForeignKey(d => d.CommunityAndInternationalEngagementsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CommunityAndInternationalEngagementsImages_CommunityAndInternationalEngagementsImages");
         });
 
         modelBuilder.Entity<ComplaintsAndSuggestion>(entity =>
@@ -202,6 +217,14 @@ public partial class TrainingSectorDbContext : DbContext
                 .HasForeignKey(d => d.EducationalFacilitiesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EducationalLevel_EducationalFacilities");
+        });
+
+        modelBuilder.Entity<EntityImage>(entity =>
+        {
+            entity.Property(e => e.EntityType).HasMaxLength(50);
+            entity.Property(e => e.TitleAr).HasMaxLength(500);
+            entity.Property(e => e.TitleEn).HasMaxLength(500);
+            entity.Property(e => e.UserCreationDate).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<ExamSchedual>(entity =>

@@ -16,6 +16,7 @@ namespace TrainigSectorDataEntry.Interface
         Task<IEnumerable<T>> GetDropdownListAsync();
          Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<T>> GetAllAsync(bool includeDeleted = false,params Expression<Func<T, object>>[] includes);
+        Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
 
 
     }

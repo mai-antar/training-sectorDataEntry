@@ -50,7 +50,7 @@ namespace TrainigSectorDataEntry.ViewModel
         public bool IsActive { get; set; }
 
         public virtual EducationalFacility? EducationalFacilities { get; set; } = null!;
-
+        public List<EntityImage>? Images { get; set; }
         public virtual ICollection<ProjectImage> ProjectImages { get; set; } = new List<ProjectImage>();
         public List<IFormFile>? UploadedImages { get; set; }
         public List<int?> DeletedImageIds { get; set; } = new List<int?>();
