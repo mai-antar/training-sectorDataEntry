@@ -16,7 +16,7 @@ public class MappingProfile : Profile
         CreateMap<DepartmentType, DepartmentTypeVM>().ReverseMap();
         CreateMap<News, NewsVM>().ReverseMap();
         CreateMap<NewsImage, NewsImageVM>().ReverseMap();
-        CreateMap<Service, ServiceVM>().ReverseMap();
+        CreateMap<CommunityAndInternationalEngagement, CommunityAndInternationalEngagementVM>().ReverseMap();
         CreateMap<HistoryBreif, HistoryBreifVM>().ReverseMap();
         CreateMap<Project, ProjectVM>().ReverseMap();
         CreateMap<QualityCertificate, QualityCertificateVM>().ReverseMap();

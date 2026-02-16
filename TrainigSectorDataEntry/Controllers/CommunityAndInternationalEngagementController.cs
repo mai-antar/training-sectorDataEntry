@@ -10,17 +10,17 @@ using TrainigSectorDataEntry.ViewModel;
 
 namespace TrainigSectorDataEntry.Controllers
 {
-    public class ServiceController : Controller
+    public class CommunityAndInternationalEngagementController : Controller
     {
-        private readonly IGenericService<Service> _Services;
+        private readonly IGenericService<CommunityAndInternationalEngagement> _CommunityAndInternationalEngagement;
   
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         private readonly IFileStorageService _fileStorageService;
-        public ServiceController(IGenericService<Service> Services,
+        public CommunityAndInternationalEngagementController(IGenericService<CommunityAndInternationalEngagement> CommunityAndInternationalEngagement,
              IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
         {
-            _Services = Services;
+            _CommunityAndInternationalEngagement = CommunityAndInternationalEngagement;
 
             _mapper = mapper;
             _logger = logger;
@@ -28,10 +28,10 @@ namespace TrainigSectorDataEntry.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var ServiceList = await _Services.GetAllAsync();
+            var CommunityAndInternationalEngagementList = await _CommunityAndInternationalEngagement.GetAllAsync();
         
 
-            var viewModelList = _mapper.Map<List<ServiceVM>>(ServiceList);
+            var viewModelList = _mapper.Map<List<CommunityAndInternationalEngagementVM>>(CommunityAndInternationalEngagementList);
 
             return View(viewModelList);
         }
@@ -40,18 +40,18 @@ namespace TrainigSectorDataEntry.Controllers
         {
         
 
-            var existingService = await _Services.GetAllAsync();
-            var existingServiceVM = _mapper.Map<List<ServiceVM>>(existingService);
+            var existingCommunityAndInternationalEngagement = await _CommunityAndInternationalEngagement.GetAllAsync();
+            var existingCommunityAndInternationalEngagementVM = _mapper.Map<List<CommunityAndInternationalEngagementVM>>(existingCommunityAndInternationalEngagement);
 
 
 
-            ViewBag.existingService = existingServiceVM;
+            ViewBag.existingCommunityAndInternationalEngagement = existingCommunityAndInternationalEngagementVM;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ServiceVM model)
+        public async Task<IActionResult> Create(CommunityAndInternationalEngagementVM model)
         {
             // Validate that an image is uploaded
             if (model.UploadedImage == null || model.UploadedImage.Length == 0)
@@ -62,11 +62,11 @@ namespace TrainigSectorDataEntry.Controllers
             if (!ModelState.IsValid)
             {
          
-                var existingService = await _Services.GetAllAsync();
-                var existingServiceVM = _mapper.Map<List<ServiceVM>>(existingService);
+                var existingCommunityAndInternationalEngagement = await _CommunityAndInternationalEngagement.GetAllAsync();
+                var existingCommunityAndInternationalEngagementVM = _mapper.Map<List<CommunityAndInternationalEngagementVM>>(existingCommunityAndInternationalEngagement);
 
                
-                ViewBag.existingService = existingServiceVM;
+                ViewBag.existingCommunityAndInternationalEngagement = existingCommunityAndInternationalEngagementVM;
 
                 return View(model);
             }
@@ -79,38 +79,42 @@ namespace TrainigSectorDataEntry.Controllers
                 if (relativePath != null)
                 {
                     // Map and save the entity
-                    var entity = _mapper.Map<Service>(model);
+                    var entity = _mapper.Map<CommunityAndInternationalEngagement>(model);
                     entity.IsDeleted = false;
                     entity.IsActive = true;
                     entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
                     entity.ImagePath = relativePath;
 
-                    await _Services.AddAsync(entity);
+                    await _CommunityAndInternationalEngagement.AddAsync(entity);
                 }
          
             }
-            TempData["Success"] = "تمت الاضافة بنجاح";
 
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تمت الاضافة بنجاح";
+        
+            return RedirectToAction(nameof(Create));
+            //TempData["Success"] = "تمت الاضافة بنجاح";
+
+            //return RedirectToAction(nameof(Index));
         }
 
 
         public async Task<IActionResult> Edit(int id)
         {
-            var Service = await _Services.GetByIdAsync(id);
-            if (Service == null) return NotFound();
+            var CommunityAndInternationalEngagement = await _CommunityAndInternationalEngagement.GetByIdAsync(id);
+            if (CommunityAndInternationalEngagement == null) return NotFound();
 
-            var model = _mapper.Map<ServiceVM>(Service);
+            var model = _mapper.Map<CommunityAndInternationalEngagementVM>(CommunityAndInternationalEngagement);
      
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ServiceVM model)
+        public async Task<IActionResult> Edit(CommunityAndInternationalEngagementVM model)
         {
         
-            var entity = await _Services.GetByIdAsync(model.Id);
+            var entity = await _CommunityAndInternationalEngagement.GetByIdAsync(model.Id);
             if (entity == null) return NotFound();
 
 
@@ -158,7 +162,7 @@ namespace TrainigSectorDataEntry.Controllers
                 return View(model);
             }
 
-            await _Services.UpdateAsync(entity);
+            await _CommunityAndInternationalEngagement.UpdateAsync(entity);
 
             TempData["Success"] = "تم التعديل بنجاح";
 
@@ -167,20 +171,22 @@ namespace TrainigSectorDataEntry.Controllers
 
         public async Task<IActionResult> Delete(int id)
         { 
-            var Service = await _Services.GetByIdAsync(id);
-            if (Service == null) return NotFound();
+            var CommunityAndInternationalEngagement = await _CommunityAndInternationalEngagement.GetByIdAsync(id);
+            if (CommunityAndInternationalEngagement == null) return NotFound();
 
-            if (Service.ImagePath != null)
+            if (CommunityAndInternationalEngagement.ImagePath != null)
             {
-                await _fileStorageService.DeleteFileAsync(Service.ImagePath);
+                await _fileStorageService.DeleteFileAsync(CommunityAndInternationalEngagement.ImagePath);
             }
 
-            await _Services.DeleteAsync(id);
+            await _CommunityAndInternationalEngagement.DeleteAsync(id);
 
             TempData["Success"] = "تم الحذف بنجاح";
 
             return RedirectToAction(nameof(Index));
         }
+
+     
 
     }
 }

@@ -70,7 +70,21 @@ namespace TrainigSectorDataEntry.Controllers
             ViewBag.ExistingStudentTablesAttachment = existingStudentTablesAttachmentVM;
 
             var model = new StudentTablesAttachmentVM();
+
+
+            if (TempData["StudentTablesAttachment_EducationalFacilitiesId"] != null)
+            {
+                model.EducationalFacilitiesId = (int)TempData["StudentTablesAttachment_EducationalFacilitiesId"];
+                model.EducationalLevelId = (int)TempData["StudentTablesAttachment_EducationalLevelId"];
+                model.TermsId = (int)TempData["StudentTablesAttachment_TermsId"];
+                model.TableTypeId = (int)TempData["StudentTablesAttachment_TableTypeId"];
+                model.DepartmentsandbranchesId = (int)TempData["StudentTablesAttachment_DepartmentsandbranchesId"];
+                model.SpecializationId =(int?)TempData["StudentTablesAttachment_SpecializationId"];
+            }
+
             await RefillViewBags(model);
+
+           
 
             return View(model);
         }
@@ -133,8 +147,17 @@ namespace TrainigSectorDataEntry.Controllers
             }
 
 
-            TempData["Success"] = "تمت إضافة الملف بنجاح";
-            return RedirectToAction(nameof(Index));
+            TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["StudentTablesAttachment_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            TempData["StudentTablesAttachment_EducationalLevelId"] = model.EducationalLevelId;
+            TempData["StudentTablesAttachment_TermsId"] = model.TermsId;
+            TempData["StudentTablesAttachment_TableTypeId"] = model.TableTypeId;
+            TempData["StudentTablesAttachment_DepartmentsandbranchesId"] = model.DepartmentsandbranchesId;
+            TempData["StudentTablesAttachment_SpecializationId"] = model.SpecializationId;
+            return RedirectToAction(nameof(Create));
+
+            //TempData["Success"] = "تمت إضافة الملف بنجاح";
+            //return RedirectToAction(nameof(Index));
         }
 
 
@@ -163,9 +186,15 @@ namespace TrainigSectorDataEntry.Controllers
             var specializationId = entity.SpecializationId;
 
             model.EducationalFacilitiesId = facilityId ?? 0;
+            model.EducationalLevelId = levelId ?? 0;
+            model.DepartmentsandbranchesId = departmentId ?? 0;
+            model.SpecializationId = specializationId ?? 0;
             await RefillViewBags(model);
 
-     
+            ViewBag.CurrentDepartmentId = model.DepartmentsandbranchesId;
+            ViewBag.CurrentSpecializationId = model.SpecializationId;
+
+
 
             return View(model);
         }

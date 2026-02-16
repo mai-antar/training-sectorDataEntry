@@ -91,7 +91,7 @@
             </div>
             <div class="col-md-6">
                 <!-- Specialization  -->
-                <div class="form-group" id="specialization-group">
+                <div class="form-group" id="specializationContainer">
                     <label asp-for="SpecializationId" class="control-label"> التخصص</label>
                     <select asp-for="SpecializationId" id="SpecializationId" class="form-control">
                         <option value="">-- اختر التخصص --</option>
@@ -180,6 +180,116 @@
     <script>
         $(document).ready(function () {
 
+            const $facility = $('#EducationalFacilitiesId');
+            const $level = $('#EducationalLevelId');
+            const $department = $('#DepartmentsandbranchesId');
+            const $specialization = $('#SpecializationId');
+            const $specializationContainer = $('#specializationContainer');
+
+            const currentDepartmentId = $('#CurrentDepartmentId').val();
+            const currentSpecializationId = $('#CurrentSpecializationId').val();
+            const currentLevelId = $('#CurrentLevelId').val();
+
+
+            function resetSpecialization() {
+                $specialization.html('<option value="">-- اختر التخصص --</option>');
+                $specialization.prop('required', false);
+                $specializationContainer.hide();
+            }
+
+            // ===============================
+            // Facility → Educational Levels + Departments
+            // ===============================
+            $facility.on('change', function () {
+
+                const facilityId = $(this).val();
+
+                $level.html('<option value="">-- اختر سنة دراسية --</option>');
+                $department.html('<option value="">-- اختر القسم --</option>');
+                resetSpecialization();
+
+                if (!facilityId) return;
+
+                // ===== Load Educational Levels =====
+                $.get('/StudentTablesAttachment/GetLevelsByFacilityId',
+                    { facilityId },
+                    function (data) {
+                        $.each(data, function (_, item) {
+                            $level.append(
+                                `<option value="${item.id}">${item.nameAr}</option>`
+                            );
+                        });
+                         if (currentLevelId) {
+                         $level.val(currentLevelId);
+        }
+                    });
+
+                // ===== Load Departments =====
+                $.get('/StudentTablesAttachment/GetDepartmentsByFacilityId',
+                    { facilityId },
+                    function (data) {
+                        $.each(data, function (_, item) {
+                            $department.append(
+                                `<option value="${item.id}">${item.nameAr}</option>`
+                            );
+                        });
+
+                        // Restore department (Edit / TempData)
+                        if (currentDepartmentId) {
+                            $department.val(currentDepartmentId).trigger('change');
+                        }
+                    });
+            });
+
+            // ===============================
+            // Department → Specialization
+            // ===============================
+            $department.on('change', function () {
+
+                const departmentId = $(this).val();
+                resetSpecialization();
+
+                if (!departmentId) return;
+
+                $.get('/StudentTablesAttachment/GetSpecializationsByDepartmentId',
+                    { departmentId },
+                    function (data) {
+
+                      if (!data || data.length === 0) {
+                           resetSpecialization();
+                          return;
+                      }
+
+
+                        $.each(data, function (_, item) {
+                            $specialization.append(
+                                `<option value="${item.id}">${item.nameAr}</option>`
+                            );
+                        });
+
+                        $specialization.prop('required', true);
+                        $specializationContainer.show();
+
+
+
+                        // Restore specialization
+                        if (currentSpecializationId) {
+                            $specialization.val(currentSpecializationId);
+                        }
+                    });
+            });
+
+            // ===============================
+            // Auto-load (Edit / Validation error)
+            // ===============================
+            if ($facility.val()) {
+                $facility.trigger('change');
+            }
+        });
+    </script>
+@*     <script>
+        $(document).ready(function () {
+
              var currentFacilityId = $('#EducationalFacilitiesId').val();
             var currentLevelId = $('#CurrentLevelId').val();
             var currentDepartmentId = $('#CurrentDepartmentId').val();
@@ -264,93 +374,7 @@
 
 
          });
-    </script>
- @*    <script>
-
-          $(document).ready(function () {
-            var currentFacilityId = $('#EducationalFacilitiesId').val();
-            var currentLevelId = $('#CurrentLevelId').val();
-            var currentDepartmentId = $('#CurrentDepartmentId').val();
-            var currentSpecializationId = $('#CurrentSpecializationId').val();
-
-            if (!currentFacilityId) return;
-
-            // Load Levels
-            $.get('/StudentTablesAttachment/GetLevelsByFacilityId',
-                { facilityId: currentFacilityId },
-                function (levels) {
-                    $('#EducationalLevelId')
-                        .empty()
-                        .append('<option value="">-- اختر سنة دراسية --</option>');
-
-                    $.each(levels, function (i, item) {
-                        $('#EducationalLevelId')
-                            .append(`<option value="${item.id}">${item.nameAr}</option>`);
-                    });
-
-                    $('#EducationalLevelId').val(String(currentLevelId).trim());
-                });
-
-            // Load Departments
-            $.get('/StudentTablesAttachment/GetDepartmentsByFacilityId',
-                { facilityId: currentFacilityId },
-                function (departments) {
-                    $('#DepartmentsandbranchesId')
-                        .empty()
-                        .append('<option value="">-- اختر القسم --</option>');
-
-                    $.each(departments, function (i, item) {
-                        $('#DepartmentsandbranchesId')
-                            .append(`<option value="${item.id}">${item.nameAr}</option>`);
-                    });
-
-                    $('#DepartmentsandbranchesId').val(String(currentDepartmentId).trim());
-
-                    // Always load Specializations if department is selected
-                    if (currentDepartmentId) {
-                        $.get('/StudentTablesAttachment/GetSpecializationsByDepartmentId',
-                            { departmentId: currentDepartmentId },
-                            function (specializations) {
-                                var $specializationGroup = $('#specialization-group');
-                                var $specializationSelect = $('#SpecializationId');
-                                $specializationSelect
-                                    .empty()
-                                    .append('<option value="">-- اختر التخصص --</option>');
-
-                                if (specializations && specializations.length > 0) {
-                                    $.each(specializations, function (i, item) {
-                                        $specializationSelect
-                                            .append(`<option value="${item.id}">${item.nameAr}</option>`);
-                                    });
-                                    $specializationGroup.show();
-                                    $specializationSelect.prop('required', true);
-                                    $specializationSelect.attr('data-val', 'true');
-                                    $specializationSelect.attr('data-val-required', 'حقل التخصص مطلوب');
-                                    $specializationSelect.val(String(currentSpecializationId).trim());
-                                } else {
-                                    $specializationGroup.hide();
-                                    $specializationSelect.prop('required', false);
-                                    $specializationSelect.removeAttr('data-val');
-                                    $specializationSelect.removeAttr('data-val-required');
-                                    $specializationSelect.val('');
-                                }
-
-                                // Refresh validation
-                                if (typeof $.validator !== 'undefined') {
-                                    $.validator.unobtrusive.parse($specializationGroup);
-                                }
-                            });
-                    } else {
-                        $('#specialization-group').hide();
-                        $('#SpecializationId').prop('required', false).removeAttr('data-val').removeAttr('data-val-required').val('');
-                        if (typeof $.validator !== 'undefined') {
-                            $.validator.unobtrusive.parse('#specialization-group');
-                        }
-                    }
-                });
-        });
-
-
     </script> *@
+
 
 }

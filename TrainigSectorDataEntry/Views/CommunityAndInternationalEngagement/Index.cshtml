@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.ServiceVM>
+﻿@model IEnumerable<TrainigSectorDataEntry.ViewModel.CommunityAndInternationalEngagementVM>
 
 @{
     ViewData["Title"] = "المشاركات المجتمعية و الدولية";
@@ -35,14 +35,14 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var service in Model)
+            @foreach (var CommunityAndInternationalEngagement in Model)
         {
             <tr>
-                <td>@service.TitleAr</td>
-                <td>@service.TitleEn</td>
+                    <td>@CommunityAndInternationalEngagement.TitleAr</td>
+                    <td>@CommunityAndInternationalEngagement.TitleEn</td>
          
                     <td>
-                        @if (service.Type == true)
+                        @if (CommunityAndInternationalEngagement.Type == true)
                         {
                             <span class="badge bg-success">محلية</span>
                         }
@@ -52,7 +52,7 @@
                         }
                     </td>
                 <td>
-                    @if (service.IsActive)
+                        @if (CommunityAndInternationalEngagement.IsActive)
                     {
                         <span class="badge bg-success">مفعل</span>
                     }
@@ -63,16 +63,16 @@
                 </td>
                 <td>
 
-                    <img src="/Files/@service.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+                        <img src="/Files/@CommunityAndInternationalEngagement.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
                 </td>
                 <td>
-                        <a asp-action="Edit" asp-route-id="@service.Id" class="buttonedit right-4tens ">
+                        <a asp-action="Edit" asp-route-id="@CommunityAndInternationalEngagement.Id" class="buttonedit right-4tens ">
                             <span class="buttonedit__text">تعديل</span>
                             <span class="buttonedit__icon"> <i class="fas fa-edit"></i></span>
                         </a>
 
                         <a href="javascript:void(0);" class="buttonremove right-4tens "
-                           onclick="confirmDelete(@service.Id)">
+                           onclick="confirmDelete(@CommunityAndInternationalEngagement.Id)">
                             <span class="buttonremove__text"> حذف</span>
                             <span class="buttonremove__icon"> <i class="fa-solid fa-x"></i></span>
                         </a>
@@ -96,7 +96,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Navigate to Delete action
-                window.location.href = '/Service/Delete/' + id;
+                window.location.href = '/CommunityAndInternationalEngagement/Delete/' + id;
             }
         });
     }

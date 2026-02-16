@@ -1,4 +1,4 @@
-﻿@model TrainigSectorDataEntry.ViewModel.ServiceVM
+﻿@model TrainigSectorDataEntry.ViewModel.CommunityAndInternationalEngagementVM
 
 @{
     ViewData["Title"] = "المشاركات المجتمعية و الدولية";
@@ -114,7 +114,7 @@
     <div class="card-body">
             <h3>المشاركات المجتمعية و الدولية</h3>
 
-        <table class="table table-bordered table-striped" id="servicesTable">
+            <table class="table table-bordered table-striped" id="CommunityAndInternationalEngagementTable">
             <thead class="thead-dark">
                 <tr>
                         <th>العنوان باللغة العربية</th>
@@ -127,7 +127,7 @@
                 </tr>
             </thead>
             <tbody>
-                @Html.Partial("_ServicePartial", (List<TrainigSectorDataEntry.ViewModel.ServiceVM>)ViewBag.existingService)
+                    @Html.Partial("_CommunityAndInternationalEngagementPartial", (List<TrainigSectorDataEntry.ViewModel.CommunityAndInternationalEngagementVM>)ViewBag.existingCommunityAndInternationalEngagement)
 
                          </tbody>
         </table>
@@ -140,23 +140,23 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
+@*     <script>
         $(document).ready(function() {
             $('#EducationalFacilitiesId').change(function() {
                 var facilityId = $(this).val();
                 if (facilityId) {
                     $.ajax({
-                        url: '@Url.Action("GetServicesByFacility", "Service")',
+                        url: '@Url.Action("GetCommunityAndInternationalEngagementByFacility", "CommunityAndInternationalEngagement")',
                         type: 'GET',
                         data: { facilityId: facilityId },
                         success: function(data) {
-                            $('#servicesTable tbody').html(data);
+                            $('#CommunityAndInternationalEngagementTable tbody').html(data);
                         }
                     });
                 } else {
-                    $('#servicesTable tbody').html('');
+                    $('#CommunityAndInternationalEngagementTable tbody').html('');
                 }
             });
         });
-    </script>
+    </script> *@
 }

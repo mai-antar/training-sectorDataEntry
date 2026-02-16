@@ -3,7 +3,7 @@ using TrainigSectorDataEntry.Models;
 
 namespace TrainigSectorDataEntry.ViewModel
 {
-    public class ServiceVM
+    public class CommunityAndInternationalEngagementVM
     {
         public int Id { get; set; }
 

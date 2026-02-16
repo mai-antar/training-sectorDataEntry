@@ -48,6 +48,12 @@ namespace TrainigSectorDataEntry.Controllers
 
 
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+
+            if (TempData["StudentActivite_EducationalFacilitiesId"] != null)
+            {
+                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr", TempData["StudentActivite_EducationalFacilitiesId"]);
+            }
+
             ViewBag.existingStudentActivite = existingStudentActiviteVM;
             return View();
         }
@@ -98,11 +104,13 @@ namespace TrainigSectorDataEntry.Controllers
 
             }
 
-
-
             TempData["Success"] = "تمت الاضافة بنجاح";
+            TempData["StudentActivite_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+            return RedirectToAction(nameof(Create));
 
-            return RedirectToAction(nameof(Index));
+            //TempData["Success"] = "تمت الاضافة بنجاح";
+
+            //return RedirectToAction(nameof(Index));
         }
 
 
