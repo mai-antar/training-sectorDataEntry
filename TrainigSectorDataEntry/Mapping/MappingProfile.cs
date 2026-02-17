@@ -30,5 +30,6 @@ public class MappingProfile : Profile
         CreateMap<SucessStory, SucessStoryVM>().ReverseMap();
         CreateMap<TrainingCoursesType, TrainingCoursesTypeVM>().ReverseMap();
         CreateMap<TrainingCourse, TrainingCourseVM>().ReverseMap();
+        CreateMap<EntityImage, EntityImageVM>().ReverseMap();
     }
 }

@@ -1,0 +1,12 @@
+﻿
+
+@model List<TrainigSectorDataEntry.ViewModel.EntityImageVM>
+<div class="entity-images">
+    @foreach (var img in Model)
+    {
+        <div class="image-item">
+            <img src="@img.ImagePath" style="max-width:150px; max-height:150px;" />
+            <a asp-action="Delete" asp-controller="EntityImage" asp-route-id="@img.Id">Delete</a>
+        </div>
+    }
+</div>

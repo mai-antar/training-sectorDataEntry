@@ -13,6 +13,7 @@ namespace TrainigSectorDataEntry.DepandecyInjection
             services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
             services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
             services.AddScoped<IFileStorageService, FileStorageService>();
+            services.AddScoped<IEntityImageService, EntityImageService>();
 
             return services;
         }

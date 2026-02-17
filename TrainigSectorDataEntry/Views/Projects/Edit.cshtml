@@ -80,9 +80,9 @@
                 <label>الصور الحالية</label>
 
                 <div>
-                    @if (Model.ProjectImages != null && Model.ProjectImages.Any())
+                    @if (Model.Images != null && Model.Images.Any())
                     {
-                        foreach (var image in Model.ProjectImages.Where(a => a.IsDeleted == false))
+                        foreach (var image in Model.Images.Where(a => a.IsDeleted == false))
                         {
                             <div class="image-container" data-image-id="@image.Id" style="display: inline-block; position: relative; margin: 5px;">
                                 <img src="/Files/@image.ImagePath" alt="Project Image"
