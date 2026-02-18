@@ -19,14 +19,14 @@ namespace TrainigSectorDataEntry.ViewModel
         public string TitleEn { get; set; } = null!;
 
 
-        [Required(ErrorMessage = ".برجاء ادخال الخبر باللغة العربية")]
+        //[Required(ErrorMessage = ".برجاء ادخال الخبر باللغة العربية")]
         //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
-        public string ShortDescriptionAr { get; set; } = null!;
+        //public string ShortDescriptionAr { get; set; } = null!;
 
 
-        [Required(ErrorMessage = ".برجاء ادخال الخبر باللغة الانجليزية")]
+        //[Required(ErrorMessage = ".برجاء ادخال الخبر باللغة الانجليزية")]
         //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
-        public string ShortDescriptionEn { get; set; }
+        //public string ShortDescriptionEn { get; set; }
  
 
         [Required(ErrorMessage = ".برجاء ادخال تفاصيل الخبر باللغة العربية")]
@@ -55,7 +55,7 @@ namespace TrainigSectorDataEntry.ViewModel
 
         public bool IsActive { get; set; }
 
-        public virtual ICollection<NewsImage> NewsImages { get; set; } = new List<NewsImage>();
+        public virtual ICollection<EntityImage> NewsImages { get; set; } = new List<EntityImage>();
 
         public virtual TrainingSector? TrainigSector { get; set; }
         public List<IFormFile>? UploadedImages { get; set; }

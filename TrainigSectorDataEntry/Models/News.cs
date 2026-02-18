@@ -13,9 +13,9 @@ public partial class News
 
     public string TitleEn { get; set; } = null!;
 
-    public string ShortDescriptionAr { get; set; } = null!;
+    public string? ShortDescriptionAr { get; set; }
 
-    public string ShortDescriptionEn { get; set; } = null!;
+    public string? ShortDescriptionEn { get; set; }
 
     public string DescriptionAr { get; set; } = null!;
 

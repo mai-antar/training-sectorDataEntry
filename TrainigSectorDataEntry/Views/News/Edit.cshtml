@@ -11,32 +11,98 @@
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <br />
-    <div class="form-group">
-        <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
-        <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
-            <option value="">-- Select Training Sector --</option>
-        </select>
-        <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TrainigSectorId" class="control-label">اسم الجهة</label>
+                <select asp-for="TrainigSectorId" asp-items="ViewBag.TrainingSectorList" class="form-control">
+                    <option value="">-- Select Training Sector --</option>
+                </select>
+                <span asp-validation-for="TrainigSectorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Date" class="control-label">تاريخ الخبر</label>
+                <input asp-for="Date" class="form-control" type="date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+        </div>
+        
     </div>
-    <br />
 
-    <div class="form-group">
-        <label asp-for="Date" class="control-label">تاريخ الخبر</label>
-        <input asp-for="Date" class="form-control" type="date" />
-        <span asp-validation-for="Date" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
+                <input asp-for="TitleAr" class="form-control" />
+                <span asp-validation-for="TitleAr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TitleEn" class="control-label">عنوان الخبر بالانجليزي</label>
+                <input asp-for="TitleEn" class="form-control" />
+                <span asp-validation-for="TitleEn" class="text-danger"></span>
+            </div>
+        </div>
+        
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleAr" class="control-label">عنوان الخبر بالعربي</label>
-        <input asp-for="TitleAr" class="form-control" />
-        <span asp-validation-for="TitleAr" class="text-danger"></span>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
+                <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DescriptionEn" class="control-label">تفاصيل الخبر بالانجليزي</label>
+                <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
+                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+            </div>
+        </div>
     </div>
-    <br />
-    <div class="form-group">
-        <label asp-for="TitleEn" class="control-label">عنوان الخبر بالانجليزي</label>
-        <input asp-for="TitleEn" class="form-control" />
-        <span asp-validation-for="TitleEn" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Existing Images -->
+            <div class="form-group">
+                <label>الصور الحالية</label>
+                @*  <input type="hidden" name="DeletedImageIds" id="DeletedImageIds" /> *@
+                <div>
+                    @if (Model.NewsImages != null && Model.NewsImages.Any())
+                    {
+                        foreach (var image in Model.NewsImages.Where(a => a.IsDeleted == false))
+                        {
+                            <div class="image-container" data-image-id="@image.Id" style="display: inline-block; position: relative; margin: 5px;">
+                                <img src="/Files/@image.ImagePath" alt="News Image"
+                                     style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
+                                <button type="button" class="btn btn-sm btn-danger delete-image-btn"
+                                        style="position: absolute; top: -10px; right: -10px;">
+                                    X
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>لا توجد صور.</p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Upload New Images -->
+            <div class="form-group">
+                <label for="UploadedImages">إضافة صور جديدة</label>
+                <input asp-for="UploadedImages" type="file" multiple class="form-control" />
+                <span asp-validation-for="UploadedImages" class="text-danger"></span>
+            </div>
+        </div>
     </div>
+  
  @*    <br />
     <div class="form-group">
         <label asp-for="ShortDescriptionAr" class="control-label">الخبر بالعربي</label>
@@ -50,63 +116,17 @@
         <span asp-validation-for="ShortDescriptionEn" class="text-danger"></span>
     </div> *@
 
-    <br />
-    <div class="form-group">
-        <label asp-for="DescriptionAr" class="control-label">تفاصيل الخبر بالعربي</label>
-        <textarea asp-for="DescriptionAr" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-    </div>
-    <br />
-
-    <div class="form-group">
-        <label asp-for="DescriptionEn" class="control-label">تفاصيل الخبر بالانجليزي</label>
-        <textarea asp-for="DescriptionEn" class="form-control my-textarea"></textarea>
-        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-    </div>
-    <br />
-
- 
-    <!-- Existing Images -->
-    <div class="form-group">
-        <label>الصور الحالية</label>
-       @*  <input type="hidden" name="DeletedImageIds" id="DeletedImageIds" /> *@
-        <div>
-            @if (Model.NewsImages != null && Model.NewsImages.Any())
-            {
-                foreach (var image in Model.NewsImages.Where(a => a.IsDeleted == false))
-                {
-                    <div class="image-container" data-image-id="@image.Id" style="display: inline-block; position: relative; margin: 5px;">
-                        <img src="/Files/@image.ImagePath" alt="News Image"
-                             style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
-                        <button type="button" class="btn btn-sm btn-danger delete-image-btn"
-                                style="position: absolute; top: -10px; right: -10px;">
-                            X
-                        </button>
-                    </div>
-                }
-            }
-            else
-            {
-                <p>لا توجد صور.</p>
-            }
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label">التفعيل</label>
+                <input asp-for="IsActive" class="form-check-input" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
         </div>
     </div>
-    <br />
-    <!-- Upload New Images -->
-    <div class="form-group">
-        <label for="UploadedImages">إضافة صور جديدة</label>
-        <input asp-for="UploadedImages" type="file" multiple class="form-control" />
-        <span asp-validation-for="UploadedImages" class="text-danger"></span>
-    </div>
-
-<br />
 
 
-    <div class="form-group">
-        <label asp-for="IsActive" class="control-label">التفعيل</label>
-        <input asp-for="IsActive" class="form-check-input" />
-        <span asp-validation-for="IsActive" class="text-danger"></span>
-    </div>
     <br />
     <button type="submit" class="btn btn-primary">حفظ</button>
     <a asp-action="Index" class="btn btn-secondary">إلغاء</a>

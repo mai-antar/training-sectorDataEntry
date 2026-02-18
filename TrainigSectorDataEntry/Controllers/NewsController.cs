@@ -9,6 +9,8 @@ using System.Configuration;
 using System.Net.Mail;
 using TrainigSectorDataEntry.Helper;
 using TrainigSectorDataEntry.Services;
+using TrainigSectorDataEntry.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace TrainigSectorDataEntry.Controllers
 {
@@ -16,14 +18,16 @@ namespace TrainigSectorDataEntry.Controllers
     {
         private readonly IGenericService<News> _newsService;
         private readonly IGenericService<NewsImage> _newsImagesService;
-      
+        private readonly IEntityImageService _entityImageService;
         private readonly IGenericService<TrainingSector> _trainingSectorService;
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         private readonly IConfiguration _configuration;
         private readonly IFileStorageService _fileStorageService;
+        private readonly TrainingSectorDbContext _context;
         public NewsController(IGenericService<News> newsService, IGenericService<NewsImage> newsImagesService,IGenericService<TrainingSector> trainingSectorService,
-            IMapper mapper, ILoggerRepository logger, IConfiguration configuration, IFileStorageService fileStorageService)
+            IMapper mapper, ILoggerRepository logger, IConfiguration configuration, IFileStorageService fileStorageService,
+            IEntityImageService entityImageService, TrainingSectorDbContext context)
         {
             _newsService = newsService;
             _newsImagesService = newsImagesService;
@@ -32,6 +36,8 @@ namespace TrainigSectorDataEntry.Controllers
             _logger = logger;
             _configuration = configuration;
             _fileStorageService = fileStorageService;
+            _entityImageService = entityImageService;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -39,8 +45,17 @@ namespace TrainigSectorDataEntry.Controllers
             var newsList = await _newsService.GetAllAsync(false,x=>x.TrainigSector, x => x.NewsImages);
             var vm = _mapper.Map<List<NewsVM>>(newsList);
 
-            //var vm = _mapper.Map<NewsVM>(newsList);
-        
+            var newsImagesList = await _entityImageService.FindAsync(
+                     x => x.EntityImagesTableTypeId == 2 && x.IsDeleted != true);
+
+            foreach (var item in vm)
+            {
+                if (newsImagesList.Where(a => a.EntityId == item.Id).ToList().Count > 0)
+                {
+
+                    item.NewsImages = newsImagesList.Where(a => a.EntityId == item.Id).ToList();
+                }
+            }
 
             return View(vm);
 
@@ -51,21 +66,36 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create()
         {
             var sectors = await _trainingSectorService.GetDropdownListAsync();
+            ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
 
             var existingNews = await _newsService.GetAllAsync();
+           
             var existingNewsVM = _mapper.Map<List<NewsVM>>(existingNews);
 
-            var newsImagesList = await _newsImagesService.GetAllAsync();
+            var newsImagesList = await _entityImageService.FindAsync(
+              x => x.EntityImagesTableTypeId == 2 && x.IsDeleted != true);
+
             foreach (var item in existingNewsVM)
             {
-                if (newsImagesList.Where(a => a.NewsId == item.Id).ToList().Count > 0)
+                if (newsImagesList.Where(a => a.EntityId == item.Id).ToList().Count > 0)
                 {
 
-                    item.NewsImages = newsImagesList.Where(a => a.NewsId == item.Id).ToList();
+                    item.NewsImages = newsImagesList.Where(a => a.EntityId == item.Id).ToList();
                 }
             }
 
-            ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
+
+            // Preserve selected facility
+            if (TempData["News_TrainingSectorId"] != null)
+            {
+                ViewBag.TrainingSectorList = new SelectList(
+                    sectors,
+                    "Id",
+                    "NameAr",
+                    TempData["News_TrainingSectorId"]);
+            }
+
+
             ViewBag.ExistingNews = existingNewsVM;
             return View();
         }
@@ -75,61 +105,59 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create(NewsVM model)
         {
             if (!ModelState.IsValid)
+                return View(model);
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                var sectors = await _trainingSectorService.GetDropdownListAsync();
 
-                var existingNews = await _newsService.GetAllAsync();
-                var existingNewsVM = _mapper.Map<List<NewsVM>>(existingNews);
+                var entity = _mapper.Map<News>(model);
+                entity.IsDeleted = false;
+                entity.IsActive = true;
+                entity.Date = model.Date;
+                entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
 
-                ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
-                ViewBag.ExistingNews = existingNewsVM;
+                await _newsService.AddAsync(entity);
+
+
+                if (model.UploadedImages != null && model.UploadedImages.Any())
+                {
+                    await _entityImageService.AddImagesAsync(
+                        2,
+                        entity.Id,
+                        model.UploadedImages);
+                }
+
+                await transaction.CommitAsync();
+
+                TempData["Success"] = "تمت الاضافة بنجاح";
+                TempData["News_TrainingSectorId"] = model.TrainigSectorId;
+                return RedirectToAction(nameof(Create));
+
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+
+                _logger.LogError(ex, nameof(NewsController), nameof(Create));
+                ModelState.AddModelError("", "حدث خطأ أثناء الحفظ، تم إلغاء العملية.");
 
                 return View(model);
             }
-                
-
-            var entity = _mapper.Map<News>(model);
-            entity.IsDeleted = false;
-            entity.IsActive = true;
-            entity.Date = model.Date;
-            entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
-
-            await _newsService.AddAsync(entity);
-
-
-            if (model.UploadedImages != null && model.UploadedImages.Any())
-            {
-                foreach (var image in model.UploadedImages)
-                {
-                    var relativePath = await _fileStorageService.UploadImageAsync(image, "NewsImages");
-
-                    if (relativePath != null)
-                    {
-                        await _newsImagesService.AddAsync(new NewsImage
-                        {
-                            NewsId = entity.Id,
-                            ImagePath = relativePath,
-                            IsActive = true,
-                            IsDeleted = false,
-                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                        });
-                    }
-                }
-
-            }
-            TempData["Success"] = "تمت الاضافة بنجاح";
-
-            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var news = await _newsService.GetByIdAsync(id,x=>x.TrainigSector, x => x.NewsImages);
-   
-            //var news = await _newsService.GetByIdAsync(id, n => ((News)n).NewsImages);
+            var news = await _newsService.GetByIdAsync(id,x=>x.TrainigSector);
             if (news == null) return NotFound();
 
             var model = _mapper.Map<NewsVM>(news);
+
+            var newsImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 2 && x.EntityId == id && x.IsDeleted == false);
+            model.NewsImages = newsImages;
+
+            
             var sectors = await _trainingSectorService.GetAllAsync();
 
             ViewBag.TrainingSectorList = new SelectList(
@@ -139,7 +167,7 @@ namespace TrainigSectorDataEntry.Controllers
                 news.TrainigSectorId
             );
 
-            //ViewBag.TrainingSectorList = news.TrainigSector.NameAr;
+         
             return View(model);
         }
 
@@ -147,110 +175,70 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(NewsVM model)
         {
-            if (!ModelState.IsValid) {
-                var sectors = await _trainingSectorService.GetDropdownListAsync();
-                ViewBag.TrainingSectorList = new SelectList(sectors, "Id", "NameAr");
+            if (!ModelState.IsValid)
+                return View(model);
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+
+                var entity = await _newsService.GetByIdAsync(model.Id);
+                if (entity == null) return NotFound();
+
+                entity.TitleAr = model.TitleAr;
+                entity.TitleEn = model.TitleEn;
+                //entity.ShortDescriptionAr = model.ShortDescriptionAr;
+                //entity.ShortDescriptionEn = model.ShortDescriptionEn;
+                entity.DescriptionAr = model.DescriptionAr;
+                entity.DescriptionEn = model.DescriptionEn;
+                entity.Date = model.Date;
+                entity.TrainigSectorId = model.TrainigSectorId;
+                entity.IsActive = model.IsActive;
+                entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
+                //var entity = _mapper.Map<News>(model);
+
+
+                await _newsService.UpdateAsync(entity);
+
+                //  حذف صور
+                if (model.DeletedImageIds != null)
+                {
+                    foreach (var imageId in model.DeletedImageIds
+                        .Where(x => x.HasValue)
+                        .Select(x => x.Value))
+                    {
+                        await _entityImageService.DeleteImageAsync(imageId);
+                    }
+                }
+
+                //  إضافة صور
+                if (model.UploadedImages != null && model.UploadedImages.Any())
+                {
+                    await _entityImageService.AddImagesAsync(
+                        2,
+                        entity.Id,
+                        model.UploadedImages);
+                }
+
+                await transaction.CommitAsync();
+
+
+                TempData["Success"] = "تم التعديل بنجاح";
+
+                return RedirectToAction(nameof(Index));
+
+
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+
+                _logger.LogError(ex, nameof(ProjectsController), nameof(Edit));
+                ModelState.AddModelError("", "حدث خطأ أثناء التعديل، تم إلغاء العملية.");
+
                 return View(model);
             }
-
-        
-            var entity = await _newsService.GetByIdAsync(model.Id);
-            if (entity == null) return NotFound();
-
-            entity.TitleAr = model.TitleAr;
-            entity.TitleEn = model.TitleEn;
-            entity.ShortDescriptionAr = model.ShortDescriptionAr;
-            entity.ShortDescriptionEn = model.ShortDescriptionEn;
-            entity.DescriptionAr = model.DescriptionAr;
-            entity.DescriptionEn = model.DescriptionEn;
-            entity.Date = model.Date;
-            entity.TrainigSectorId = model.TrainigSectorId;
-            entity.IsActive = model.IsActive;
-            entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
-            //var entity = _mapper.Map<News>(model);
-        
-
-            await _newsService.UpdateAsync(entity);
-           
-                //if (model.DeletedImageIds != null && model.DeletedImageIds.Any())
-                //{
-                //    foreach (var id in model.DeletedImageIds.Where(x => x.HasValue).Select(x => x.Value))
-                //    {
-                //        var image = await _newsImagesService.GetByIdAsync(id);
-                //        if (image != null)
-                //        {
-                //            image.IsDeleted = true;
-                //            await _newsImagesService.UpdateAsync(image);
-                //        }
-                //    }
-                //}
-            if (model.DeletedImageIds != null && model.DeletedImageIds.Any())
-            {
-                foreach (var id in model.DeletedImageIds.Where(x => x.HasValue).Select(x => x.Value))
-                {
-                    var image = await _newsImagesService.GetByIdAsync(id);
-                    if (image != null)
-                    {
-             
-                        await _fileStorageService.DeleteFileAsync(image.ImagePath);
-                        await _newsImagesService.DeleteAsync(id);
-                    }
-                }
-            }
-
-
-            if (model.UploadedImages != null && model.UploadedImages.Any())
-            {
-                foreach (var image in model.UploadedImages)
-                {
-                    var relativePath = await _fileStorageService
-                  .UploadImageAsync(image, "NewsImages");
-
-                    if (relativePath != null)
-                    {
-                        await _newsImagesService.AddAsync(new NewsImage
-                        {
-                            NewsId = model.Id,
-                            ImagePath = relativePath,
-                            IsActive = true,
-                            IsDeleted = false,
-                            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                        });
-                    }
-                }
-                //string uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/newsImage");
-                //if (!Directory.Exists(uploadDir))
-                //    Directory.CreateDirectory(uploadDir);
-                //foreach (var image in model.UploadedImages)
-                //{
-                //    if (image.Length > 0 && image.ContentType.StartsWith("image/"))
-                //    {
-                //        var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
-                //        var filePath = Path.Combine(uploadDir, fileName);
-
-                //        using (var stream = new FileStream(filePath, FileMode.Create))
-                //        {
-                //            await image.CopyToAsync(stream);
-                //        }
-
-                //        var newsImage = new NewsImage
-                //        {
-                //            NewsId = model.Id,
-                //            ImagePath = "/uploads/newsImage/" + fileName,
-                //            IsActive = true,
-                //            IsDeleted = false,
-                //            UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                //        };
-
-                //        await _newsImagesService.AddAsync(newsImage);
-                //    }
-                //}
-            }
-
-
-            TempData["Success"] = "تم التعديل بنجاح";
-
-            return RedirectToAction(nameof(Index));
         }
    
         public async Task<IActionResult> AddImages(int id)
@@ -266,53 +254,6 @@ namespace TrainigSectorDataEntry.Controllers
             };
 
             return View(vm);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddImages(NewsImageVM model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var news = await _newsService.GetByIdAsync(model.NewsId);
-            if (news == null)
-                return NotFound();
-
-
-            foreach (var image in model.UploadedImages)
-            {
-                var relativePath = await _fileStorageService
-              .UploadImageAsync(image, "NewsImages");
-
-                if (relativePath != null)
-                {
-                    await _newsImagesService.AddAsync(new NewsImage
-                    {
-                        NewsId = model.NewsId,
-                        ImagePath = relativePath,
-                        IsActive = true,
-                        IsDeleted = false,
-                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today)
-                    });
-                }
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-        [HttpGet]
-        public async Task<IActionResult> DeleteImage(int id)
-        {
-            var image = await _newsImagesService.GetByIdAsync(id);
-            if (image == null) return NotFound();
-
-            // Delete physical file
-            await _fileStorageService.DeleteFileAsync(image.ImagePath);
-
-            await _newsImagesService.DeleteAsync(id);
-            return RedirectToAction("Edit", new { id = image.NewsId });
-
-       
         }
         public async Task<IActionResult> Delete(int id)
         {
