@@ -7,7 +7,7 @@ public partial class EntityImage
 {
     public int Id { get; set; }
 
-    public string? EntityType { get; set; }
+    public int EntityImagesTableTypeId { get; set; }
 
     public int? EntityId { get; set; }
 
@@ -36,4 +36,6 @@ public partial class EntityImage
     public DateOnly? UserDeletionDate { get; set; }
 
     public bool IsActive { get; set; }
+
+    public virtual EntityImagesTableType EntityImagesTableType { get; set; } = null!;
 }

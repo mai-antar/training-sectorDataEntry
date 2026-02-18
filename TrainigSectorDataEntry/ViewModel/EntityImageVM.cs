@@ -6,7 +6,7 @@ namespace TrainigSectorDataEntry.ViewModel
     public class EntityImageVM
     {
         public int Id { get; set; }
-        public string EntityType { get; set; } = string.Empty;
+        public int EntityType { get; set; } 
         public int EntityId { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public bool IsActive { get; set; }

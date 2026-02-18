@@ -41,13 +41,15 @@ namespace TrainigSectorDataEntry.Controllers
         
 
             var projectImagesList = await _entityImageService.FindAsync(
-                x => x.EntityType == "Project" && x.IsDeleted != true);
-
-            var viewModelList = _mapper.Map<List<ProjectVM>>(ProjectsList);
+                x => x.EntityImagesTableTypeId == 1 && x.IsDeleted != true);
 
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
 
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+
+            var viewModelList = _mapper.Map<List<ProjectVM>>(ProjectsList);
+
+     
             foreach (var item in viewModelList)
             {
                 if (projectImagesList.Where(a => a.EntityId == item.Id).ToList().Count > 0)
@@ -99,7 +101,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             //  Load ONLY project images 
             var projectImages = await _entityImageService.FindAsync(
-                x => x.EntityType == "Project" && x.IsDeleted==false
+                x => x.EntityImagesTableTypeId == 1 && x.IsDeleted==false
             );
 
             //  Attach images to each project
@@ -145,7 +147,7 @@ namespace TrainigSectorDataEntry.Controllers
                 if (model.UploadedImages != null && model.UploadedImages.Any())
                 {
                     await _entityImageService.AddImagesAsync(
-                        "Project",
+                        1,
                         entity.Id,
                         model.UploadedImages);
                 }
@@ -173,7 +175,7 @@ namespace TrainigSectorDataEntry.Controllers
 
             var model = _mapper.Map<ProjectVM>(Project);
 
-            var projectImages = await _entityImageService.FindAsync(x => x.EntityType == "Project" && x.EntityId == id && x.IsDeleted == false);
+            var projectImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 1 && x.EntityId == id && x.IsDeleted == false);
 
             model.Images = projectImages;
             //var Project = await _projectService.GetByIdAsync(id, n => ((Project)n).ProjectImages);
@@ -224,7 +226,7 @@ namespace TrainigSectorDataEntry.Controllers
                 if (model.UploadedImages != null && model.UploadedImages.Any())
                 {
                     await _entityImageService.AddImagesAsync(
-                        "Project",
+                        1,
                         entity.Id,
                         model.UploadedImages);
                 }
@@ -344,7 +346,7 @@ namespace TrainigSectorDataEntry.Controllers
             projects = projects.Where(a => a.EducationalFacilitiesId == facilityId).ToList();
             var vmList = _mapper.Map<List<ProjectVM>>(projects);
 
-            var projectImages = await _entityImageService.FindAsync(x => x.EntityType == "Project" && x.IsDeleted == false);
+            var projectImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 1 && x.IsDeleted == false);
 
             foreach (var vm in vmList)
             {

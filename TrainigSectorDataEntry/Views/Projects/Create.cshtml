@@ -138,6 +138,34 @@
     </div>
 </div>
 </div>
+<div class="modal fade" id="uploadImageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="EntityImage"
+                  asp-action="Upload"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة صور</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="EntityType" value=1 />
+                    <input type="hidden" name="EntityId" id="entityIdInput" />
+
+                    <input type="file" name="UploadedImages" multiple class="form-control" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{
@@ -161,5 +189,10 @@
                 }
             });
         });
+        function openImageUpload(projectId) {
+            document.getElementById("entityIdInput").value = projectId;
+            var modal = new bootstrap.Modal(document.getElementById('uploadImageModal'));
+            modal.show();
+        }
     </script>
 }

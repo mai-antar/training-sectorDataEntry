@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
 using TrainigSectorDataEntry.Interface;
 using TrainigSectorDataEntry.Models;
@@ -8,27 +9,36 @@ namespace TrainigSectorDataEntry.Services
     public class EntityImageService : IEntityImageService
     {
         private readonly IGenericService<EntityImage> _imageService;
+        private readonly IGenericService<EntityImagesTableType> _EntityImagesTableTypeService;
         private readonly IFileStorageService _fileStorage;
 
         public EntityImageService(
             IGenericService<EntityImage> imageService,
-            IFileStorageService fileStorage)
+            IFileStorageService fileStorage, IGenericService<EntityImagesTableType> EntityImagesTableTypeService)
         {
             _imageService = imageService;
             _fileStorage = fileStorage;
+            _EntityImagesTableTypeService = EntityImagesTableTypeService;
         }
-        public async Task AddImagesAsync(string entityType,int entityId,IEnumerable<IFormFile> files)
+        public async Task AddImagesAsync(int entityType,int entityId,IEnumerable<IFormFile> files)
         {
             if (files == null || !files.Any())
                 return;
 
             var uploadedPaths = new List<string>();
 
+            var tableType = await _EntityImagesTableTypeService.GetByIdAsync(entityType);
+
+            if (tableType == null)
+                throw new Exception("Invalid entity type");
+
+            var folderName = tableType.Name.Trim(); 
+
             try
             {
                 foreach (var file in files)
                 {
-                    var path = await _fileStorage.UploadImageAsync(file, entityType);
+                    var path = await _fileStorage.UploadImageAsync(file, folderName);
 
                     if (string.IsNullOrEmpty(path))
                         throw new Exception("Image upload failed");
@@ -37,7 +47,7 @@ namespace TrainigSectorDataEntry.Services
 
                     await _imageService.AddAsync(new EntityImage
                     {
-                        EntityType = entityType,
+                        EntityImagesTableTypeId = entityType,
                         EntityId = entityId,
                         ImagePath = path,
                         IsActive = true,
