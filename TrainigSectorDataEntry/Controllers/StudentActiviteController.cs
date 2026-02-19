@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TrainigSectorDataEntry.DataContext;
 using TrainigSectorDataEntry.Interface;
 using TrainigSectorDataEntry.Logging;
 using TrainigSectorDataEntry.Models;
@@ -16,24 +17,41 @@ namespace TrainigSectorDataEntry.Controllers
         private readonly IMapper _mapper;
         private readonly ILoggerRepository _logger;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IEntityImageService _entityImageService;
+        private readonly TrainingSectorDbContext _context;
 
         public StudentActiviteController(IGenericService<StudentActivite> StudentActiviteService,
-            IGenericService<EducationalFacility> educationalFacilityService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService)
+            IGenericService<EducationalFacility> educationalFacilityService, IMapper mapper, ILoggerRepository logger, IFileStorageService fileStorageService
+            , IEntityImageService entityImageService, TrainingSectorDbContext context)
         {
             _StudentActiviteService = StudentActiviteService;
             _educationalFacilityService = educationalFacilityService;
             _mapper = mapper;
             _logger = logger;
             _fileStorageService = fileStorageService;
+            _entityImageService = entityImageService;
+            _context = context;
         }
         public async Task<IActionResult> Index()
         {
             var StudentActiviteList = await _StudentActiviteService.GetAllAsync();
-            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
 
+            var StudentActiviteImagesList = await _entityImageService.FindAsync(
+               x => x.EntityImagesTableTypeId == 6 && x.IsDeleted != true);
+
+            var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
 
             var viewModelList = _mapper.Map<List<StudentActiviteVM>>(StudentActiviteList);
+
+            foreach (var item in viewModelList)
+            {
+                if (StudentActiviteImagesList.Where(a => a.EntityId == item.Id).ToList().Count > 0)
+                {
+
+                    item.StudentActiviteImages = StudentActiviteImagesList.Where(a => a.EntityId == item.Id).ToList();
+                }
+            }
 
             return View(viewModelList);
         }
@@ -41,13 +59,23 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Create()
         {
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
+            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
 
             var existingStudentActivite = await _StudentActiviteService.GetAllAsync();
             var existingStudentActiviteVM = _mapper.Map<List<StudentActiviteVM>>(existingStudentActivite);
 
 
+            var StudentActiviteImages = await _entityImageService.FindAsync(
+           x => x.EntityImagesTableTypeId == 6 && x.IsDeleted == false
+       );
 
-            ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+          
+            foreach (var project in existingStudentActiviteVM)
+            {
+                project.StudentActiviteImages = StudentActiviteImages
+                    .Where(x => x.EntityId == project.Id)
+                    .ToList();
+            }
 
             if (TempData["StudentActivite_EducationalFacilitiesId"] != null)
             {
@@ -62,55 +90,49 @@ namespace TrainigSectorDataEntry.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StudentActiviteVM model)
         {
-            // Validate that an image is uploaded
-            if (model.UploadedImage == null || model.UploadedImage.Length == 0)
-            {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-            }
-
             if (!ModelState.IsValid)
-            {
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                var existingStudentActivite = await _StudentActiviteService.GetAllAsync();
-                var existingStudentActiviteVM = _mapper.Map<List<StudentActiviteVM>>(existingStudentActivite);
+                return View(model);
 
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
-                ViewBag.existingStudentActivite = existingStudentActiviteVM;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try {
+                // Validate that an image is uploaded
+                if (model.UploadedImage == null || model.UploadedImage.Length == 0)
+                {
+                    ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
+                }
+
+                var entity = _mapper.Map<StudentActivite>(model);
+                entity.IsDeleted = false;
+                entity.IsActive = true;
+                entity.UserCreationDate = DateOnly.FromDateTime(DateTime.Today);
+
+                await _StudentActiviteService.AddAsync(entity);
+
+                if (model.UploadedImages != null && model.UploadedImages.Any())
+                {
+                    await _entityImageService.AddImagesAsync(
+                        1,
+                        entity.Id,
+                        model.UploadedImages);
+                }
+
+                await transaction.CommitAsync();
+
+                TempData["Success"] = "تمت الاضافة بنجاح";
+                TempData["StudentActivite_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
+                return RedirectToAction(nameof(Create));
+
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+
+                _logger.LogError(ex, nameof(StudentActiviteController), nameof(Create));
+                ModelState.AddModelError("", "حدث خطأ أثناء الحفظ، تم إلغاء العملية.");
 
                 return View(model);
             }
-
-            // Save the image
-            if (model.UploadedImage != null)
-            {
-
-
-                var relativePath = await _fileStorageService.UploadImageAsync(model.UploadedImage, "StudentActiviteImage");
-
-                if (relativePath != null)
-                {
-                    await _StudentActiviteService.AddAsync(new StudentActivite
-                    {
-                        EducationalFacilitiesId = model.EducationalFacilitiesId,
-                        DescriptionAr = model.DescriptionAr,
-                        DescriptionEn = model.DescriptionEn,
-                        IsDeleted = false,
-                        IsActive = true,
-                        UserCreationDate = DateOnly.FromDateTime(DateTime.Today),
-                        ImagePath = relativePath
-                    });
-
-                }
-
-            }
-
-            TempData["Success"] = "تمت الاضافة بنجاح";
-            TempData["StudentActivite_EducationalFacilitiesId"] = model.EducationalFacilitiesId;
-            return RedirectToAction(nameof(Create));
-
-            //TempData["Success"] = "تمت الاضافة بنجاح";
-
-            //return RedirectToAction(nameof(Index));
         }
 
 
@@ -120,6 +142,11 @@ namespace TrainigSectorDataEntry.Controllers
             if (StudentActivite == null) return NotFound();
 
             var model = _mapper.Map<StudentActiviteVM>(StudentActivite);
+
+            var StudentActiviteImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 6 && x.EntityId == id && x.IsDeleted == false);
+
+            model.StudentActiviteImages = StudentActiviteImages;
+
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
             ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
             return View(model);
@@ -130,76 +157,77 @@ namespace TrainigSectorDataEntry.Controllers
         public async Task<IActionResult> Edit(StudentActiviteVM model)
         {
             if (!ModelState.IsValid)
-            {
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
                 return View(model);
-            }
 
-            var entity = await _StudentActiviteService.GetByIdAsync(model.Id);
-            if (entity == null) return NotFound();
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            // If no new image uploaded AND no existing image, throw validation error
-            if (model.UploadedImage == null && string.IsNullOrEmpty(entity.ImagePath))
+            try
             {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                return View(model);
-            }
+                var entity = await _StudentActiviteService.GetByIdAsync(model.Id);
+                if (entity == null) return NotFound();
 
+             
+                entity.DescriptionAr = model.DescriptionAr;
+                entity.DescriptionEn = model.DescriptionEn;
+                entity.EducationalFacilitiesId = model.EducationalFacilitiesId;
+                entity.IsActive = model.IsActive;
+                entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
 
-
-            entity.DescriptionAr = model.DescriptionAr;
-            entity.DescriptionEn = model.DescriptionEn;
-            entity.EducationalFacilitiesId = model.EducationalFacilitiesId;
-            entity.IsActive = model.IsActive;
-            entity.UserUpdationDate = DateOnly.FromDateTime(DateTime.Today);
-
-            if (model.UploadedImage != null && model.UploadedImage.Length > 0)
-            {
-
-                if (!string.IsNullOrEmpty(entity.ImagePath))
+                //  حذف صور
+                if (model.DeletedImageIds != null)
                 {
-                    await _fileStorageService.DeleteFileAsync(entity.ImagePath);
+                    foreach (var imageId in model.DeletedImageIds
+                        .Where(x => x.HasValue)
+                        .Select(x => x.Value))
+                    {
+                        await _entityImageService.DeleteImageAsync(imageId);
+                    }
                 }
 
-                var relativePath = await _fileStorageService
-                    .UploadImageAsync(model.UploadedImage, "StudentActiviteImage");
-
-                entity.ImagePath = relativePath;
-
-                if (string.IsNullOrEmpty(relativePath))
+                //  إضافة صور
+                if (model.UploadedImages != null && model.UploadedImages.Any())
                 {
-                    ModelState.AddModelError("UploadedImage", "حدث خطأ أثناء رفع الصورة.");
-                    var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                    ViewBag.educationalFacilityList =
-                        new SelectList(educationalFacility, "Id", "NameAr");
-                    return View(model);
+                    await _entityImageService.AddImagesAsync(
+                        6,
+                        entity.Id,
+                        model.UploadedImages);
                 }
 
-                entity.ImagePath = relativePath;
+                await transaction.CommitAsync();
+
+
+
+                await _StudentActiviteService.UpdateAsync(entity);
+
+                TempData["Success"] = "تم التعديل بنجاح";
+
+                return RedirectToAction(nameof(Index));
             }
-
-
-            // Ensure image path is still set
-            if (string.IsNullOrEmpty(entity.ImagePath))
+            catch (Exception ex)
             {
-                ModelState.AddModelError("UploadedImage", "يجب تحميل صورة.");
-                var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
-                ViewBag.educationalFacilityList = new SelectList(educationalFacility, "Id", "NameAr");
+                await transaction.RollbackAsync();
+
+                _logger.LogError(ex, nameof(StudentActiviteController), nameof(Edit));
+                ModelState.AddModelError("", "حدث خطأ أثناء التعديل، تم إلغاء العملية.");
+
                 return View(model);
             }
-
-            await _StudentActiviteService.UpdateAsync(entity);
-
-            TempData["Success"] = "تم التعديل بنجاح";
-
-            return RedirectToAction(nameof(Index));
+          
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             var StudentActivite = await _StudentActiviteService.GetByIdAsync(id);
             if (StudentActivite == null) return NotFound();
+
+            // Delete associated images from file system
+            var StudentActiviteImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 6 && x.EntityId == id && x.IsDeleted == false);
+
+            if (StudentActiviteImages != null && StudentActiviteImages.Any())
+            {
+                foreach (var img in StudentActiviteImages)
+                    await _fileStorageService.DeleteFileAsync(img.ImagePath);
+            }
 
             await _StudentActiviteService.DeleteAsync(id);
 

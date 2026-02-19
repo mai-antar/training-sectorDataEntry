@@ -22,9 +22,20 @@
 
         <td>
 
-            <img src="/Files/@StudentActivite.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
 
 
+            @foreach (var item in StudentActivite.StudentActiviteImages)
+            {
+                <img src="/Files/@StudentActivite.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+
+            }
+
+            <a href="javascript:void(0)"
+               class="buttoneimg right-4tens"
+               onclick="openImageUpload(@StudentActivite.Id)">
+                <span class="buttoneimg__text">إضافة صورة</span>
+                <span class="buttoneimg__icon">+</span>
+            </a>
 
         </td>
         <td>

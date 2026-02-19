@@ -261,9 +261,11 @@ namespace TrainigSectorDataEntry.Controllers
             if (news == null) return NotFound();
 
             // Delete associated images from file system
-            if (news.NewsImages != null && news.NewsImages.Any())
+            var NewsImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 2 && x.EntityId == id && x.IsDeleted == false);
+
+            if (NewsImages != null && NewsImages.Any())
             {
-                foreach (var img in news.NewsImages)
+                foreach (var img in NewsImages)
                     await _fileStorageService.DeleteFileAsync(img.ImagePath);
             }
 

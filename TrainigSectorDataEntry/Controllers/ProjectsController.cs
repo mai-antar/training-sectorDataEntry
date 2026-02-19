@@ -155,8 +155,7 @@ namespace TrainigSectorDataEntry.Controllers
             var projectImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 1 && x.EntityId == id && x.IsDeleted == false);
 
             model.Images = projectImages;
-            //var Project = await _projectService.GetByIdAsync(id, n => ((Project)n).ProjectImages);
-            //if (Project == null) return NotFound();
+  
 
          
             var educationalFacility = await _educationalFacilityService.GetDropdownListAsync();
@@ -247,9 +246,10 @@ namespace TrainigSectorDataEntry.Controllers
             if (Project == null) return NotFound();
 
             // Delete associated images from file system
-            if (Project.ProjectImages != null && Project.ProjectImages.Any())
+            var projectImages = await _entityImageService.FindAsync(x => x.EntityImagesTableTypeId == 1 && x.EntityId == id && x.IsDeleted == false);
+            if (projectImages != null && projectImages.Any())
             {
-                foreach (var img in Project.ProjectImages)
+                foreach (var img in projectImages)
                     await _fileStorageService.DeleteFileAsync(img.ImagePath);
             }
 

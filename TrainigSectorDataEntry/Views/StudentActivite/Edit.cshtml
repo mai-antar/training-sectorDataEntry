@@ -53,18 +53,22 @@
                 <div class="col-md-6">
                     <!-- Existing Images -->
                     <div class="form-group">
-                        <label>الصورة الحالية</label>
+                        <label>الصور الحالية</label>
 
                         <div>
-                            @if (Model.ImagePath != null)
+                            @if (Model.StudentActiviteImages != null && Model.StudentActiviteImages.Any())
                             {
-
-                                <div class="image-container" data-id="@Model.Id" style="display: inline-block; position: relative; margin: 5px;">
-                                    <img src="/Files/@Model.ImagePath" alt="student activity Image"
-                                         style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
-
-                                </div>
-
+                                foreach (var image in Model.StudentActiviteImages.Where(a => a.IsDeleted == false))
+                                {
+                                    <div class="image-container" data-image-id="@image.Id" style="display: inline-block; position: relative; margin: 5px;">
+                                        <img src="/Files/@image.ImagePath" alt="StudentActivite Image"
+                                             style="width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc;" />
+                                        <button type="button" class="btn btn-sm btn-danger delete-image-btn"
+                                                style="position: absolute; top: -10px; right: -10px;">
+                                            X
+                                        </button>
+                                    </div>
+                                }
                             }
                             else
                             {
@@ -73,6 +77,7 @@
                         </div>
                     </div>
                 </div>
+            
         <div class="col-md-6"> <!-- Upload New Images -->
     <div class="form-group">
         <label for="UploadedImages">تحديث الصورة</label>
@@ -133,8 +138,37 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  
     }
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
 
+                document.querySelectorAll(".delete-image-btn").forEach(button => {
+                    button.addEventListener("click", function () {
+
+                        const container = this.closest(".image-container");
+                        const imageId = container.dataset.imageId;
+
+                        // hide image
+                        container.style.display = "none";
+
+                        // prevent duplicates
+                        if (document.querySelector(`input[name="DeletedImageIds"][value="${imageId}"]`))
+                            return;
+
+                        // create hidden input
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = "DeletedImageIds";
+                        input.value = imageId;
+
+                        // append to form
+                        container.closest("form").appendChild(input);
+                    });
+                });
+
+            });
+        </script>
 
 }
 

@@ -53,7 +53,19 @@
                 </td>
                 <td>
 
-                    <img src="/Files/@studentActivite.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+
+                        @foreach (var item in studentActivite.StudentActiviteImages)
+                        {
+                            <img src="/Files/@item.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+
+
+                        }
+                        <a href="javascript:void(0)"
+                           class="buttoneimg right-4tens"
+                           onclick="openImageUpload(@studentActivite.Id)">
+                            <span class="buttoneimg__text">إضافة صورة</span>
+                            <span class="buttoneimg__icon">+</span>
+                        </a>
                 </td>
                 <td>
                         <a asp-action="Edit" asp-route-id="@studentActivite.Id" class="buttonedit right-4tens ">
@@ -72,6 +84,34 @@
     </tbody>
 </table>
 </div>
+<div class="modal fade" id="uploadImageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="EntityImage"
+                  asp-action="Upload"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة صور</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="EntityType" value=6 />
+                    <input type="hidden" name="EntityId" id="entityIdInput" />
+
+                    <input type="file" name="UploadedImages" multiple class="form-control" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     function confirmDelete(id) {
         Swal.fire({
@@ -89,5 +129,10 @@
                 window.location.href = '/StudentActivite/Delete/' + id;
             }
         });
+    }
+          function openImageUpload(studentActiviteId) {
+        document.getElementById("entityIdInput").value = studentActiviteId;
+        var modal = new bootstrap.Modal(document.getElementById('uploadImageModal'));
+        modal.show();
     }
 </script>

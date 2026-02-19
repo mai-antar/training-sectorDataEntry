@@ -11,11 +11,13 @@ public partial class ContactU
 
     public string Address { get; set; } = null!;
 
-    public int Telephone { get; set; }
+    public string Telephone { get; set; } = null!;
 
     public int Fax { get; set; }
 
     public string Email { get; set; } = null!;
+
+    public string? Location { get; set; }
 
     public bool IsActive { get; set; }
 

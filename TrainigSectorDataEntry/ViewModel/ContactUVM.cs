@@ -18,7 +18,7 @@ namespace TrainigSectorDataEntry.ViewModel
         public string Address { get; set; } = null!;
 
         [Required(ErrorMessage = ".برجاء ادخال رقم الهاتف ")]
-        public int Telephone { get; set; }
+        public string Telephone { get; set; }
 
         [Required(ErrorMessage = ".برجاء ادخال الفاكس ")]
         public int Fax { get; set; }

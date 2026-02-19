@@ -43,7 +43,7 @@ namespace TrainigSectorDataEntry.ViewModel
         [ValidateNever]
         public virtual TrainingSector TrainigSector { get; set; } = null!;
   
-        public virtual ICollection<StagesAndHallsImage> StagesAndHallsImages { get; set; } = new List<StagesAndHallsImage>();
+        public virtual ICollection<EntityImage> StagesAndHallsImages { get; set; } = new List<EntityImage>();
 
         public List<IFormFile>? UploadedImages { get; set; }
         public List<int?> DeletedImageIds { get; set; } = new List<int?>();

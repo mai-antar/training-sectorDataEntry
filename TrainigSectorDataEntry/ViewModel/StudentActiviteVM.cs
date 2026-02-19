@@ -43,5 +43,8 @@ namespace TrainigSectorDataEntry.ViewModel
         public IFormFile? UploadedImage { get; set; }
         [ValidateNever]
         public virtual EducationalFacility EducationalFacilities { get; set; } = null!;
+        public virtual ICollection<EntityImage> StudentActiviteImages { get; set; } = new List<EntityImage>();
+        public List<IFormFile>? UploadedImages { get; set; }
+        public List<int?> DeletedImageIds { get; set; } = new List<int?>();
     }
 }
