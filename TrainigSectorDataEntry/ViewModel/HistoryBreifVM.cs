@@ -11,14 +11,14 @@ namespace TrainigSectorDataEntry.ViewModel
         public int EducationalFacilitiesId { get; set; }
 
 
-        [Required(ErrorMessage = ".برجاء ادخال الاسم باللغة العربية")]
+        //[Required(ErrorMessage = ".برجاء ادخال الاسم باللغة العربية")]
         //[RegularExpression(@"^[\u0600-\u06FF\s]+$", ErrorMessage = ".يجب كتابة لغة عربية فقط")]
-        public string NameAr { get; set; } = null!;
+        public string? NameAr { get; set; } = null!;
 
 
-        [Required(ErrorMessage = ".برجاء ادخال الاسم باللغة الانجليزي")]
+        //[Required(ErrorMessage = ".برجاء ادخال الاسم باللغة الانجليزي")]
         //[RegularExpression(@"^[a-zA-Z0-9\s.,'-]+$", ErrorMessage = ".يجب كتابة لغة انجليزية فقط")]
-        public string NameEn { get; set; } = null!;
+        public string? NameEn { get; set; } = null!;
 
 
         [Required(ErrorMessage = ".برجاء ادخال عنوان النبذة التاريخية باللغة العربية")]
@@ -58,7 +58,7 @@ namespace TrainigSectorDataEntry.ViewModel
 
         public virtual EducationalFacility? EducationalFacilities { get; set; } = null!;
 
-        public virtual ICollection<HistoryBerifImage> HistoryBerifImages { get; set; } = new List<HistoryBerifImage>();
+        public virtual ICollection<EntityImage> HistoryBerifImages { get; set; } = new List<EntityImage>();
 
         public List<IFormFile>? UploadedImages { get; set; }
         public List<int?> DeletedImageIds { get; set; } = new List<int?>();

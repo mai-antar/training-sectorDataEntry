@@ -19,12 +19,17 @@
             }
         </td>
         <td>
-      
-            <a class="buttoneimg right-4tens " asp-route-id="@historyBreif.Id"  asp-action="AddImages">
+            @foreach (var item in historyBreif.HistoryBerifImages)
+            {
+                <img src="/Files/@item.ImagePath" alt="Project Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
+
+            }
+
+            <a href="javascript:void(0)"
+               class="buttoneimg right-4tens"
+               onclick="openImageUpload(@historyBreif.Id)">
                 <span class="buttoneimg__text">إضافة صورة</span>
-                <span class="buttoneimg__icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg>
-                </span>
+                <span class="buttoneimg__icon">+</span>
             </a>
         </td>
         <td>
