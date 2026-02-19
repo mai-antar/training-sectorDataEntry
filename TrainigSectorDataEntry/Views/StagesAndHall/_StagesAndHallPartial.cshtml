@@ -30,7 +30,11 @@
         </td>
         <td>
 
+            @foreach (var item in stagesAndHall.StagesAndHallsImages)
+            {
+                <img src="/Files/@item.ImagePath" alt="StagesAndHalls Image" style="width: 60px; height: 60px; object-fit: cover; margin: 2px;" />
 
+            }
 
             <a class="buttoneimg right-4tens " asp-route-id="@stagesAndHall.Id" asp-action="AddImages">
                 <span class="buttoneimg__text">إضافة صورة</span>
